@@ -11,7 +11,7 @@ type Inputs = {
   password: string;
 };
 
-export default function Login() {
+export default function SignIn() {
   const {
     register,
     handleSubmit,
@@ -24,9 +24,7 @@ export default function Login() {
     },
   });
 
-  console.log(errors);
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log("Hello");
     console.log(data);
   };
   watch();
