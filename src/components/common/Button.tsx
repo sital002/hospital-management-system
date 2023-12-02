@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({
   ...rest
 }) => {
   const styles = {
-    primary: `bg-light-orange-9 text-light-orange-2 border-light-orange-9 hover:bg-light-orange-10 `,
+    primary: `bg-gray-600 text-white hover:bg-white hover:text-black`,
   };
 
   const rootClass = clsx(
