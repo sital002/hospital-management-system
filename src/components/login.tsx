@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "./common/Button";
 import Input from "./common/Input";
 import Label from "./common/Label";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   email: string;
@@ -12,6 +13,8 @@ type Inputs = {
 };
 
 export default function SignIn() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -24,8 +27,24 @@ export default function SignIn() {
     },
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/signin`,
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+      );
+      const json = await res.json();
+      console.log(json);
+      if (json.redirect) {
+        router.push(json.redirect);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
   watch();
   return (
