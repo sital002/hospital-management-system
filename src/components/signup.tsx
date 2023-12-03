@@ -7,6 +7,7 @@ import Input from "./common/Input";
 import Label from "./common/Label";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 type FormInputs = {
   name: string;
@@ -41,12 +42,15 @@ export default function SignUp() {
         },
       );
       const json = await res.json();
-      console.log(json);
+      if (!json.success) {
+        toast.error(json.message);
+      }
       if (json.redirect) {
         router.push(json.redirect);
+        toast.success(json.message);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      toast.error("Something went wrong");
     }
   };
   watch();
@@ -88,7 +92,7 @@ export default function SignUp() {
               message: "Password is required",
             },
             minLength: {
-              value: 8,
+              value: 3,
               message: "Password must be at least 8 characters long",
             },
             maxLength: {
@@ -107,7 +111,7 @@ export default function SignUp() {
       <p className="mt-3">
         Already have an account?{" "}
         <span className="cursor-pointer font-medium underline underline-offset-4">
-          <Link href="/sign-in">Signin here</Link>
+          <Link href="/signin">Signin here</Link>
         </span>
       </p>
     </div>

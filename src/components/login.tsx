@@ -7,6 +7,7 @@ import Input from "./common/Input";
 import Label from "./common/Label";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 type FormInputs = {
   email: string;
@@ -23,8 +24,8 @@ export default function SignIn() {
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: {
-      email: "johndoe33@gmail.com",
-      password: "Password@123",
+      email: "admin@gmail.com",
+      password: "admin123",
     },
   });
 
@@ -40,11 +41,16 @@ export default function SignIn() {
       );
       const json = await res.json();
       console.log(json);
-      if (json.redirect) {
+      if (json.success) {
+        toast.success("Logged in successfully");
         router.push(json.redirect);
+        router.refresh();
+        return;
       }
-    } catch (err) {
+      return toast.error(json.message);
+    } catch (err: any) {
       console.log(err);
+      toast.error(err.message);
     }
   };
   watch();
@@ -90,7 +96,7 @@ export default function SignIn() {
       <p className="mt-3">
         Don&apos;t have an account?{" "}
         <span className="cursor-pointer font-medium underline underline-offset-4">
-          <Link href="/sign-up">Signup here</Link>
+          <Link href="/signup">Signup here</Link>
         </span>
       </p>
     </div>
