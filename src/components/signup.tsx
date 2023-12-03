@@ -9,11 +9,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 type FormInputs = {
+  name: string;
   email: string;
   password: string;
 };
 
-export default function SignIn() {
+export default function SignUp() {
   const router = useRouter();
 
   const {
@@ -23,6 +24,7 @@ export default function SignIn() {
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: {
+      name: "",
       email: "johndoe33@gmail.com",
       password: "Password@123",
     },
@@ -32,7 +34,7 @@ export default function SignIn() {
     console.log(data);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/signin`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/signup`,
         {
           method: "POST",
           body: JSON.stringify(data),
@@ -50,8 +52,23 @@ export default function SignIn() {
   watch();
   return (
     <div className="mx-2 w-full max-w-[600px] rounded-lg bg-slate-50 p-5 ">
-      <h1 className="my-4 text-center text-4xl">Login</h1>
+      <h1 className="my-4 text-center text-4xl">Sign Up</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <Label className="my-3">Name</Label>
+        <Input
+          {...register("name", {
+            required: {
+              value: true,
+              message: "Name is required",
+            },
+            maxLength: {
+              value: 64,
+              message: "Name must be less than 64 characters long",
+            },
+          })}
+          placeholder="John Doe"
+        />
+        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
         <Label className="my-3">Email</Label>
         <Input
           {...register("email", {
@@ -88,9 +105,9 @@ export default function SignIn() {
         <Button type="submit">Submit</Button>
       </form>
       <p className="mt-3">
-        Don&apos;t have an account?{" "}
+        Already have an account?{" "}
         <span className="cursor-pointer font-medium underline underline-offset-4">
-          <Link href="/sign-up">Signup here</Link>
+          <Link href="/sign-in">Signin here</Link>
         </span>
       </p>
     </div>
