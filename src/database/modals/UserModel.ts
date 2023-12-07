@@ -10,6 +10,25 @@ const UserSchema = new mongoose.Schema({
     required: [true, `Email is required`],
     unique: [true, `Email is already taken`],
   },
+  phone: {
+    type: Number,
+    required: [true, `Phone number is required`],
+    length: [10, `Phone number must be 10 characters`],
+  },
+  address: {
+    type: String,
+    required: [true, `Address is required`],
+    maxLength: [200, `Address must be at most 200 characters`],
+  },
+  gender: {
+    type: String,
+    enum: ["male", "female"],
+    required: [true, `Gender is required`],
+  },
+  dob: {
+    type: String,
+    required: [true, `Date of birth is required`],
+  },
   password: {
     type: String,
     required: true,
@@ -21,7 +40,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ["user", "patient", "admin", "hospital", "doctor", "staff"],
-    default: "user",
+    default: "admin",
   },
 });
 

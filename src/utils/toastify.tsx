@@ -5,10 +5,11 @@ export default function Toastify() {
   return (
     <ToastContainer
       position="top-right"
-      autoClose={5000}
-      hideProgressBar={false}
+      autoClose={1000}
+      hideProgressBar={true}
       newestOnTop={false}
       closeOnClick={true}
+      limit={3}
     />
   );
 }

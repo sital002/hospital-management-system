@@ -35,7 +35,7 @@ export default function SignUp() {
     console.log(data);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/signup`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signup`,
         {
           method: "POST",
           body: JSON.stringify(data),

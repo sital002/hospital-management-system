@@ -30,17 +30,15 @@ export default function SignIn() {
   });
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    console.log(data);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/signin`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signin`,
         {
           method: "POST",
           body: JSON.stringify(data),
         },
       );
       const json = await res.json();
-      console.log(json);
       if (json.success) {
         toast.success("Logged in successfully");
         router.push(json.redirect);

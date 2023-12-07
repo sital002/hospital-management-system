@@ -2,9 +2,15 @@
 import { useState } from "react";
 import Button from "./common/Button";
 import PopupForm from "./popupForm";
+import { UserType } from "@/database/modals/UserModel";
 
-export default function MainDash() {
+interface AdminDashboardProps {
+  users: UserType[];
+  user: UserType;
+}
+export default function MainDash({ users, user }: AdminDashboardProps) {
   const [popUp, setPopUp] = useState(false);
+  console.log(user);
 
   function clickBtn() {
     setPopUp(!popUp);
@@ -12,28 +18,31 @@ export default function MainDash() {
 
   return (
     <div>
-      {popUp && <PopupForm />}
+      {popUp && <PopupForm setPopUp={setPopUp} />}
       <Button onClick={clickBtn} className="ml-[86%] w-fit">
         + Add New
       </Button>
       <table className="mt-3 w-[77vw] border-collapse border-2 border-gray-200 text-center  ">
-        <thead className="h-[60px]">
-          <th>Photo</th>
-          <th>Name</th>
-          <th>Address</th>
-          <th>DOB</th>
-          <th>Gender</th>
-          <th>Role</th>
-        </thead>
         <tbody>
-          <tr className="h-[60px] border-2 border-gray-200">
-            <td>DEMO</td>
-            <td>Jone Doe</td>
-            <td>Australia</td>
-            <td>2000-1-1</td>
-            <td>Male</td>
-            <td>Doctor</td>
+          <tr className="py-2">
+            <td className="py-3 font-semibold uppercase">Name</td>
+            <td className="py-3 font-semibold uppercase">Address</td>
+            <td className="py-3 font-semibold uppercase">Email</td>
+            <td className="py-3 font-semibold uppercase">DOB</td>
+            <td className="py-3 font-semibold uppercase">Gender</td>
+            <td className="py-3 font-semibold uppercase">Role</td>
           </tr>
+
+          {users.map((item, index) => (
+            <tr className="h-[60px] border-2 border-gray-200" key={index}>
+              <td className="uppercase">{item.name}</td>
+              <td className="uppercase">{item?.address}</td>
+              <td>{item?.email}</td>
+              <td className="uppercase">{item?.dob.toString()}</td>
+              <td className="uppercase">{item?.gender}</td>
+              <td className="uppercase">{item.role}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

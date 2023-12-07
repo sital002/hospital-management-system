@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
         success: false,
         message: "Invalid email or password",
       });
-    console.log(user._id);
+    // console.log(user._id);
     // if (user.role !== "admin")
     //   return NextResponse.json({ message: "You are not admin" });
     if (user.password !== password)
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       });
     const authToken = jwt.sign(
       {
-        id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
