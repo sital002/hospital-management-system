@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import User, { type UserType } from "@/database/modals/UserModel";
-import { use } from "react";
 import connectToDB from "@/database/connectToDB";
 
 export function isAuthenticated(): boolean {
@@ -31,7 +30,7 @@ export async function isAuthorized(role: RoleType) {
     ) as jwt.JwtPayload;
     if (!decoded && !decoded) return false;
     await connectToDB();
-    const user = (await User.findOne(decoded._id)) as UserType;
+    const user = (await User.findById(decoded._id)) as UserType;
     if (!user) return false;
     if (user.role !== role) return false;
     console.log("Authorized");
