@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import User, { type UserType } from "@/database/modals/UserModel";
 import { use } from "react";
+import connectToDB from "@/database/connectToDB";
 
 export function isAuthenticated(): boolean {
   try {
@@ -48,6 +49,7 @@ export async function getUserDetails(): Promise<UserType | null> {
       process.env.JWT_SECRET as string,
     ) as jwt.JwtPayload;
     if (!decoded) return null;
+    await connectToDB();
     const user = await User.findById(decoded._id);
     return user;
   } catch (err) {
