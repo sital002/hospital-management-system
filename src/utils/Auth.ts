@@ -30,6 +30,7 @@ export async function isAuthorized(role: RoleType) {
       process.env.JWT_SECRET as string,
     ) as jwt.JwtPayload;
     if (!decoded && !decoded) return false;
+    await connectToDB();
     const user = (await User.findOne(decoded._id)) as UserType;
     if (!user) return false;
     if (user.role !== role) return false;
