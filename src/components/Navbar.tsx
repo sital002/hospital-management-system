@@ -7,10 +7,10 @@ export default function Navbar() {
       <Link href={"/"} legacyBehavior>
         <a>Home</a>
       </Link>
-      <Link href={"/sign-up"} legacyBehavior>
+      <Link href={"/signup"} legacyBehavior>
         <a>Sign Up</a>
       </Link>
-      <Link href={"/sign-in"} legacyBehavior>
+      <Link href={"/signin"} legacyBehavior>
         <a>Sign In</a>
       </Link>
       <Link href={"/dashboard"} legacyBehavior>

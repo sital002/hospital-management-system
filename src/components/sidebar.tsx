@@ -1,40 +1,68 @@
 import { MdDashboard } from "react-icons/md";
 import { IoHomeOutline } from "react-icons/io5";
-import '@/components/CSS/style.css'
+import "@/components/CSS/style.css";
+import {
+  Accessibility,
+  BookOpenCheck,
+  CircleUser,
+  LayoutDashboard,
+  Pill,
+  UserRound,
+} from "lucide-react";
+import Link from "next/link";
 
-export default function Sidebar(){
-    return(
-        <div className="w-[20vw] border-r-2 border-gray-300 h-[100vh] bg-[#fafbfb] sticky top-0 left-0">
-            <div className="pt-4 px-3 flex gap-2 items-center text-xl font-semibold">
-            <MdDashboard/>
-            <span>Hospital MS</span>
-            </div>
-            <ul className="my-5 border-t-2 border-gray-200 min-h-[85vh] ">
-                <li>
-                    <IoHomeOutline/>
-                    <span>Home</span>
-                </li>
-                <li>
-                    <IoHomeOutline/>
-                    <span>Home</span>
-                </li>
-                <li>
-                    <IoHomeOutline/>
-                    <span>Home</span>
-                </li>
-                <li>
-                    <IoHomeOutline/>
-                    <span>Home</span>
-                </li>
-                <li>
-                    <IoHomeOutline/>
-                    <span>Home</span>
-                </li>
-                <li>
-                    <IoHomeOutline/>
-                    <span>Home</span>
-                </li>
-            </ul>
-        </div>
-    )
+const sideBarOptions = [
+  {
+    name: "Dashboard",
+    url: "/dashboard",
+    icon: <LayoutDashboard />,
+  },
+  {
+    name: "Patient",
+    url: "/patient",
+    icon: <Accessibility />,
+  },
+  {
+    name: "Staff",
+    url: "/staff",
+    icon: <UserRound />,
+  },
+  {
+    name: "Doctor",
+    url: "/doctor",
+    icon: <CircleUser />,
+  },
+  {
+    name: "Pharmacy",
+    url: "/pharmacy",
+    icon: <Pill />,
+  },
+  {
+    name: "Medical Report",
+    url: "/medical-report",
+    icon: <BookOpenCheck />,
+  },
+];
+export default function Sidebar() {
+  return (
+    <div className="sticky left-0 top-0 h-[100vh] w-[20vw] border-r-2 border-gray-300 bg-[#fafbfb]">
+      <div className="flex items-center gap-2 px-3 pt-4 text-xl font-semibold">
+        <MdDashboard />
+        <span>Hospital MS</span>
+      </div>
+      <ul className="my-5 min-h-[85vh] border-t-2 border-gray-200 ">
+        {sideBarOptions.map((option, index) => {
+          return (
+            <Link href={option.url} key={option.name + index}>
+              <li className="mx-2 flex items-center gap-2 px-1 py-2 hover:bg-gray-200 sm:px-3">
+                <div className="text-2xl">{option.icon}</div>
+                <span className=" hidden sm:block">{option.name}</span>
+                <hr />
+              </li>
+            </Link>
+          );
+        })}
+      </ul>
+    </div>
+  );
 }

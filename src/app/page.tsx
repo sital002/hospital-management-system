@@ -1,11 +1,8 @@
-import { cookies } from "next/headers";
+import Modal from "@/components/common/Modal";
+import React from "react";
 
-export default function Page() {
-  const cookieStore = cookies();
-  return cookieStore.getAll().map((cookie) => (
-    <div key={cookie.name}>
-      <span>{cookie.name} </span>
-      <span>{cookie.value}</span>
-    </div>
-  ));
+function page() {
+  return <div>{/* <Modal /> */}</div>;
 }
+
+export default page;
