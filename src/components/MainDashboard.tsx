@@ -1,24 +1,26 @@
 "use client";
 import { useState } from "react";
 import Button from "./common/Button";
-import PopupForm from "./popupForm";
 import { UserType } from "@/database/modals/UserModel";
+import AddProfileModal from "./AddProfileModal";
 
 interface AdminDashboardProps {
   users: UserType[];
   user: UserType;
 }
-export default function MainDash({ users, user }: AdminDashboardProps) {
-  const [popUp, setPopUp] = useState(false);
+export default function MainDashboard({ users, user }: AdminDashboardProps) {
+  const [showModal, setShowModal] = useState(false);
   console.log(user);
 
   function clickBtn() {
-    setPopUp(!popUp);
+    setShowModal(!showModal);
   }
 
   return (
     <div>
-      {popUp && <PopupForm setPopUp={setPopUp} />}
+      {showModal && (
+        <AddProfileModal showModal={showModal} setShowModal={setShowModal} />
+      )}
       <Button onClick={clickBtn} className="ml-[86%] w-fit">
         + Add New
       </Button>

@@ -1,4 +1,4 @@
-import Maindash from "@/components/maindash";
+import Maindashboard from "@/components/MainDashboard";
 import Sidebar from "@/components/sidebar";
 import { UserType } from "@/database/modals/UserModel";
 import { getUserDetails, isAuthenticated } from "@/utils/Auth";
@@ -37,7 +37,7 @@ export default async function Dashboard() {
   return (
     <div className="flex items-start justify-around bg-[#fafbfb]">
       <Sidebar />
-      <Maindash users={data} user={user} />
+      <Maindashboard users={data} user={user} />
     </div>
   );
 }

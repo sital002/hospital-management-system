@@ -1,17 +1,12 @@
-"use client";
-
-import { FC, FormEvent } from "react";
-import Button from "./common/Button";
-import Input from "./common/Input";
-import { X } from "lucide-react";
+import React, { useState } from "react";
 import Label from "./common/Label";
 import Select from "./common/Select";
+import Input from "./common/Input";
+import Button from "./common/Button";
+import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
-interface PopUpFormProps {
-  setPopUp: (e: boolean) => void;
-}
+import { X } from "lucide-react";
 
 type FormInputs = {
   name: string;
@@ -23,6 +18,7 @@ type FormInputs = {
   dob: string;
   gender: string;
   role: string;
+  department: string;
 };
 
 const genderOptions = [
@@ -54,7 +50,8 @@ const roleOptions = [
     value: "admin",
   },
 ];
-const PopupForm: FC<PopUpFormProps> = ({ setPopUp }) => {
+
+export default function LabTechnicianForm() {
   const {
     register,
     handleSubmit,
@@ -71,10 +68,12 @@ const PopupForm: FC<PopUpFormProps> = ({ setPopUp }) => {
       dob: "2000-01-01",
       password: "Password@123",
       cpassword: "Password@123",
+      department: "neurology",
     },
   });
 
   const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     console.log(data);
@@ -90,7 +89,7 @@ const PopupForm: FC<PopUpFormProps> = ({ setPopUp }) => {
       if (json.success) {
         toast.success("Account created successfully");
         router.refresh();
-        setPopUp(false);
+        setShowModal(false);
         return;
       }
       return toast.error(json.message);
@@ -99,18 +98,15 @@ const PopupForm: FC<PopUpFormProps> = ({ setPopUp }) => {
       toast.error(err.message);
     }
   };
+
   return (
-    <div className="fixed inset-0 z-10 flex min-h-screen w-screen items-center justify-center  bg-gray-300 ">
-      <form
-        className="z-20 max-w-2xl rounded-lg border-2 border-gray-200 bg-[#fafbfb] p-5 shadow-md"
-        onSubmit={handleSubmit(onSubmit)}
-      >
+    <div>
+      {" "}
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div
-          onClick={() => setPopUp(false)}
+          onClick={() => setShowModal(false)}
           className="ml-auto w-fit cursor-pointer "
-        >
-          <X className="text-2xl" />
-        </div>
+        ></div>
         <h1 className="text-center text-3xl font-medium">Create New User</h1>
         <Label>Name</Label>
         <Input
@@ -192,13 +188,13 @@ const PopupForm: FC<PopUpFormProps> = ({ setPopUp }) => {
             },
           })}
         />
-        <Label>Role</Label>
+        <Label>Department</Label>
         <Select
           options={roleOptions}
-          {...register("role", {
+          {...register("department", {
             required: {
               value: true,
-              message: "Role is required",
+              message: "Department is required",
             },
           })}
         />
@@ -234,6 +230,4 @@ const PopupForm: FC<PopUpFormProps> = ({ setPopUp }) => {
       </form>
     </div>
   );
-};
-
-export default PopupForm;
+}
