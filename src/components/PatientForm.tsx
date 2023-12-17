@@ -44,12 +44,12 @@ const patientTypeOption = [
 
 const admitType=[
   {
-    name:'Normal',
-    value:'normal'
+    name:"Normal",
+    value:"normal"
   },
   {
-    name:'Emergency',
-    value:'emergency'
+    name:"Emergency",
+    value:"emergency"
   }
 ]
 
