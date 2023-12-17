@@ -17,8 +17,7 @@ export default async function connectToDB() {
     mongoose
       .connect(process.env.MONGO_DB_URI, {
         dbName: "hospital-management-system",
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
+        // useUnifiedTopology: true,
       } as connectionOptions)
       .then(() => {
         console.log("Connected to MongoDB");

@@ -11,14 +11,12 @@ import { X } from "lucide-react";
 type FormInputs = {
   name: string;
   email: string;
-  password: string;
-  cpassword: string;
   phone: number;
   address: string;
   dob: string;
   gender: string;
-  role: string;
-  department: string;
+  patientType:"inpatient" | "outpatient"
+  admitType:"normal"|"emergency"
 };
 
 const genderOptions = [
@@ -32,30 +30,33 @@ const genderOptions = [
   },
 ];
 
-const roleOptions = [
+
+const patientTypeOption = [
   {
-    name: "Doctor",
-    value: "doctor",
+    name: "InPatient",
+    value: "inpatient",
   },
   {
-    name: "Patient",
-    value: "patient",
-  },
-  {
-    name: "Staff",
-    value: "staff",
-  },
-  {
-    name: "Admin",
-    value: "admin",
-  },
+    name: "OutPatient",
+    value: "outpatient",
+  }
 ];
+
+const admitType=[
+  {
+    name:"Normal",
+    value:"normal"
+  },
+  {
+    name:"Emergency",
+    value:"emergency"
+  }
+]
 
 export default function PatientForm() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: {
@@ -64,11 +65,7 @@ export default function PatientForm() {
       phone: 9860098600,
       address: "Ratnapark, Kathmandu",
       gender: "male",
-      role: "doctor",
       dob: "2000-01-01",
-      password: "Password@123",
-      cpassword: "Password@123",
-      department: "neurology",
     },
   });
 
@@ -107,7 +104,7 @@ export default function PatientForm() {
           onClick={() => setShowModal(false)}
           className="ml-auto w-fit cursor-pointer "
         ></div>
-        <h1 className="text-center text-3xl font-medium">Create New User</h1>
+        <h1 className="text-center text-3xl font-medium">Create New Patient</h1>
         <Label>Name</Label>
         <Input
           {...register("name", {
@@ -122,6 +119,7 @@ export default function PatientForm() {
           })}
           placeholder="John Doe"
         />
+        <p className="text-red-800">{errors.name?.message}</p>
         <Label>Email</Label>
         <Input
           {...register("email", {
@@ -136,6 +134,7 @@ export default function PatientForm() {
           })}
           placeholder="johndoe@gmail.com"
         />
+        <p className="text-red-800">{errors.email?.message}</p>
         <Label>Phone</Label>
         <Input
           {...register("phone", {
@@ -150,6 +149,7 @@ export default function PatientForm() {
           })}
           placeholder="+97700000000"
         />
+        <p className="text-red-800">{errors.phone?.message}</p>
         <Label>DOB</Label>
         <Input
           {...register("dob", {
@@ -163,7 +163,9 @@ export default function PatientForm() {
             },
           })}
           placeholder="2002/01/01"
+          type="date"
         />
+        <p className="text-red-800">{errors.dob?.message}</p>
         <Label>Address</Label>
         <Input
           {...register("address", {
@@ -178,6 +180,7 @@ export default function PatientForm() {
           })}
           placeholder="Ratnapark, Kathmandu"
         />
+        <p className="text-red-800">{errors.address?.message}</p>
         <Label>Gender</Label>
         <Select
           options={genderOptions}
@@ -188,43 +191,27 @@ export default function PatientForm() {
             },
           })}
         />
-        <Label>Department</Label>
+        <p className="text-red-800">{errors.gender?.message}</p>
+        <Label>Admit Type</Label>
         <Select
-          options={roleOptions}
-          {...register("department", {
+          options={admitType}
+          {...register("admitType", {
             required: {
               value: true,
-              message: "Department is required",
+              message: "Admit Type is required",
             },
           })}
         />
-        <Label>Password</Label>
-        <Input
-          {...register("password", {
+        <p className="text-red-800">{errors.admitType?.message}</p>
+        <Label>Patient Type</Label>
+        <Select
+          options={patientTypeOption}
+          {...register("patientType", {
             required: {
               value: true,
-              message: "Password is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Password must be less than 64 characters long",
+              message: "PatientType is required",
             },
           })}
-          placeholder="xxxxxxxxx"
-        />
-        <Label>Confirm password</Label>
-        <Input
-          {...register("cpassword", {
-            required: {
-              value: true,
-              message: "Confirm password is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Confirm password must be less than 64 characters long",
-            },
-          })}
-          placeholder="xxxxxxxxx"
         />
         <Button>Add</Button>
       </form>

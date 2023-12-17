@@ -17,8 +17,6 @@ type FormInputs = {
   address: string;
   dob: string;
   gender: string;
-  role: string;
-  department: string;
 };
 
 const genderOptions = [
@@ -32,30 +30,11 @@ const genderOptions = [
   },
 ];
 
-const roleOptions = [
-  {
-    name: "Doctor",
-    value: "doctor",
-  },
-  {
-    name: "Patient",
-    value: "patient",
-  },
-  {
-    name: "Staff",
-    value: "staff",
-  },
-  {
-    name: "Admin",
-    value: "admin",
-  },
-];
 
 export default function LabTechnicianForm() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: {
@@ -64,11 +43,9 @@ export default function LabTechnicianForm() {
       phone: 9860098600,
       address: "Ratnapark, Kathmandu",
       gender: "male",
-      role: "doctor",
       dob: "2000-01-01",
       password: "Password@123",
-      cpassword: "Password@123",
-      department: "neurology",
+      cpassword: "Password@123"
     },
   });
 
@@ -107,7 +84,7 @@ export default function LabTechnicianForm() {
           onClick={() => setShowModal(false)}
           className="ml-auto w-fit cursor-pointer "
         ></div>
-        <h1 className="text-center text-3xl font-medium">Create New User</h1>
+        <h1 className="text-center text-3xl font-medium">Create New LabTechnician</h1>
         <Label>Name</Label>
         <Input
           {...register("name", {
@@ -122,6 +99,7 @@ export default function LabTechnicianForm() {
           })}
           placeholder="John Doe"
         />
+        <p className="text-red-800">{errors.name?.message}</p>
         <Label>Email</Label>
         <Input
           {...register("email", {
@@ -136,6 +114,7 @@ export default function LabTechnicianForm() {
           })}
           placeholder="johndoe@gmail.com"
         />
+        <p className="text-red-800">{errors.email?.message}</p>
         <Label>Phone</Label>
         <Input
           {...register("phone", {
@@ -150,6 +129,7 @@ export default function LabTechnicianForm() {
           })}
           placeholder="+97700000000"
         />
+        <p className="text-red-800">{errors.phone?.message}</p>
         <Label>DOB</Label>
         <Input
           {...register("dob", {
@@ -163,6 +143,7 @@ export default function LabTechnicianForm() {
             },
           })}
           placeholder="2002/01/01"
+          type="date"
         />
         <Label>Address</Label>
         <Input
@@ -178,6 +159,7 @@ export default function LabTechnicianForm() {
           })}
           placeholder="Ratnapark, Kathmandu"
         />
+        <p className="text-red-800">{errors.address?.message}</p>
         <Label>Gender</Label>
         <Select
           options={genderOptions}
@@ -188,16 +170,7 @@ export default function LabTechnicianForm() {
             },
           })}
         />
-        <Label>Department</Label>
-        <Select
-          options={roleOptions}
-          {...register("department", {
-            required: {
-              value: true,
-              message: "Department is required",
-            },
-          })}
-        />
+       <p className="text-red-800">{errors.gender?.message}</p>
         <Label>Password</Label>
         <Input
           {...register("password", {
@@ -212,6 +185,7 @@ export default function LabTechnicianForm() {
           })}
           placeholder="xxxxxxxxx"
         />
+        <p className="text-red-800">{errors.password?.message}</p>
         <Label>Confirm password</Label>
         <Input
           {...register("cpassword", {
@@ -226,6 +200,7 @@ export default function LabTechnicianForm() {
           })}
           placeholder="xxxxxxxxx"
         />
+        <p className="text-red-800">{errors.cpassword?.message}</p>
         <Button>Add</Button>
       </form>
     </div>
