@@ -203,7 +203,7 @@ export default function PatientForm() {
           })}
         />
         <p className="text-red-800">{errors.admitType?.message}</p>
-        <Label>Patient's Type</Label>
+        <Label>Patient Type</Label>
         <Select
           options={patientTypeOption}
           {...register("patientType", {
