@@ -75,3 +75,56 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+
+export async function PUT(req: NextRequest) {
+  try {
+    const data = await req.json();
+    // const id = req.nextUrl.searchParams.get("id");
+    const id = req.nextUrl.pathname.split("/")[3];
+    console.log(id);
+
+    // console.log(data);
+    const { name, phone, dob, address, gender, admitType, patientType } = data;
+    if (!name)
+      return new Response(
+        JSON.stringify({ success: false, message: "Name is required" }),
+      );
+    if (!phone)
+      return new Response(
+        JSON.stringify({ success: false, message: "Phone is required" }),
+      );
+    if (!dob)
+      return new Response(
+        JSON.stringify({ success: false, message: "DOB is required" }),
+      );
+    if (!address)
+      return new Response(
+        JSON.stringify({ success: false, message: "Address is required" }),
+      );
+    if (!gender)
+      return new Response(
+        JSON.stringify({ success: false, message: "Gender is required" }),
+      );
+    if (!admitType)
+      return new Response(
+        JSON.stringify({ success: false, message: "Admit Type is required" }),
+      );
+    if (!patientType)
+      return new Response(
+        JSON.stringify({ success: false, message: "Patient Type is required" }),
+      );
+    await connectToDB();
+    const updatedData = await Patient.findByIdAndUpdate(id, data);
+    return new Response(JSON.stringify({ success: true, updatedData }));
+    // const user =
+  } catch (err: any) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: err.message,
+      }),
+    );
+  }
+}
+
