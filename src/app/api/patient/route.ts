@@ -76,6 +76,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+
 export async function PUT(req: NextRequest) {
   try {
     const data = await req.json();
@@ -126,3 +127,4 @@ export async function PUT(req: NextRequest) {
     );
   }
 }
+
