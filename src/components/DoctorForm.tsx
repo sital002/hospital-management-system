@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import Label from "./common/Label";
 import Select from "./common/Select";
 import Input from "./common/Input";
@@ -6,7 +6,6 @@ import Button from "./common/Button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { X } from "lucide-react";
 
 type FormInputs = {
   name: string;
@@ -15,6 +14,7 @@ type FormInputs = {
   cpassword: string;
   phone: number;
   address: string;
+  department: string;
   dob: string;
   gender: string;
 };
@@ -30,9 +30,12 @@ const genderOptions = [
   },
 ];
 
+interface DoctorFormProps {
+  // showModal: boolean;
+  setShowModal: (e: boolean) => void;
+}
 
-
-export default function DoctorForm() {
+const DoctorForm: FC<DoctorFormProps> = ({ setShowModal }) => {
   const {
     register,
     handleSubmit,
@@ -45,20 +48,20 @@ export default function DoctorForm() {
       phone: 9860098600,
       address: "Ratnapark, Kathmandu",
       gender: "male",
+      department: "Cardiology",
       dob: "2000-01-01",
       password: "Password@123",
-      cpassword: "Password@123"
+      cpassword: "Password@123",
     },
   });
 
   const router = useRouter();
-  const [showModal, setShowModal] = useState(false);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     console.log(data);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/user`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor`,
         {
           method: "POST",
           body: JSON.stringify(data),
@@ -86,7 +89,7 @@ export default function DoctorForm() {
           onClick={() => setShowModal(false)}
           className="ml-auto w-fit cursor-pointer "
         ></div>
-        <h1 className="text-center text-3xl font-medium">Create New Doctor</h1>
+        <h1 className="text-center text-3xl font-medium">Add New Doctor</h1>
         <Label>Name</Label>
         <Input
           {...register("name", {
@@ -145,7 +148,7 @@ export default function DoctorForm() {
             },
           })}
           placeholder="2002/01/01"
-          type='date'
+          type="date"
         />
         <p className="text-red-800">{errors.dob?.message}</p>
         <Label>Address</Label>
@@ -174,7 +177,21 @@ export default function DoctorForm() {
           })}
         />
         <p className="text-red-800">{errors.gender?.message}</p>
-        
+        <Label>Department</Label>
+        <Input
+          {...register("department", {
+            required: {
+              value: true,
+              message: "Department is required",
+            },
+            maxLength: {
+              value: 64,
+              message: "Department must be less than 64 characters long",
+            },
+          })}
+          placeholder="John Doe"
+        />
+        <p className="text-red-800">{errors.department?.message}</p>
         <Label>Password</Label>
         <Input
           {...register("password", {
@@ -209,4 +226,6 @@ export default function DoctorForm() {
       </form>
     </div>
   );
-}
+};
+
+export default DoctorForm;

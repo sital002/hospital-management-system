@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Pill,
   UserRound,
+  FlaskConical
 } from "lucide-react";
 import Link from "next/link";
 
@@ -33,6 +34,11 @@ const sideBarOptions = [
     icon: <CircleUser />,
   },
   {
+    name:"Lab Technician",
+    url:"labtechnician",
+    icon:<FlaskConical />
+  },
+  {
     name: "Pharmacy",
     url: "/pharmacy",
     icon: <Pill />,
@@ -41,7 +47,8 @@ const sideBarOptions = [
     name: "Medical Report",
     url: "/medical-report",
     icon: <BookOpenCheck />,
-  },
+  }
+  
 ];
 export default function Sidebar() {
   return (

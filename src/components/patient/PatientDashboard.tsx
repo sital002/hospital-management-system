@@ -1,16 +1,19 @@
 "use client";
 import { useState } from "react";
-import Button from "./common/Button";
 import { UserType } from "@/database/modals/UserModel";
-import AddProfileModal from "./AddProfileModal";
 import { formatDate } from "@/utils/formatDate";
 import { PateintType } from "@/database/modals/PatientModel";
+import AddProfileModal from "../AddProfileModal";
+import Button from "../common/Button";
 
-interface AdminDashboardProps {
+interface PatientDashboardProps {
   users: PateintType[];
   user: UserType;
 }
-export default function MainDashboard({ users, user }: AdminDashboardProps) {
+export default function PatientDashboard({
+  users,
+  user,
+}: PatientDashboardProps) {
   const [showModal, setShowModal] = useState(false);
   // console.log(user);
 
@@ -36,7 +39,7 @@ export default function MainDashboard({ users, user }: AdminDashboardProps) {
             {/* <td className="py-3 font-semibold uppercase">Email</td> */}
             <td className="py-3 font-semibold uppercase">DOB</td>
             <td className="py-3 font-semibold uppercase">Gender</td>
-            {/* <td className="py-3 font-semibold uppercase">Role</td> */}
+            <td className="py-3 font-semibold uppercase">Action</td>
           </tr>
 
           {users.map((item, index) => (
@@ -47,7 +50,11 @@ export default function MainDashboard({ users, user }: AdminDashboardProps) {
               {/* <td>{item?.email}</td> */}
               <td className="uppercase">{formatDate(item?.dob)}</td>
               <td className="uppercase">{item?.gender}</td>
-              {/* <td className="uppercase">{item.role}</td> */}
+              <td className="uppercase">
+                <Button className="mr-3 w-fit">View</Button>
+                <Button className="mr-3 w-fit">Edit</Button>
+                <Button className="mr-3 w-fit">Delete</Button>
+              </td>
             </tr>
           ))}
         </tbody>
