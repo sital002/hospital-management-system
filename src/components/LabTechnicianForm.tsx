@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import Label from "./common/Label";
 import Select from "./common/Select";
 import Input from "./common/Input";
@@ -30,8 +30,12 @@ const genderOptions = [
   },
 ];
 
+interface LabTechnicianFormProps {
+  // showModal: boolean;
+  setShowModal: (e: boolean) => void;
+}
 
-export default function LabTechnicianForm() {
+const LabTechnicianForm: FC<LabTechnicianFormProps> = ({ setShowModal }) => {
   const {
     register,
     handleSubmit,
@@ -45,18 +49,18 @@ export default function LabTechnicianForm() {
       gender: "male",
       dob: "2000-01-01",
       password: "Password@123",
-      cpassword: "Password@123"
+      cpassword: "Password@123",
     },
   });
 
   const router = useRouter();
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     console.log(data);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/user`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician`,
         {
           method: "POST",
           body: JSON.stringify(data),
@@ -84,7 +88,9 @@ export default function LabTechnicianForm() {
           onClick={() => setShowModal(false)}
           className="ml-auto w-fit cursor-pointer "
         ></div>
-        <h1 className="text-center text-3xl font-medium">Create New LabTechnician</h1>
+        <h1 className="text-center text-3xl font-medium">
+          Create New LabTechnician
+        </h1>
         <Label>Name</Label>
         <Input
           {...register("name", {
@@ -170,7 +176,7 @@ export default function LabTechnicianForm() {
             },
           })}
         />
-       <p className="text-red-800">{errors.gender?.message}</p>
+        <p className="text-red-800">{errors.gender?.message}</p>
         <Label>Password</Label>
         <Input
           {...register("password", {
@@ -205,4 +211,6 @@ export default function LabTechnicianForm() {
       </form>
     </div>
   );
-}
+};
+
+export default LabTechnicianForm;

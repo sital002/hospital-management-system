@@ -31,6 +31,8 @@ export default function MainDashboard({ users, user }: AdminDashboardProps) {
           <tr className="py-2">
             <td className="py-3 font-semibold uppercase">Name</td>
             <td className="py-3 font-semibold uppercase">Address</td>
+            <td className="py-3 font-semibold uppercase">Patient Type</td>
+
             {/* <td className="py-3 font-semibold uppercase">Email</td> */}
             <td className="py-3 font-semibold uppercase">DOB</td>
             <td className="py-3 font-semibold uppercase">Gender</td>
@@ -41,6 +43,7 @@ export default function MainDashboard({ users, user }: AdminDashboardProps) {
             <tr className="h-[60px] border-2 border-gray-200" key={index}>
               <td className="uppercase">{item.name}</td>
               <td className="uppercase">{item?.address}</td>
+              <td className="uppercase">{item?.patientType}</td>
               {/* <td>{item?.email}</td> */}
               <td className="uppercase">{formatDate(item?.dob)}</td>
               <td className="uppercase">{item?.gender}</td>

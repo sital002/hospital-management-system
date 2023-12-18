@@ -1,15 +1,19 @@
 import mongoose, { InferSchemaType, Schema, Types } from "mongoose";
 
-const StaffSchema = new Schema(
+const LabtechnicianSchema = new Schema(
   {
     name: {
       type: String,
       required: [true, "Please provide a name"],
       minLength: [3, "Name cannot be less than 3 characters"],
     },
+    // speciality: {
+    //   type: String,
+    //   required: [true, "Please provide a speciality"],
+    // },
     email: {
       type: String,
-      required: [true, "Please provide a Email"],
+      required: [true, "Please provide a email"],
     },
     phone: {
       type: String,
@@ -19,17 +23,19 @@ const StaffSchema = new Schema(
       type: String,
       required: [true, "Please provide a address"],
     },
-    shift: {
-      type: String,
-      enum: ["morning", "evening", "night"],
-      required: [true, "Please provide a department"],
+    dob: {
+      type: Date,
+      required: [true, "Please provide a dob"],
     },
     gender: {
       type: String,
       enum: ["male", "female"],
-      required: [true, "Please provide a Gender"],
+      required: [true, "Gender is required"],
     },
-
+    // department: {
+    //   type: String,
+    //   required: [true, "Please provide a department"],
+    // },
     password: {
       type: String,
       required: [true, "Please provide a password"],
@@ -40,9 +46,10 @@ const StaffSchema = new Schema(
   { timestamps: true },
 );
 
-export const Staff =
-  mongoose.models.Staff || mongoose.model("Staff", StaffSchema);
+export const Labtechnician =
+  mongoose.models.Labtechnician ||
+  mongoose.model("Labtechnician", LabtechnicianSchema);
 
-export type Staff = InferSchemaType<typeof StaffSchema> & {
+export type LabtechnicianType = InferSchemaType<typeof LabtechnicianSchema> & {
   _id: Types.ObjectId;
 };
