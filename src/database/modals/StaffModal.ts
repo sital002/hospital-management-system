@@ -34,7 +34,7 @@ const StaffSchema = new Schema(
 );
 
 export const Staff =
-  mongoose.models.Staff || mongoose.model("Doctor", StaffSchema);
+  mongoose.models.Staff || mongoose.model("Staff", StaffSchema);
 
 export type Staff = InferSchemaType<typeof StaffSchema> & {
   _id: Types.ObjectId;

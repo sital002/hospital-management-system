@@ -10,13 +10,12 @@ import { X } from "lucide-react";
 
 type FormInputs = {
   name: string;
-  email: string;
   phone: number;
   address: string;
-  dob: string;
+  dob: Date | null;
   gender: string;
-  patientType:"inpatient" | "outpatient"
-  admitType:"normal"|"emergency"
+  patientType: "inpatient" | "outpatient";
+  admitType: "normal" | "emergency";
 };
 
 const genderOptions = [
@@ -30,7 +29,6 @@ const genderOptions = [
   },
 ];
 
-
 const patientTypeOption = [
   {
     name: "InPatient",
@@ -39,19 +37,19 @@ const patientTypeOption = [
   {
     name: "OutPatient",
     value: "outpatient",
-  }
+  },
 ];
 
-const admitType=[
+const admitType = [
   {
-    name:"Normal",
-    value:"normal"
+    name: "Normal",
+    value: "normal",
   },
   {
-    name:"Emergency",
-    value:"emergency"
-  }
-]
+    name: "Emergency",
+    value: "emergency",
+  },
+];
 
 export default function PatientForm() {
   const {
@@ -61,11 +59,10 @@ export default function PatientForm() {
   } = useForm<FormInputs>({
     defaultValues: {
       name: "John Doe",
-      email: "johndoe33@gmail.com",
       phone: 9860098600,
       address: "Ratnapark, Kathmandu",
       gender: "male",
-      dob: "2000-01-01",
+      dob: null,
     },
   });
 
@@ -73,10 +70,10 @@ export default function PatientForm() {
   const [showModal, setShowModal] = useState(false);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    console.log(data);
+    // console.log(data);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/user`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient`,
         {
           method: "POST",
           body: JSON.stringify(data),
@@ -85,6 +82,7 @@ export default function PatientForm() {
       const json = await res.json();
       if (json.success) {
         toast.success("Account created successfully");
+        console.log(json);
         router.refresh();
         setShowModal(false);
         return;
@@ -120,21 +118,6 @@ export default function PatientForm() {
           placeholder="John Doe"
         />
         <p className="text-red-800">{errors.name?.message}</p>
-        <Label>Email</Label>
-        <Input
-          {...register("email", {
-            required: {
-              value: true,
-              message: "Email is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Email must be less than 64 characters long",
-            },
-          })}
-          placeholder="johndoe@gmail.com"
-        />
-        <p className="text-red-800">{errors.email?.message}</p>
         <Label>Phone</Label>
         <Input
           {...register("phone", {
