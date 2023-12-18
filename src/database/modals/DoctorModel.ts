@@ -7,17 +7,25 @@ const DoctorSchema = new Schema(
       required: [true, "Please provide a name"],
       minLength: [3, "Name cannot be less than 3 characters"],
     },
-    speciality: {
+    // speciality: {
+    //   type: String,
+    //   required: [true, "Please provide a speciality"],
+    // },
+    email: {
       type: String,
-      required: [true, "Please provide a speciality"],
+      required: [true, "Please provide a email"],
     },
-    contact: {
+    phone: {
       type: String,
       required: [true, "Please provide a contact"],
     },
     address: {
       type: String,
       required: [true, "Please provide a address"],
+    },
+    dob: {
+      type: Date,
+      required: [true, "Please provide a dob"],
     },
     gender: {
       type: String,

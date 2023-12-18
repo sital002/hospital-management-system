@@ -23,6 +23,7 @@ const PatientSchema = new Schema(
     },
     patientType: {
       type: String,
+      enum: ["outpatient", "inpatient"],
       required: [true, "Please provide a  Patient type"],
     },
     phone: {

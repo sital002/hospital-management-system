@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import Label from "./common/Label";
 import Select from "./common/Select";
 import Input from "./common/Input";
@@ -6,7 +6,6 @@ import Button from "./common/Button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { X } from "lucide-react";
 
 type FormInputs = {
   name: string;
@@ -31,11 +30,11 @@ const genderOptions = [
 
 const patientTypeOption = [
   {
-    name: "InPatient",
+    name: "In Patient",
     value: "inpatient",
   },
   {
-    name: "OutPatient",
+    name: "Out Patient",
     value: "outpatient",
   },
 ];
@@ -51,7 +50,11 @@ const admitType = [
   },
 ];
 
-export default function PatientForm() {
+interface PatientFormProps {
+  // showModal: boolean;
+  setShowModal: (e: boolean) => void;
+}
+const PatientForm: FC<PatientFormProps> = ({ setShowModal }) => {
   const {
     register,
     handleSubmit,
@@ -62,12 +65,14 @@ export default function PatientForm() {
       phone: 9860098600,
       address: "Ratnapark, Kathmandu",
       gender: "male",
+      admitType: "emergency",
+      patientType: "inpatient",
       dob: null,
     },
   });
 
   const router = useRouter();
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     // console.log(data);
@@ -200,4 +205,6 @@ export default function PatientForm() {
       </form>
     </div>
   );
-}
+};
+
+export default PatientForm;
