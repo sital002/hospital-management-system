@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { UserType } from "@/database/modals/UserModel";
 import { formatDate } from "@/utils/formatDate";
-import { PateintType } from "@/database/modals/PatientModel";
+import { type PateintType } from "@/database/modals/PatientModel";
 import AddProfileModal from "../AddProfileModal";
 import Button from "../common/Button";
 
