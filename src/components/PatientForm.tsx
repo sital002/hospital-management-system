@@ -96,7 +96,7 @@ const PatientForm: FC<PatientFormProps> = ({ setShowModal }) => {
       return toast.error(json.message);
     } catch (err: any) {
       console.log(err);
-      toast.error(err.message);
+      toast.error(err?.message);
     }
   };
 
