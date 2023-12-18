@@ -64,8 +64,8 @@ const PatientForm: FC<PatientFormProps> = ({ setShowModal }) => {
       name: "John Doe",
       phone: 9860098600,
       address: "Ratnapark, Kathmandu",
-      gender: "male",
 
+      gender: "male",
       admitType: "emergency",
       patientType: "inpatient",
       dob: null,
@@ -96,7 +96,7 @@ const PatientForm: FC<PatientFormProps> = ({ setShowModal }) => {
       return toast.error(json.message);
     } catch (err: any) {
       console.log(err);
-      toast.error(err.message);
+      toast.error(err?.message);
     }
   };
 
