@@ -65,6 +65,7 @@ const PatientForm: FC<PatientFormProps> = ({ setShowModal }) => {
       phone: 9860098600,
       address: "Ratnapark, Kathmandu",
       gender: "male",
+
       admitType: "emergency",
       patientType: "inpatient",
       dob: null,
