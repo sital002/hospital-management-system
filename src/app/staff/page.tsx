@@ -1,4 +1,3 @@
-
 import Sidebar from "@/components/sidebar";
 import StaffDashboard from "@/components/staff/StaffDashboard";
 import { PateintType } from "@/database/modals/PatientModel";
@@ -32,7 +31,6 @@ export default async function Dashboard() {
   console.log(data);
   return (
     <div className="flex items-start justify-around bg-[#fafbfb]">
-      <Sidebar />
       <StaffDashboard users={data} user={user} />
     </div>
   );

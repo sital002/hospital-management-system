@@ -13,7 +13,7 @@ export default function Navbar() {
       <Link href={"/signin"} legacyBehavior>
         <a>Sign In</a>
       </Link>
-      <Link href={"/dashboard"} legacyBehavior>
+      <Link href={"/dashboard/admin"} legacyBehavior>
         <a>Dashboard</a>
       </Link>
     </nav>

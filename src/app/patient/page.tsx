@@ -28,10 +28,9 @@ export default async function Dashboard() {
   if (!user) return redirect("/signin");
 
   const data = await getAllUsers();
-  console.log(data);
+  // console.log(data);
   return (
     <div className="flex items-start justify-around bg-[#fafbfb]">
-      <Sidebar />
       <PatientDashboard users={data} user={user} />
     </div>
   );
