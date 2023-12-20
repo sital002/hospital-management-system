@@ -7,6 +7,7 @@ import AddProfileModal from "../AddProfileModal";
 import Button from "../common/Button";
 import EditPatientModal from "./EditPatientModal";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface PatientDashboardProps {
   users: PateintType[];
@@ -19,6 +20,7 @@ export default function PatientDashboard({
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   // console.log(user);
+  const router = useRouter();
 
   function clickBtn() {
     setShowModal(!showModal);
@@ -26,15 +28,15 @@ export default function PatientDashboard({
 
   const handleDelete = async (id: string) => {
     try {
-      // const res = await fetch(`/api/patient/${id}`, {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient?id=${id}`,
         {
           method: "DELETE",
         },
       );
       const data = await res.json();
       toast.success(data.message);
+      router.refresh();
     } catch (err: any) {
       console.log(err.message);
       toast.error(err.message);

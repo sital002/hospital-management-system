@@ -130,7 +130,9 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     console.log("Hello");
-    const id = req.nextUrl.pathname.split("/");
+    // const id = req.nextUrl.pathname.split("/");
+    const parts = req.nextUrl.searchParams.get("id");
+    const id = parts;
     console.log("the id ", id);
     if (!id)
       return new Response(
