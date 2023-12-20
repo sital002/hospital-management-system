@@ -1,6 +1,4 @@
-import PatientDashboard from "@/components/patient/PatientDashboard";
 import { PatientType } from "@/database/modals/PatientModel";
-import Maindashboard from "@/components/MainDashboard";
 import PatientDashboard from "@/components/patient/PatientDashboard";
 import Sidebar from "@/components/sidebar";
 import { getUserDetails } from "@/utils/Auth";
