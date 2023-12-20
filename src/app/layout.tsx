@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Toastify from "@/utils/toastify";
-import Sidebar from "@/components/sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,10 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Toastify />
         <Navbar />
-        <div className="flex gap-2 bg-[#fafbfb]">
-          <Sidebar />
-          <main className="w-full">{children}</main>
-        </div>
+        <main className="w-full">{children}</main>
       </body>
     </html>
   );

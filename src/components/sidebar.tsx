@@ -20,32 +20,32 @@ const sideBarOptions = [
   },
   {
     name: "Patient",
-    url: "/patient",
+    url: "/dashboard/patient",
     icon: <Accessibility />,
   },
   {
     name: "Staff",
-    url: "/staff",
+    url: "/dashboard/staff",
     icon: <UserRound />,
   },
   {
     name: "Doctor",
-    url: "/doctor",
+    url: "/dashboard/doctor",
     icon: <CircleUser />,
   },
   {
     name: "Lab Technician",
-    url: "labtechnician",
+    url: "/dashboard/labtechnician",
     icon: <FlaskConical />,
   },
   {
     name: "Pharmacy",
-    url: "/pharmacy",
+    url: "/dashboard/pharmacy",
     icon: <Pill />,
   },
   {
     name: "Medical Report",
-    url: "/medical-report",
+    url: "/dashboard/medical-report",
     icon: <BookOpenCheck />,
   },
 ];

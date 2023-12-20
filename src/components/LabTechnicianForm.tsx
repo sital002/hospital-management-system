@@ -1,3 +1,5 @@
+"use client";
+
 import React, { FC, useState } from "react";
 import Label from "./common/Label";
 import Select from "./common/Select";
@@ -32,10 +34,9 @@ const genderOptions = [
 
 interface LabTechnicianFormProps {
   // showModal: boolean;
-  setShowModal: (e: boolean) => void;
 }
 
-const LabTechnicianForm: FC<LabTechnicianFormProps> = ({ setShowModal }) => {
+const LabTechnicianForm: FC<LabTechnicianFormProps> = () => {
   const {
     register,
     handleSubmit,
@@ -70,7 +71,6 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({ setShowModal }) => {
       if (json.success) {
         toast.success("Account created successfully");
         router.refresh();
-        setShowModal(false);
         return;
       }
       return toast.error(json.message);
@@ -84,10 +84,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({ setShowModal }) => {
     <div>
       {" "}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div
-          onClick={() => setShowModal(false)}
-          className="ml-auto w-fit cursor-pointer "
-        ></div>
+        <div className="ml-auto w-fit cursor-pointer "></div>
         <h1 className="text-center text-3xl font-medium">
           Create New LabTechnician
         </h1>
