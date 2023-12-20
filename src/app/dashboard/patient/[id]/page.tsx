@@ -1,4 +1,6 @@
+import Button from "@/components/common/Button";
 import PatientDetailCard from "@/components/patientDetails/PatientDetailCard";
+import LabRecords from "@/components/patientDetails/table/LabRecords";
 import PatientReportDetails from "@/components/patientDetails/table/VitalsTable";
 import { PatientType } from "@/database/modals/PatientModel";
 
@@ -21,11 +23,17 @@ export default async function Page({ params }: { params: { id: string } }) {
   if (!patient) return null;
   return (
     <>
-    <h1 className="ml-16 text-xl font-semibold">{`${patient.name}'s Profile`}</h1>
-    <div className="flex  gap-4 ">
-    <PatientDetailCard patient={patient}/>
-    <PatientReportDetails/>
-    </div>
+      <div className="m-6 flex flex-col gap-10 rounded-lg  lg:flex-row ">
+        <PatientDetailCard patient={patient} />
+        <div className="h-fit w-full max-w-[750px]  bg-neutral-50 p-5 shadow-md">
+          <div className="flex gap-2">
+            <Button>Prescription</Button>
+            <Button>Vitals</Button>
+            <Button>Lab Records</Button>
+          </div>
+          <LabRecords />
+        </div>
+      </div>
     </>
   );
 }
