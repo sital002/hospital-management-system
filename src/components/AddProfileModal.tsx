@@ -14,24 +14,24 @@ const AddProfileModal: FC<PopUpFormProps> = ({ setShowModal, showModal }) => {
     {
       name: "Patient",
       value: "patient",
-      url: "/patient/new",
+      url: "/dashboard/patient/new",
       icon: <Accessibility />,
     },
     {
       name: "Doctor",
       value: "doctor",
-      url: "/doctor/new",
+      url: "/dashboard/doctor/new",
       icon: <UserCheck />,
     },
     {
       name: "Staff",
-      url: "/staff/new",
+      url: "/dashboard/staff/new",
       value: "staff",
       icon: <Users />,
     },
     {
       name: "Lab technician",
-      url: "labtechnician/new",
+      url: "/dashboard/labtechnician/new",
       value: "lab technician",
       icon: <Users />,
     },

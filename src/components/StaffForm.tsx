@@ -1,3 +1,4 @@
+"use client";
 import React, { FC, useState } from "react";
 import Label from "./common/Label";
 import Select from "./common/Select";
@@ -50,9 +51,8 @@ const workShift = [
 
 interface StaffFormProps {
   // showModal: boolean;
-  setShowModal: (e: boolean) => void;
 }
-const StaffForm: FC<StaffFormProps> = ({ setShowModal }) => {
+const StaffForm: FC<StaffFormProps> = () => {
   const {
     register,
     handleSubmit,
@@ -85,7 +85,6 @@ const StaffForm: FC<StaffFormProps> = ({ setShowModal }) => {
       if (json.success) {
         toast.success("Account created successfully");
         router.refresh();
-        setShowModal(false);
         return;
       }
       return toast.error(json.message);
@@ -99,10 +98,7 @@ const StaffForm: FC<StaffFormProps> = ({ setShowModal }) => {
     <div>
       {" "}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div
-          onClick={() => setShowModal(false)}
-          className="ml-auto w-fit cursor-pointer "
-        ></div>
+        <div className="ml-auto w-fit cursor-pointer "></div>
         <h1 className="text-center text-3xl font-medium">Create New Staff</h1>
         <Label>Name</Label>
         <Input
