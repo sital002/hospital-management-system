@@ -1,16 +1,16 @@
 "use client";
 import { useState } from "react";
-import Button from "./common/Button";
 import { UserType } from "@/database/modals/UserModel";
-import AddProfileModal from "./AddProfileModal";
 import { formatDate } from "@/utils/formatDate";
-import { PateintType } from "@/database/modals/PatientModel";
+import AddProfileModal from "../AddProfileModal";
+import Button from "../common/Button";
+import { type DoctorType } from "@/database/modals/DoctorModel";
 
-interface AdminDashboardProps {
-  users: PateintType[];
+interface DoctorDashboardProps {
+  users: DoctorType[];
   user: UserType;
 }
-export default function MainDashboard({ users, user }: AdminDashboardProps) {
+export default function DoctorDashboard({ users, user }: DoctorDashboardProps) {
   const [showModal, setShowModal] = useState(false);
   // console.log(user);
 
@@ -31,23 +31,27 @@ export default function MainDashboard({ users, user }: AdminDashboardProps) {
           <tr className="py-2">
             <td className="py-3 font-semibold uppercase">Name</td>
             <td className="py-3 font-semibold uppercase">Address</td>
-            <td className="py-3 font-semibold uppercase">Patient Type</td>
+            {/* <td className="py-3 font-semibold uppercase">Patient Type</td> */}
 
-            {/* <td className="py-3 font-semibold uppercase">Email</td> */}
+            <td className="py-3 font-semibold uppercase">Email</td>
             <td className="py-3 font-semibold uppercase">DOB</td>
             <td className="py-3 font-semibold uppercase">Gender</td>
-            {/* <td className="py-3 font-semibold uppercase">Role</td> */}
+            <td className="py-3 font-semibold uppercase">Action</td>
           </tr>
 
           {users.map((item, index) => (
             <tr className="h-[60px] border-2 border-gray-200" key={index}>
               <td className="uppercase">{item.name}</td>
               <td className="uppercase">{item?.address}</td>
-              <td className="uppercase">{item?.patientType}</td>
+              <td className="uppercase">{item?.email}</td>
               {/* <td>{item?.email}</td> */}
               <td className="uppercase">{formatDate(item?.dob)}</td>
               <td className="uppercase">{item?.gender}</td>
-              {/* <td className="uppercase">{item.role}</td> */}
+              <td className="uppercase">
+                <Button className="mr-3 w-fit">View</Button>
+                <Button className="mr-3 w-fit">Edit</Button>
+                <Button className="mr-3 w-fit">Delete</Button>
+              </td>
             </tr>
           ))}
         </tbody>

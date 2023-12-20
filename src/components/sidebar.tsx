@@ -8,13 +8,14 @@ import {
   LayoutDashboard,
   Pill,
   UserRound,
+  FlaskConical,
 } from "lucide-react";
 import Link from "next/link";
 
 const sideBarOptions = [
   {
     name: "Dashboard",
-    url: "/dashboard",
+    url: "/dashboard/admin",
     icon: <LayoutDashboard />,
   },
   {
@@ -31,6 +32,11 @@ const sideBarOptions = [
     name: "Doctor",
     url: "/doctor",
     icon: <CircleUser />,
+  },
+  {
+    name: "Lab Technician",
+    url: "labtechnician",
+    icon: <FlaskConical />,
   },
   {
     name: "Pharmacy",

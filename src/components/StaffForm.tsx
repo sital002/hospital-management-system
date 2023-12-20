@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import Label from "./common/Label";
 import Select from "./common/Select";
 import Input from "./common/Input";
@@ -18,7 +18,7 @@ type FormInputs = {
   dob: string;
   gender: string;
   role: string;
-  shift:string;
+  shift: string;
   department: string;
 };
 
@@ -33,18 +33,26 @@ const genderOptions = [
   },
 ];
 
-const workShift=[
+const workShift = [
   {
-    name:'Day',
-    value:'day'
+    name: "Morning",
+    value: "morning",
   },
   {
-    name:'Night',
-    value:'nignt'
-  }
-]
+    name: "Evening",
+    value: "evening",
+  },
+  {
+    name: "Night",
+    value: "night",
+  },
+];
 
-export default function StaffForm() {
+interface StaffFormProps {
+  // showModal: boolean;
+  setShowModal: (e: boolean) => void;
+}
+const StaffForm: FC<StaffFormProps> = ({ setShowModal }) => {
   const {
     register,
     handleSubmit,
@@ -57,25 +65,22 @@ export default function StaffForm() {
       address: "Ratnapark, Kathmandu",
       gender: "male",
       dob: "2000-01-01",
-      shift:'Day',
+      shift: "morning",
       password: "Password@123",
-      cpassword: "Password@123"
+      cpassword: "Password@123",
     },
   });
 
   const router = useRouter();
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     console.log(data);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/user`,
-        {
-          method: "POST",
-          body: JSON.stringify(data),
-        },
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
       const json = await res.json();
       if (json.success) {
         toast.success("Account created successfully");
@@ -231,4 +236,6 @@ export default function StaffForm() {
       </form>
     </div>
   );
-}
+};
+
+export default StaffForm;

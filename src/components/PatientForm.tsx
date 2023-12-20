@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import React, { FC, useState } from "react";
 import Label from "./common/Label";
 import Select from "./common/Select";
 import Input from "./common/Input";
@@ -6,17 +7,17 @@ import Button from "./common/Button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { X } from "lucide-react";
+import { PateintType } from "@/database/modals/PatientModel";
 
 type FormInputs = {
   name: string;
-  email: string;
+  id?: string;
   phone: number;
   address: string;
-  dob: string;
+  dob: Date | null;
   gender: string;
-  patientType:"inpatient" | "outpatient"
-  admitType:"normal"|"emergency"
+  patientType: "inpatient" | "outpatient";
+  admitType: "normal" | "emergency";
 };
 
 const genderOptions = [
@@ -30,81 +31,139 @@ const genderOptions = [
   },
 ];
 
-
 const patientTypeOption = [
   {
-    name: "InPatient",
+    name: "In Patient",
     value: "inpatient",
   },
   {
-    name: "OutPatient",
+    name: "Out Patient",
     value: "outpatient",
-  }
+  },
 ];
 
-const admitType=[
+const admitType = [
   {
-    name:"Normal",
-    value:"normal"
+    name: "Normal",
+    value: "normal",
   },
   {
-    name:"Emergency",
-    value:"emergency"
-  }
-]
+    name: "Emergency",
+    value: "emergency",
+  },
+];
 
-export default function PatientForm() {
+interface PatientFormProps {
+  // showModal: boolean;
+  update?: boolean;
+  patient?: PateintType;
+}
+
+const addNewPatient = async ({
+  data,
+  router,
+}: {
+  data: FormInputs;
+  router: any;
+}) => {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/patient`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    const json = await res.json();
+    if (json.success) {
+      toast.success("Account created successfully");
+      console.log(json);
+      router.push("/patient");
+      router.refresh();
+      return;
+    }
+    return toast.error(json.message);
+  } catch (err: any) {
+    console.log(err);
+    toast.error(err?.message);
+  }
+};
+
+const updatePatientDetail = async ({
+  data,
+  router,
+}: {
+  data: FormInputs;
+  router: any;
+}) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${data?.id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      },
+    );
+    const json = await res.json();
+    if (json.success) {
+      toast.success("Account created successfully");
+      console.log(json);
+      router.push("/patient");
+      router.refresh();
+      return;
+    }
+    return toast.error(json.message);
+  } catch (err: any) {
+    console.log(err);
+    toast.error(err?.message);
+  }
+};
+
+const PatientForm: FC<PatientFormProps> = ({ patient, update = false }) => {
+  console.log(patient);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormInputs>({
-    defaultValues: {
-      name: "John Doe",
-      email: "johndoe33@gmail.com",
-      phone: 9860098600,
-      address: "Ratnapark, Kathmandu",
-      gender: "male",
-      dob: "2000-01-01",
-    },
+    defaultValues: update
+      ? {
+          id: patient?._id.toString(),
+          name: patient?.name,
+          phone: patient?.phone,
+          address: patient?.address,
+          admitType: patient?.admitType,
+          patientType: patient?.patientType,
+          dob: patient?.dob,
+          gender: patient?.gender,
+        }
+      : {
+          name: "John Doe",
+          phone: 9860098600,
+          address: "Ratnapark, Kathmandu",
+          gender: "male",
+          admitType: "emergency",
+          patientType: "inpatient",
+          dob: null,
+        },
   });
 
   const router = useRouter();
-  const [showModal, setShowModal] = useState(false);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    console.log(data);
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/user`,
-        {
-          method: "POST",
-          body: JSON.stringify(data),
-        },
-      );
-      const json = await res.json();
-      if (json.success) {
-        toast.success("Account created successfully");
-        router.refresh();
-        setShowModal(false);
-        return;
-      }
-      return toast.error(json.message);
-    } catch (err: any) {
-      console.log(err);
-      toast.error(err.message);
+    // console.log(data);
+
+    if (update) {
+      updatePatientDetail({ data, router });
+    } else {
+      addNewPatient({ data, router });
     }
   };
 
   return (
-    <div>
+    <div className="px-4">
       {" "}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div
-          onClick={() => setShowModal(false)}
-          className="ml-auto w-fit cursor-pointer "
-        ></div>
-        <h1 className="text-center text-3xl font-medium">Create New Patient</h1>
+        <h1 className="text-center text-3xl font-medium">
+          {update ? "Update Patient Detail" : "Add New Patient"}
+        </h1>
         <Label>Name</Label>
         <Input
           {...register("name", {
@@ -120,21 +179,6 @@ export default function PatientForm() {
           placeholder="John Doe"
         />
         <p className="text-red-800">{errors.name?.message}</p>
-        <Label>Email</Label>
-        <Input
-          {...register("email", {
-            required: {
-              value: true,
-              message: "Email is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Email must be less than 64 characters long",
-            },
-          })}
-          placeholder="johndoe@gmail.com"
-        />
-        <p className="text-red-800">{errors.email?.message}</p>
         <Label>Phone</Label>
         <Input
           {...register("phone", {
@@ -217,4 +261,6 @@ export default function PatientForm() {
       </form>
     </div>
   );
-}
+};
+
+export default PatientForm;
