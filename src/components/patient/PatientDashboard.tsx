@@ -2,15 +2,16 @@
 import { useState } from "react";
 import { UserType } from "@/database/modals/UserModel";
 import { formatDate } from "@/utils/formatDate";
-import { type PateintType } from "@/database/modals/PatientModel";
+import { type PatientType } from "@/database/modals/PatientModel";
 import AddProfileModal from "../AddProfileModal";
 import Button from "../common/Button";
 import EditPatientModal from "./EditPatientModal";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface PatientDashboardProps {
-  users: PateintType[];
+  users: PatientType[];
   user: UserType;
 }
 export default function PatientDashboard({
@@ -29,7 +30,7 @@ export default function PatientDashboard({
   const handleDelete = async (id: string) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient?id=${id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${id}`,
         {
           method: "DELETE",
         },
@@ -85,7 +86,11 @@ export default function PatientDashboard({
                 <td className="uppercase">{formatDate(item?.dob)}</td>
                 <td className="uppercase">{item?.gender}</td>
                 <td className="uppercase">
-                  <Button className="mr-3 w-fit">View</Button>
+                  <Button className="mr-3 w-fit">
+                    <Link href={`/dashboard/patient/${item._id.toString()}`}>
+                      view
+                    </Link>
+                  </Button>
                   <Button
                     className="mr-3 w-fit"
                     onClick={() => setShowEditModal(true)}
