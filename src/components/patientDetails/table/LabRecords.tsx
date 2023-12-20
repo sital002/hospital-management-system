@@ -1,12 +1,13 @@
+import Button from '@/components/common/Button'
 import React from 'react'
 
 const LabRecords = () => {
   return (
     <div className='min-w-[600px] p-5 border-gray-500 border-2 shadow-md h-fit'>
         <div className='flex  gap-7'>
-            <button className='bg-green-500 p-3 rounded-md grow text-white'>Prescription</button>
-            <button className='bg-green-500 p-3 rounded-md grow text-white'>Vitals</button>
-            <button className='bg-green-500 p-3 rounded-md grow text-white'>Lab Records</button>
+            <Button>Presception</Button>
+            <Button>Presception</Button>
+            <Button>Presception</Button>
         </div>
         <table className='w-full text-center border-red-500 border-2 mt-6'>
             <thead>
