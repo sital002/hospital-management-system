@@ -35,9 +35,7 @@ export default async function Dashboard() {
   // console.log(data);
   return (
     <div>
-      {/* // <div className="flex items-start justify-around bg-[#fafbfb]"> */}
-      {/* <Sidebar /> */}
-      {/* <Maindashboard users={data} user={user} /> */}
+      <Maindashboard users={data} user={user} />
     </div>
   );
 }

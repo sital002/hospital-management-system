@@ -1,7 +1,7 @@
 import Sidebar from "@/components/sidebar";
 import StaffDashboard from "@/components/staff/StaffDashboard";
 import { PatientType } from "@/database/modals/PatientModel";
-import { Staff } from "@/database/modals/StaffModal";
+import { Staff, StaffType } from "@/database/modals/StaffModal";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -16,7 +16,7 @@ const getAllUsers = async () => {
         Cookie: `auth_token=${authToken};`,
       },
     });
-    const data = (await res.json()) as Staff[];
+    const data = (await res.json()) as StaffType[];
     return data;
   } catch (err: any) {
     console.log(err?.message);

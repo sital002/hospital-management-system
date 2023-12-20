@@ -1,6 +1,6 @@
 import mongoose, { InferSchemaType, Schema, Types } from "mongoose";
 
-const StaffSchema = new Schema(
+const AdminSchema = new Schema(
   {
     name: {
       type: String,
@@ -9,7 +9,7 @@ const StaffSchema = new Schema(
     },
     email: {
       type: String,
-      required: [true, "Please provide a Email"],
+      required: [true, "Please provide a email"],
     },
     phone: {
       type: String,
@@ -19,17 +19,15 @@ const StaffSchema = new Schema(
       type: String,
       required: [true, "Please provide a address"],
     },
-    shift: {
-      type: String,
-      enum: ["morning", "evening", "night"],
-      required: [true, "Please provide a department"],
+    dob: {
+      type: Date,
+      required: [true, "Please provide a dob"],
     },
     gender: {
       type: String,
       enum: ["male", "female"],
-      required: [true, "Please provide a Gender"],
+      required: [true, "Gender is required"],
     },
-
     password: {
       type: String,
       required: [true, "Please provide a password"],
@@ -40,9 +38,9 @@ const StaffSchema = new Schema(
   { timestamps: true },
 );
 
-export const Staff =
-  mongoose.models.Staff || mongoose.model("Staff", StaffSchema);
+export const Admin =
+  mongoose.models.Admin || mongoose.model("Admin", AdminSchema);
 
-export type StaffType = InferSchemaType<typeof StaffSchema> & {
+export type AdminType = InferSchemaType<typeof AdminSchema> & {
   _id: Types.ObjectId;
 };

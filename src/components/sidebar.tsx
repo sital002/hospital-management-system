@@ -15,7 +15,7 @@ import Link from "next/link";
 const sideBarOptions = [
   {
     name: "Dashboard",
-    url: "/dashboard/admin",
+    url: "/dashboard",
     icon: <LayoutDashboard />,
   },
   {
