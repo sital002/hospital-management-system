@@ -2,12 +2,6 @@ import React from 'react'
 
 const VitalsTable = () => {
   return (
-    <div className='min-w-[600px] p-5 border-gray-500 border-2 shadow-md h-fit'>
-        <div className='flex  gap-7'>
-            <button className='bg-green-500 p-3 rounded-md grow text-white'>Prescription</button>
-            <button className='bg-green-500 p-3 rounded-md grow text-white'>Vitals</button>
-            <button className='bg-green-500 p-3 rounded-md grow text-white'>Lab Records</button>
-        </div>
         <table className='w-full text-center border-red-500 border-2 mt-6'>
             <thead>
                 <th className='p-3 border-2 border-gray-500'>Body Tempereture</th>
@@ -24,7 +18,6 @@ const VitalsTable = () => {
                 </tr>
             </tbody>
         </table>
-    </div>
   )
 }
 

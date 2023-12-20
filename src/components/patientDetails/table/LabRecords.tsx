@@ -1,15 +1,9 @@
-import Button from '@/components/common/Button'
 import React from 'react'
 
 const LabRecords = () => {
   return (
-    <div className='min-w-[600px] p-5 border-gray-500 border-2 shadow-md h-fit'>
-        <div className='flex  gap-7'>
-            <Button>Presception</Button>
-            <Button>Presception</Button>
-            <Button>Presception</Button>
-        </div>
-        <table className='w-full text-center border-red-500 border-2 mt-6'>
+        
+        <table className='w-full text-center border-red-500 border-2 mt-6 '>
             <thead>
                 <th className='p-3 border-2 border-gray-500'>Body Tempereture</th>
                 <th className='p-3 border-2 border-gray-500'>Heart Pulse</th>
@@ -25,7 +19,6 @@ const LabRecords = () => {
                 </tr>
             </tbody>
         </table>
-    </div>
   )
 }
 
