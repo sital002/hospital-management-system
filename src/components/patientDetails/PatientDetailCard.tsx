@@ -1,5 +1,5 @@
-import React from 'react'
-import { PatientType } from '@/database/modals/PatientModel'
+import React from "react"
+import { PatientType } from "@/database/modals/PatientModel"
 
 const PatientDetailCard = ({patient}:{patient:PatientType}) => {
   return (
