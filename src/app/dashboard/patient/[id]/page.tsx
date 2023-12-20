@@ -1,3 +1,5 @@
+import PatientDetailCard from "@/components/patientDetails/PatientDetailCard";
+import PatientReportDetails from "@/components/patientDetails/table/VitalsTable";
 import { PatientType } from "@/database/modals/PatientModel";
 
 async function getPatientDetail(id: string) {
@@ -18,9 +20,12 @@ export default async function Page({ params }: { params: { id: string } }) {
   const patient = await getPatientDetail(params.id);
   if (!patient) return null;
   return (
-    <div>
-      <h1>{patient.name}</h1>
-      <p>{patient.address}</p>
+    <>
+    <h1 className="ml-16 text-xl font-semibold">{`${patient.name}'s Profile`}</h1>
+    <div className="flex  gap-4 ">
+    <PatientDetailCard patient={patient}/>
+    <PatientReportDetails/>
     </div>
+    </>
   );
 }
