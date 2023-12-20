@@ -5,10 +5,10 @@ import { formatDate } from "@/utils/formatDate";
 import { PatientType } from "@/database/modals/PatientModel";
 import AddProfileModal from "../AddProfileModal";
 import Button from "../common/Button";
-import { Staff } from "@/database/modals/StaffModal";
+import { Staff, StaffType } from "@/database/modals/StaffModal";
 
 interface PatientDashboardProps {
-  users: Staff[];
+  users: StaffType[];
   user: UserType;
 }
 export default function StaffDashboard({ users, user }: PatientDashboardProps) {
