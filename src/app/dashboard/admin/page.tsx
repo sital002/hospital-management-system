@@ -1,6 +1,6 @@
 import Maindashboard from "@/components/MainDashboard";
 import Sidebar from "@/components/sidebar";
-import { PateintType } from "@/database/modals/PatientModel";
+import { PatientType } from "@/database/modals/PatientModel";
 import { UserType } from "@/database/modals/UserModel";
 import { getUserDetails, isAuthenticated } from "@/utils/Auth";
 import { cookies } from "next/headers";
@@ -16,7 +16,7 @@ const getAllUsers = async () => {
         Cookie: `auth_token=${authToken};`,
       },
     });
-    const data = (await res.json()) as PateintType[];
+    const data = (await res.json()) as PatientType[];
     // console.log(data);
     return data;
   } catch (err: any) {

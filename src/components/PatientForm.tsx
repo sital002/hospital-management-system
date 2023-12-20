@@ -7,7 +7,7 @@ import Button from "./common/Button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { PateintType } from "@/database/modals/PatientModel";
+import { PatientType } from "@/database/modals/PatientModel";
 
 type FormInputs = {
   name: string;
@@ -56,7 +56,7 @@ const admitType = [
 interface PatientFormProps {
   // showModal: boolean;
   update?: boolean;
-  patient?: PateintType;
+  patient?: PatientType;
 }
 
 const addNewPatient = async ({
@@ -75,7 +75,7 @@ const addNewPatient = async ({
     if (json.success) {
       toast.success("Account created successfully");
       console.log(json);
-      router.push("/patient");
+      // router.push("/dashboard/patient");
       router.refresh();
       return;
     }

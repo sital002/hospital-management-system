@@ -126,36 +126,3 @@ export async function PUT(req: NextRequest) {
     );
   }
 }
-
-export async function DELETE(req: NextRequest) {
-  try {
-    console.log("Hello");
-    // const id = req.nextUrl.pathname.split("/");
-    const parts = req.nextUrl.searchParams.get("id");
-    const id = parts;
-    console.log("the id ", id);
-    if (!id)
-      return new Response(
-        JSON.stringify({
-          success: false,
-          message: "ID is required",
-        }),
-        { status: 400 },
-      );
-
-    await Patient.findByIdAndDelete(id);
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Deleted successfully",
-      }),
-    );
-  } catch (err: any) {
-    return new Response(
-      JSON.stringify({
-        success: false,
-        message: err.message,
-      }),
-    );
-  }
-}

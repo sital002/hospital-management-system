@@ -4,10 +4,10 @@ import Button from "./common/Button";
 import { UserType } from "@/database/modals/UserModel";
 import AddProfileModal from "./AddProfileModal";
 import { formatDate } from "@/utils/formatDate";
-import { PateintType } from "@/database/modals/PatientModel";
+import { PatientType } from "@/database/modals/PatientModel";
 
 interface AdminDashboardProps {
-  users: PateintType[];
+  users: PatientType[];
   user: UserType;
 }
 export default function MainDashboard({ users, user }: AdminDashboardProps) {

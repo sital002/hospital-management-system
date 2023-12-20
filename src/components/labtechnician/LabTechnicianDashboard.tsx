@@ -2,10 +2,11 @@
 import { useState } from "react";
 import { UserType } from "@/database/modals/UserModel";
 import { formatDate } from "@/utils/formatDate";
-import { PateintType } from "@/database/modals/PatientModel";
+import { PatientType } from "@/database/modals/PatientModel";
 import AddProfileModal from "../AddProfileModal";
 import Button from "../common/Button";
 import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
+import Link from "next/link";
 
 interface PatientDashboardProps {
   users: LabtechnicianType[];
@@ -50,7 +51,13 @@ export default function LabTechnicianDashboard({
               <td className="uppercase">{formatDate(item?.dob)}</td>
               <td className="uppercase">{item?.gender}</td>
               <td className="uppercase">
-                <Button className="mr-3 w-fit">View</Button>
+                <Button className="mr-3 w-fit">
+                  <Link
+                    href={`/dashboard/labtechnician/${item._id.toString()}`}
+                  >
+                    view
+                  </Link>
+                </Button>
                 <Button className="mr-3 w-fit">Edit</Button>
                 <Button className="mr-3 w-fit">Delete</Button>
               </td>
