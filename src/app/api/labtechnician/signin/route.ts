@@ -1,3 +1,4 @@
+import connectToDB from "@/database/connectToDB";
 import {
   Labtechnician,
   LabtechnicianType,
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
         }),
         { status: 400 },
       );
-
+    await connectToDB();
     const user = (await Labtechnician.findOne({ email })).select(
       "+password",
     ) as LabtechnicianType;

@@ -9,9 +9,8 @@ import { Staff, StaffType } from "@/database/modals/StaffModal";
 
 interface PatientDashboardProps {
   users: StaffType[];
-  user: UserType;
 }
-export default function StaffDashboard({ users, user }: PatientDashboardProps) {
+export default function StaffDashboard({ users }: PatientDashboardProps) {
   const [showModal, setShowModal] = useState(false);
   console.log("saroj: ", users);
 

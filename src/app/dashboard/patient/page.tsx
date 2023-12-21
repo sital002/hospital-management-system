@@ -30,7 +30,7 @@ export default async function Dashboard() {
   // console.log(data);
   return (
     <div className="flex items-start justify-around bg-[#fafbfb]">
-      <PatientDashboard users={data} user={user} />
+      <PatientDashboard users={data} />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import connectToDB from "@/database/connectToDB";
 import { Admin, AdminType } from "@/database/modals/AdminModal";
 import { generateToken } from "@/utils/generateToken";
 import { cookies } from "next/headers";
@@ -15,9 +16,9 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
 
-    const user = (await Admin.findOne({ email })).select(
-      "+password",
-    ) as AdminType;
+    // console.log(email, password);
+    await connectToDB();
+    const user = (await Admin.findOne({ email })) as AdminType;
     if (!user)
       return new Response(
         JSON.stringify({
@@ -56,8 +57,9 @@ export async function POST(req: NextRequest) {
     return new Response(
       JSON.stringify({
         success: false,
-        message: error?.message,
+        message: "Something went wrong",
       }),
+      { status: 500 },
     );
   }
 }
