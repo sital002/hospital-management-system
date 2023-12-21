@@ -1,3 +1,4 @@
+import connectToDB from "@/database/connectToDB";
 import { Staff, StaffType } from "@/database/modals/StaffModal";
 import { generateToken } from "@/utils/generateToken";
 import { cookies } from "next/headers";
@@ -14,6 +15,7 @@ export async function POST(req: NextRequest) {
         }),
         { status: 400 },
       );
+    await connectToDB();
 
     const user = (await Staff.findOne({ email })).select(
       "+password",

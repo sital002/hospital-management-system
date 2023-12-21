@@ -28,7 +28,8 @@ export default async function Dashboard() {
   // const isAuthencated = isAuthenticated();
   // if (!isAuthencated) return redirect("/signin");
   const user = await getUserDetails();
-  if (!user) return redirect("/signin");
+  console.log(user);
+  if (!user) return redirect("/");
 
   const data = await getAllUsers();
   console.log(data);

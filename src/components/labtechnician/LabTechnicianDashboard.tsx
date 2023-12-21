@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { UserType } from "@/database/modals/UserModel";
 import { formatDate } from "@/utils/formatDate";
 import { PatientType } from "@/database/modals/PatientModel";
 import AddProfileModal from "../AddProfileModal";
@@ -10,11 +9,9 @@ import Link from "next/link";
 
 interface PatientDashboardProps {
   users: LabtechnicianType[];
-  user: UserType;
 }
 export default function LabTechnicianDashboard({
   users,
-  user,
 }: PatientDashboardProps) {
   const [showModal, setShowModal] = useState(false);
   // console.log(user);

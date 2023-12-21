@@ -43,8 +43,8 @@ const AddProfileModal: FC<PopUpFormProps> = ({ setShowModal, showModal }) => {
     },
     {
       name: "Medical Report",
-      url: "/dashboard/medicalreport/new",
-      value: "medicalreport",
+      url: "/dashboard/medical-report/new",
+      value: "medical-report",
       icon: <Users />,
     },
   ];

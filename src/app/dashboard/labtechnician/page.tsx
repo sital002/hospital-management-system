@@ -33,7 +33,7 @@ export default async function Dashboard() {
   console.log(data);
   return (
     <div className="flex items-start justify-around bg-[#fafbfb]">
-      <LabTechnicianDashboard users={data} user={user} />
+      <LabTechnicianDashboard users={data} />
     </div>
   );
 }
