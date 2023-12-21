@@ -1,3 +1,4 @@
+import connectToDB from "@/database/connectToDB";
 import { Doctor, DoctorType } from "@/database/modals/DoctorModel";
 import { generateToken } from "@/utils/generateToken";
 import { cookies } from "next/headers";
@@ -14,10 +15,9 @@ export async function POST(req: NextRequest) {
         }),
         { status: 400 },
       );
-
-    const user = (await Doctor.findOne({ email })).select(
-      "+password",
-    ) as DoctorType;
+    console.log(email, password);
+    await connectToDB();
+    const user = (await Doctor.findOne({ email })) as DoctorType;
     if (!user)
       return new Response(
         JSON.stringify({

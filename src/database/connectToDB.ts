@@ -9,7 +9,10 @@ interface connectionOptions {
 let isConnected: boolean = false;
 
 export default async function connectToDB() {
-  if (isConnected) return;
+  if (isConnected) {
+    console.log("Connected to MongoDB");
+    return;
+  }
   if (!process.env.MONGO_DB_URI) {
     throw new Error("MONGODB_URI is missing from env");
   }

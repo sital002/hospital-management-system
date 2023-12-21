@@ -24,8 +24,8 @@ export default function SignIn() {
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: {
-      email: "admin@gmail.com",
-      password: "admin123",
+      email: "doctor@gmail.com",
+      password: "Password@123",
     },
   });
 
@@ -41,7 +41,8 @@ export default function SignIn() {
       const json = await res.json();
       if (json.success) {
         toast.success("Logged in successfully");
-        router.push(json.redirect);
+        router.push("/dashboard");
+
         router.refresh();
         return;
       }

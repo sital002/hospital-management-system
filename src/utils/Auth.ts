@@ -2,6 +2,13 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import User, { type UserType } from "@/database/modals/UserModel";
 import connectToDB from "@/database/connectToDB";
+import {
+  Labtechnician,
+  LabtechnicianType,
+} from "@/database/modals/LabtechnicianModal";
+import { Admin, type AdminType } from "@/database/modals/AdminModal";
+import { Doctor, type DoctorType } from "@/database/modals/DoctorModel";
+import { Staff, type StaffType } from "@/database/modals/StaffModal";
 
 export function isAuthenticated(): boolean {
   try {
@@ -40,18 +47,39 @@ export async function isAuthorized(role: RoleType) {
   }
 }
 
-export async function getUserDetails(): Promise<UserType | null> {
+export async function getUserDetails() {
   try {
     const authToken = cookies().get("auth_token");
     if (!authToken) return null;
     const decoded = jwt.verify(
       authToken.value,
       process.env.JWT_SECRET as string,
-    ) as jwt.JwtPayload;
+    ) as {
+      _id: string;
+      role: "doctor" | "labtechnician" | "admin" | "staff";
+    };
     if (!decoded) return null;
     await connectToDB();
-    const user = await User.findById(decoded._id);
-    return user;
+
+    if (decoded.role === "labtechnician") {
+      const user = (await Labtechnician.findById(
+        decoded._id,
+      )) as LabtechnicianType;
+      return user;
+    }
+    if (decoded.role === "doctor") {
+      const user = (await Doctor.findById(decoded._id)) as DoctorType;
+      return user;
+    }
+    if (decoded.role === "staff") {
+      const user = (await Staff.findById(decoded._id)) as StaffType;
+      return user;
+    }
+    if (decoded.role === "admin") {
+      const user = (await Admin.findById(decoded._id)) as AdminType;
+      return user;
+    }
+    return null;
   } catch (err) {
     console.log(err);
     return null;
