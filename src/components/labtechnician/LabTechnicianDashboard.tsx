@@ -34,7 +34,7 @@ export default function LabTechnicianDashboard({
             <td className="py-3 font-semibold uppercase">Name</td>
             <td className="py-3 font-semibold uppercase">Address</td>
 
-            {/* <td className="py-3 font-semibold uppercase">Email</td> */}
+            <td className="py-3 font-semibold uppercase">Email</td>
             <td className="py-3 font-semibold uppercase">DOB</td>
             <td className="py-3 font-semibold uppercase">Gender</td>
             <td className="py-3 font-semibold uppercase">Action</td>
@@ -44,17 +44,13 @@ export default function LabTechnicianDashboard({
             <tr className="h-[60px] border-2 border-gray-200" key={index}>
               <td className="uppercase">{item.name}</td>
               <td className="uppercase">{item?.address}</td>
-              {/* <td>{item?.email}</td> */}
+              <td>{item?.email}</td>
               <td className="uppercase">{formatDate(item?.dob)}</td>
               <td className="uppercase">{item?.gender}</td>
               <td className="uppercase">
-                <Button className="mr-3 w-fit">
-                  <Link
-                    href={`/dashboard/labtechnician/${item._id.toString()}`}
-                  >
-                    view
-                  </Link>
-                </Button>
+                <Link href={`/dashboard/labtechnician/${item._id.toString()}`}>
+                  <Button className="mr-3 w-fit">view</Button>
+                </Link>
                 <Button className="mr-3 w-fit">Edit</Button>
                 <Button className="mr-3 w-fit">Delete</Button>
               </td>

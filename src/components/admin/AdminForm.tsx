@@ -59,13 +59,10 @@ const AdminForm: FC<AdminFormProps> = ({}) => {
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     console.log(data);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor`,
-        {
-          method: "POST",
-          body: JSON.stringify(data),
-        },
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
       const json = await res.json();
       if (json.success) {
         toast.success("Account created successfully");
@@ -82,7 +79,10 @@ const AdminForm: FC<AdminFormProps> = ({}) => {
   return (
     <div>
       {""}
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full px-2 mx-auto max-w-[600px]">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="mx-auto w-full max-w-[600px] px-2"
+      >
         <h1 className="text-center text-3xl font-medium">Add New Admin</h1>
         <Label>Name</Label>
         <Input
@@ -171,7 +171,7 @@ const AdminForm: FC<AdminFormProps> = ({}) => {
           })}
         />
         <p className="text-red-800">{errors.gender?.message}</p>
-       
+
         <Label>Password</Label>
         <Input
           {...register("password", {

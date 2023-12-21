@@ -47,13 +47,6 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
       <Button onClick={clickBtn} className="ml-[86%] w-fit">
         + Add New
       </Button>
-      {setShowEditModal ? (
-        <EditPatientModal
-          show={showEditModal}
-          //   patient={item}
-          setShow={setShowEditModal}
-        />
-      ) : null}
 
       <table className="mt-3 w-[77vw] border-collapse border-2 border-gray-200 text-center  ">
         <tbody>
@@ -81,11 +74,9 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
                 <td className="uppercase">{formatDate(item?.dob)}</td>
                 <td className="uppercase">{item?.gender}</td>
                 <td className="uppercase">
-                  <Button className="mr-3 w-fit">
-                    <Link href={`/dashboard/patient/${item._id.toString()}`}>
-                      view
-                    </Link>
-                  </Button>
+                  <Link href={`/dashboard/patient/${item._id.toString()}`}>
+                    <Button className="mr-3 w-fit">view</Button>
+                  </Link>
                   <Button
                     className="mr-3 w-fit"
                     onClick={() => setShowEditModal(true)}
@@ -100,6 +91,13 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
                   </Button>
                 </td>
               </tr>
+              {/* {setShowEditModal ? (
+                <EditPatientModal
+                  show={showEditModal}
+                  patient={item}
+                  setShow={setShowEditModal}
+                />
+              ) : null} */}
             </>
           ))}
         </tbody>
