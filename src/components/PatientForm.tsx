@@ -54,7 +54,9 @@ const admitType = [
 ];
 
 interface PatientFormProps {
-  // showModal: boolean;
+  // showModal: boolean;S
+  show?: boolean;
+  setShow?: (e: boolean) => void;
   update?: boolean;
   patient?: PatientType;
 }
@@ -86,37 +88,12 @@ const addNewPatient = async ({
   }
 };
 
-const updatePatientDetail = async ({
-  data,
-  router,
-}: {
-  data: FormInputs;
-  router: any;
+const PatientForm: FC<PatientFormProps> = ({
+  patient,
+  show,
+  setShow,
+  update = false,
 }) => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${data?.id}`,
-      {
-        method: "PUT",
-        body: JSON.stringify(data),
-      },
-    );
-    const json = await res.json();
-    if (json.success) {
-      toast.success("Account created successfully");
-      console.log(json);
-      router.push("/patient");
-      router.refresh();
-      return;
-    }
-    return toast.error(json.message);
-  } catch (err: any) {
-    console.log(err);
-    toast.error(err?.message);
-  }
-};
-
-const PatientForm: FC<PatientFormProps> = ({ patient, update = false }) => {
   console.log(patient);
   const {
     register,
@@ -146,12 +123,36 @@ const PatientForm: FC<PatientFormProps> = ({ patient, update = false }) => {
   });
 
   const router = useRouter();
-
+  const updatePatientDetail = async ({ data }: { data: FormInputs }) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${data?.id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(data),
+        },
+      );
+      const json = await res.json();
+      if (json.success) {
+        toast.success("Detail updated successfully");
+        console.log(json);
+        if (setShow) {
+          setShow(false);
+        }
+        router.refresh();
+        return;
+      }
+      return toast.error(json.message);
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+  };
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     // console.log(data);
 
     if (update) {
-      updatePatientDetail({ data, router });
+      updatePatientDetail({ data });
     } else {
       addNewPatient({ data, router });
     }
@@ -200,10 +201,6 @@ const PatientForm: FC<PatientFormProps> = ({ patient, update = false }) => {
             required: {
               value: true,
               message: "DOB is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "DOb must be less than 64 characters long",
             },
           })}
           placeholder="2002/01/01"

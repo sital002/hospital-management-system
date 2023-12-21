@@ -13,10 +13,16 @@ const EditPatientModal: FC<EditLabtestModalProps> = ({
   patient,
   show,
 }) => {
+  console.log(patient);
   return (
     <div>
       <Modal showModal={show} setShowModal={setShow}>
-        {/* <PatientForm setShowModal={setShow} update={true} patient={patient} /> */}
+        <PatientForm
+          show={show}
+          setShow={setShow}
+          update={true}
+          patient={patient}
+        />
       </Modal>
     </div>
   );
