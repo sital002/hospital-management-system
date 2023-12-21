@@ -31,7 +31,7 @@ export default async function Dashboard() {
   console.log(data);
   return (
     <div className="flex items-start justify-around bg-[#fafbfb]">
-      <StaffDashboard users={data} user={user} />
+      <StaffDashboard users={data} />
     </div>
   );
 }
