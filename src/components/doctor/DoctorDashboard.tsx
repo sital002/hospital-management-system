@@ -8,9 +8,8 @@ import { type DoctorType } from "@/database/modals/DoctorModel";
 
 interface DoctorDashboardProps {
   users: DoctorType[];
-  user: UserType;
 }
-export default function DoctorDashboard({ users, user }: DoctorDashboardProps) {
+export default function DoctorDashboard({ users }: DoctorDashboardProps) {
   const [showModal, setShowModal] = useState(false);
   // console.log(user);
 
