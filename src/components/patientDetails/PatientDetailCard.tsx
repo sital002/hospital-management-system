@@ -1,5 +1,6 @@
 import React from "react"
 import { PatientType } from "@/database/modals/PatientModel"
+import { formatDate } from "@/utils/formatDate"
 
 const PatientDetailCard = ({patient}:{patient:PatientType}) => {
   return (
@@ -11,7 +12,7 @@ const PatientDetailCard = ({patient}:{patient:PatientType}) => {
         <p><span className="font-bold mr-16">Full Name:</span> {patient.name}</p>
         <p><span className="font-bold mr-16">Mobile:</span> {patient.phone}</p>
         <p><span className="font-bold mr-16">Address:</span>{patient.address}</p>
-        {/* <p><span className="font-bold mr-16">Date Of Birth:</span>{patient.dob}</p> */}
+        <p><span className="font-bold mr-16">Date Of Birth:</span>{formatDate(patient.dob)}</p>
         <p><span className="font-bold mr-16">Patient Type:</span>{patient.patientType}</p>
         <p><span className="font-bold mr-16">Admit Type:</span>{patient.admitType}</p>
         {/* <p><span className="font-bold mr-16">Data Recorded:</span>{patient.updatedAt}</p> */}
