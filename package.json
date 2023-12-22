@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.1.1",
     "clsx": "^2.0.0",
+    "heroicons": "^2.1.1",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.294.0",
     "mongoose": "^8.0.2",

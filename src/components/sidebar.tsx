@@ -18,15 +18,25 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+
+
+interface Option {
+  name: string;
+  url?: string;
+  icon: React.ReactNode;
+  dropdown?: Option[];
+}
+
 const sideBarOptions = [
   {
     name: "Dashboard",
     url: "/dashboard",
     icon: <LayoutDashboard />,
+    roles:[""]
   },
   {
     name: "Patient",
-    url: "/dashboard/patient",
+    // url: "/dashboard/patient",
     icon: <Accessibility />,
     dropdown: [
       {
@@ -48,7 +58,7 @@ const sideBarOptions = [
   },
   {
     name: "Staff",
-    url: "/dashboard/staff",
+    // url: "/dashboard/staff",
     icon: <UserRound />,
     dropdown: [
       {
@@ -70,18 +80,33 @@ const sideBarOptions = [
   },
   {
     name: "Doctor",
-    url: "/dashboard/doctor",
+    // url: "/dashboard/doctor",
     icon: <CircleUser />,
     dropdown: [
       {
         name: "Register Doctor",
-        url: "demo",
+        url: "/dashboard/docor/new",
         icon:<PlusSquare />
       },
       {
         name: "View Doctor",
         url: "demo",
         icon:<Eye />
+      },
+      {
+        name: "Manage Doctor",
+        url: "demo",
+        icon:<FolderKanban />
+      },
+      {
+        name: "Manage Doctor",
+        url: "demo",
+        icon:<FolderKanban />
+      },
+      {
+        name: "Manage Doctor",
+        url: "demo",
+        icon:<FolderKanban />
       },
       {
         name: "Manage Doctor",
@@ -102,7 +127,7 @@ const sideBarOptions = [
   },
   {
     name: "Medical Report",
-    url: "/dashboard/medical-report",
+    // url: "/dashboard/medical-report",
     icon: <BookOpenCheck />,
     dropdown: [
       {
@@ -112,7 +137,7 @@ const sideBarOptions = [
       },
       {
         name: "View Lab Report",
-        url: "demo",
+        url: "/demo",
         icon:<Eye />
       },
       {
@@ -125,12 +150,6 @@ const sideBarOptions = [
 ];
 export default function Sidebar() {
 
-  interface Option {
-    name: string;
-    url: string;
-    icon: React.ReactNode;
-    dropdown?: Option[];
-  }
   
   interface DropdownState {
     patient: boolean;
@@ -164,29 +183,26 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="sticky left-0 top-0 h-[100vh] w-[20vw] border-r-2 border-gray-300 bg-[#fafbfb]">
-      <div className="flex items-center gap-2 px-3 pt-4 text-xl font-semibold">
-        <MdDashboard />
-        <span>Hospital MS</span>
-      </div>
+    <div className="sticky left-0 top-0 h-[800px] overflow-y-scroll w-[20vw] border-r-2 border-gray-300 bg-[#fafbfb] ">
+      
       <ul className="my-5 min-h-[85vh] border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name=option.name.toLowerCase().trim()
           return (
-            <Link className="duration-300 transition-all" href={option.url} key={option.name + index}>
+            <Link className="duration-300 transition-all" href={option?.url ? option.url : ""} key={option.name + index}>
               <li onClick={option.dropdown && (()=>dropDownHandler(name as keyof DropdownState))} className="mx-2  flex items-center gap-2 px-1 py-2 hover:bg-gray-200 sm:px-3 relative">
-                <div className="text-2xl">{option.icon}</div>
+                <p className="text-2xl">{option.icon}</p>
                 <span className=" hidden sm:block">{option.name}</span>
                 <hr />
               {option.dropdown && <ChevronRight className={`absolute duration-300 left-[90%] ${dropdown[name as keyof DropdownState] ? "rotate-90":""}`} />}
               </li>
               {option.dropdown && (
-                  <ul className={`w-full h-0 transition-all duration-300 overflow-hidden pl-10 pr-2 ${dropdown[name as keyof DropdownState] ? "h-[180px]":""}`}>
+                  <ul className={`w-full h-0 transition-all duration-300 overflow-hidden pl-10 pr-2 ${dropdown[name as keyof DropdownState] ? "min-h-[180px]":""}`}>
                     {option.dropdown.map((element, index) => {
                       return (
                         <Link  key={element.name + index} href={element.url}>
                           <li>
-                            <div>{element.icon}</div>
+                            <p>{element.icon}</p>
                             <span>{element.name}</span>
                             <hr />
                           </li>
