@@ -17,11 +17,19 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+interface Option {
+  name: string;
+  url?: string;
+  icon: React.ReactNode;
+  dropdown?: Option[];
+}
+
 const sideBarOptions = [
   {
     name: "Dashboard",
     url: "/dashboard",
     icon: <LayoutDashboard />,
+    roles: [""],
   },
   {
     name: "Patient",
@@ -82,6 +90,21 @@ const sideBarOptions = [
       {
         name: "Manage Doctor",
         url: "/da shboard/doctor",
+        icon: <FolderKanban />,
+      },
+      {
+        name: "Manage Doctor",
+        url: "demo",
+        icon: <FolderKanban />,
+      },
+      {
+        name: "Manage Doctor",
+        url: "demo",
+        icon: <FolderKanban />,
+      },
+      {
+        name: "Manage Doctor",
+        url: "demo",
         icon: <FolderKanban />,
       },
     ],
@@ -157,11 +180,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="sticky left-0 top-0 h-[100vh] w-[20vw] border-r-2 border-gray-300 bg-[#fafbfb]">
-      <div className="flex items-center gap-2 px-3 pt-4 text-xl font-semibold">
-        <MdDashboard />
-        <span>Hospital MS</span>
-      </div>
+    <div className="sticky left-0 top-0 h-[800px] w-[20vw] overflow-y-scroll border-r-2 border-gray-300 bg-[#fafbfb] ">
       <ul className="my-5 min-h-[85vh] border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
