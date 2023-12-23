@@ -18,70 +18,90 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+interface Option {
+  name: string;
+  url?: string;
+  icon: React.ReactNode;
+  dropdown?: Option[];
+}
+
 const sideBarOptions = [
   {
     name: "Dashboard",
     url: "/dashboard",
     icon: <LayoutDashboard />,
+    roles: [""],
   },
   {
     name: "Patient",
-    url: "/dashboard/patient",
     icon: <Accessibility />,
     dropdown: [
       {
         name: "Register Patient",
-        url: "demo",
+        url: "/dashboard/patient/new",
         icon: <PlusSquare />,
       },
       {
         name: "View Patient",
-        url: "demo",
+        url: "/dashboard/patient",
         icon: <Eye />,
       },
       {
         name: "Manage Patient",
-        url: "demo",
+        url: "/dashboard/patient",
         icon: <FolderKanban />,
       },
     ],
   },
   {
     name: "Staff",
-    url: "/dashboard/staff",
     icon: <UserRound />,
     dropdown: [
       {
         name: "Register Staff",
-        url: "demo",
+        url: "/dashboard/staff/new",
         icon: <PlusSquare />,
       },
       {
         name: "View Staff",
-        url: "demo",
+        url: "/dashboard/staff",
         icon: <Eye />,
       },
       {
         name: "Manage Staff",
-        url: "demo",
+        url: "/dashboard/staff",
         icon: <FolderKanban />,
       },
     ],
   },
   {
     name: "Doctor",
-    url: "/dashboard/doctor",
     icon: <CircleUser />,
     dropdown: [
       {
         name: "Register Doctor",
-        url: "demo",
+        url: "/dashboard/doctor/new",
         icon: <PlusSquare />,
       },
       {
         name: "View Doctor",
-        url: "demo",
+        url: "/da shboard/doctor",
         icon: <Eye />,
+      },
+      {
+        name: "Manage Doctor",
+        url: "/da shboard/doctor",
+        icon: <FolderKanban />,
+      },
+      {
+        name: "Manage Doctor",
+        url: "demo",
+        icon: <FolderKanban />,
+      },
+      {
+        name: "Manage Doctor",
+        url: "demo",
+        icon: <FolderKanban />,
       },
       {
         name: "Manage Doctor",
@@ -102,7 +122,6 @@ const sideBarOptions = [
   },
   {
     name: "Medical Report",
-    url: "/dashboard/medical-report",
     icon: <BookOpenCheck />,
     dropdown: [
       {
@@ -124,10 +143,10 @@ const sideBarOptions = [
   },
 ];
 export default function Sidebar() {
-  
+
   interface Option {
     name: string;
-    url: string;
+    url?: string;
     icon: React.ReactNode;
     dropdown?: Option[];
   }
@@ -172,16 +191,20 @@ export default function Sidebar() {
 
   return (
     <div className="sticky left-0 top-0 h-[100vh] w-[20vw] border-r-2 border-gray-300 bg-[#fafbfb]">
+
       <ul className="my-5 min-h-[85vh] border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
           return (
+
             <Fragment key={option.name + index}>
               <li className={`relative hover:bg-[#75e9e6] ${router===option.url ? "bg-[#75e9e6]":""} `}
+
                 onClick={
                   option.dropdown &&
                   (() => dropDownHandler(name as keyof DropdownState))
                 }
+
               >
                 <Link
                   className={`${router===option.url ? "bg-[#75e9e6]":""}  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
@@ -203,11 +226,14 @@ export default function Sidebar() {
               {option.dropdown && (
                 <ul
                   className={`h-0 w-full overflow-hidden pl-10 pr-2 transition-all duration-300 ${
+
+               
                     dropdown[name as keyof DropdownState] ? "h-[180px]" : ""
                   }`}
                 >
                   {option.dropdown.map((element, index) => {
                     return (
+
                       <li className={`hover:bg-[#75e9e6] ${router===element.url ? "bg-[#75e9e6]":""}`} key={element.name + index}>
                         <Link
                           className={`flex gap-3 w-full  ${router===element.url ? "bg-[#75e9e6]":""} `}

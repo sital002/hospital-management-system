@@ -4,18 +4,12 @@ import Button from "./common/Button";
 import AddProfileModal from "./AddProfileModal";
 import { formatDate } from "@/utils/formatDate";
 import { PatientType } from "@/database/modals/PatientModel";
-import { DoctorType } from "@/database/modals/DoctorModel";
-import { AdminType } from "@/database/modals/AdminModal";
-import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
-import { StaffType } from "@/database/modals/StaffModal";
 
 interface AdminDashboardProps {
   users: PatientType[];
-  user: StaffType | DoctorType | AdminType | LabtechnicianType;
 }
-export default function MainDashboard({ users, user }: AdminDashboardProps) {
+export default function MainDashboard({ users }: AdminDashboardProps) {
   const [showModal, setShowModal] = useState(false);
-  // console.log(user);
 
   function clickBtn() {
     setShowModal(!showModal);
