@@ -198,7 +198,7 @@ export default function Sidebar() {
           return (
 
             <Fragment key={option.name + index}>
-              <li className={`relative hover:bg-[#75e9e6] ${router===option.url ? "bg-[#75e9e6]":""} `}
+              <li className={`relative hover:bg-[#75e9e6] ${router===option?.url ? "bg-[#75e9e6]":""} `}
 
                 onClick={
                   option.dropdown &&
@@ -207,8 +207,8 @@ export default function Sidebar() {
 
               >
                 <Link
-                  className={`${router===option.url ? "bg-[#75e9e6]":""}  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
-                  href={option.url}
+                  className={`${router===option?.url ? "bg-[#75e9e6]":""}  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
+                  href={option?.url || ""}
                   
                 >
                   <span className="text-2xl">{option.icon}</span>
