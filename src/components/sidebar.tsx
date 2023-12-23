@@ -1,7 +1,7 @@
 "use client";
 import { MdDashboard } from "react-icons/md";
 import "@/components/CSS/style.css";
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Accessibility,
   BookOpenCheck,
@@ -16,6 +16,7 @@ import {
   Eye,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface Option {
   name: string;
@@ -172,64 +173,81 @@ export default function Sidebar() {
   }
 
   const dropDownHandler = (name: keyof DropdownState) => {
-    console.log(name);
     setDropdown((prv) => ({
-      ...prv,
-      [name]: !prv[name],
+      patient: name === "patient" ? !prv.patient : false,
+      staff: name === "staff" ? !prv.staff : false,
+      doctor: name === "doctor" ? !prv.doctor : false,
+      labreport: name === "labreport" ? !prv.labreport : false,
     }));
   };
 
+  const router = usePathname();
+  console.log(router);
+
   return (
-    <div className="sticky left-0 top-0 h-[800px] w-[20vw] overflow-y-scroll border-r-2 border-gray-300 bg-[#fafbfb] ">
+    <div className="sticky left-0 top-0 h-[100vh] w-[20vw] border-r-2 border-gray-300 bg-[#fafbfb]">
       <ul className="my-5 min-h-[85vh] border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
           return (
-            <Link
-              className="transition-all duration-300"
-              href={option.url || ""}
-              key={option.name + index}
-            >
+            <Fragment key={option.name + index}>
               <li
+                className={`relative hover:bg-[#75e9e6] ${
+                  router === option?.url ? "bg-[#75e9e6]" : ""
+                } `}
                 onClick={
                   option.dropdown &&
                   (() => dropDownHandler(name as keyof DropdownState))
                 }
-                className="relative  mx-2 flex items-center gap-2 px-1 py-2 hover:bg-gray-200 sm:px-3"
               >
-                <div className="text-2xl">{option.icon}</div>
-                <span className=" hidden sm:block">{option.name}</span>
-                <hr />
-                {option.dropdown && (
-                  <ChevronRight
-                    className={`absolute left-[90%] duration-300 ${
-                      dropdown[name as keyof DropdownState] ? "rotate-90" : ""
-                    }`}
-                  />
-                )}
+                <Link
+                  className={`${
+                    router === option?.url ? "bg-[#75e9e6]" : ""
+                  }  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
+                  href={option?.url || ""}
+                >
+                  <span className="text-2xl">{option.icon}</span>
+                  <span className=" hidden sm:block">{option.name}</span>
+                  <hr />
+                  {option.dropdown && (
+                    <ChevronRight
+                      className={`absolute left-[90%] duration-300 ${
+                        dropdown[name as keyof DropdownState] ? "rotate-90" : ""
+                      }`}
+                    />
+                  )}
+                </Link>
               </li>
               {option.dropdown && (
                 <ul
-                  className={`h-0 w-full overflow-hidden px-1 transition-all duration-300 ${
+                  className={`h-0 w-full overflow-hidden pl-10 pr-2 transition-all duration-300 ${
                     dropdown[name as keyof DropdownState] ? "h-[180px]" : ""
                   }`}
                 >
                   {option.dropdown.map((element, index) => {
                     return (
-                      <Link
+                      <li
+                        className={`hover:bg-[#75e9e6] ${
+                          router === element.url ? "bg-[#75e9e6]" : ""
+                        }`}
                         key={element.name + index}
-                        href={element.url}
-                        className="flex w-full gap-2 px-1 py-2 hover:bg-gray-500"
                       >
-                        <p>{element.icon}</p>
-                        <span>{element.name}</span>
-                        <hr />
-                      </Link>
+                        <Link
+                          className={`flex w-full gap-3  ${
+                            router === element.url ? "bg-[#75e9e6]" : ""
+                          } `}
+                          href={element.url}
+                        >
+                          {element.icon}
+                          <span>{element.name}</span>
+                          <hr />
+                        </Link>
+                      </li>
                     );
                   })}
                 </ul>
               )}
-            </Link>
+            </Fragment>
           );
         })}
       </ul>
