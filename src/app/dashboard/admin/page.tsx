@@ -35,7 +35,7 @@ export default async function Dashboard() {
   // console.log(data);
   return (
     <div>
-      <Maindashboard users={data} user={user} />
+      <Maindashboard users={data} />
     </div>
   );
 }
