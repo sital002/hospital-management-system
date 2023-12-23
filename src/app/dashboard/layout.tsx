@@ -1,13 +1,15 @@
 import Sidebar from "@/components/sidebar";
+import { getUserDetails } from "@/utils/Auth";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getUserDetails();
   return (
     <div className="flex gap-3 ">
-      <Sidebar />
+      <Sidebar role={user?.role} />
       <main className="w-full">{children}</main>
     </div>
   );

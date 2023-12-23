@@ -30,7 +30,6 @@ const sideBarOptions = [
     name: "Dashboard",
     url: "/dashboard",
     icon: <LayoutDashboard />,
-    roles: [""],
   },
   {
     name: "Patient",
@@ -56,6 +55,7 @@ const sideBarOptions = [
   {
     name: "Staff",
     icon: <UserRound />,
+    roles: ["admin"],
     dropdown: [
       {
         name: "Register Staff",
@@ -77,6 +77,7 @@ const sideBarOptions = [
   {
     name: "Doctor",
     icon: <CircleUser />,
+    roles: ["admin", "staff"],
     dropdown: [
       {
         name: "Register Doctor",
@@ -85,27 +86,12 @@ const sideBarOptions = [
       },
       {
         name: "View Doctor",
-        url: "/da shboard/doctor",
+        url: "/dashboard/doctor",
         icon: <Eye />,
       },
       {
         name: "Manage Doctor",
-        url: "/da shboard/doctor",
-        icon: <FolderKanban />,
-      },
-      {
-        name: "Manage Doctor",
-        url: "demo",
-        icon: <FolderKanban />,
-      },
-      {
-        name: "Manage Doctor",
-        url: "demo",
-        icon: <FolderKanban />,
-      },
-      {
-        name: "Manage Doctor",
-        url: "demo",
+        url: "/dashboard/doctor",
         icon: <FolderKanban />,
       },
     ],
@@ -114,6 +100,7 @@ const sideBarOptions = [
     name: "Lab Technician",
     url: "/dashboard/labtechnician",
     icon: <FlaskConical />,
+    roles: ["admin", "staff"],
   },
   {
     name: "Pharmacy",
@@ -123,6 +110,7 @@ const sideBarOptions = [
   {
     name: "Medical Report",
     icon: <BookOpenCheck />,
+    roles: ["admin", "labtechnician", "doctor"],
     dropdown: [
       {
         name: "Add Lab Report",
@@ -142,7 +130,7 @@ const sideBarOptions = [
     ],
   },
 ];
-export default function Sidebar() {
+export default function Sidebar({ role }: { role: string | undefined }) {
   interface Option {
     name: string;
     url?: string;
@@ -168,10 +156,6 @@ export default function Sidebar() {
     labreport: false,
   });
 
-  interface SidebarProps {
-    sideBarOptions: Option[];
-  }
-
   const dropDownHandler = (name: keyof DropdownState) => {
     setDropdown((prv) => ({
       patient: name === "patient" ? !prv.patient : false,
@@ -191,36 +175,41 @@ export default function Sidebar() {
           const name = option.name.toLowerCase().trim();
           return (
             <Fragment key={option.name + index}>
-              <li
-                className={`relative hover:bg-[#75e9e6] ${
-                  router === option?.url ? "bg-[#75e9e6]" : ""
-                } `}
-                onClick={
-                  option.dropdown &&
-                  (() => dropDownHandler(name as keyof DropdownState))
-                }
-              >
-                <Link
-                  className={`${
+              {(option?.roles === undefined ||
+                option?.roles?.includes(role || "")) && (
+                <li
+                  className={`relative hover:bg-[#75e9e6] ${
                     router === option?.url ? "bg-[#75e9e6]" : ""
-                  }  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
-                  href={option?.url || ""}
+                  } `}
+                  onClick={
+                    option.dropdown &&
+                    (() => dropDownHandler(name as keyof DropdownState))
+                  }
                 >
-                  <span className="text-2xl">{option.icon}</span>
-                  <span className=" hidden sm:block">{option.name}</span>
-                  <hr />
-                  {option.dropdown && (
-                    <ChevronRight
-                      className={`absolute left-[90%] duration-300 ${
-                        dropdown[name as keyof DropdownState] ? "rotate-90" : ""
-                      }`}
-                    />
-                  )}
-                </Link>
-              </li>
+                  <Link
+                    className={`${
+                      router === option?.url ? "bg-[#75e9e6]" : ""
+                    }  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
+                    href={option?.url || ""}
+                  >
+                    <span className="text-2xl">{option.icon}</span>
+                    <span className=" hidden sm:block">{option.name}</span>
+                    <hr />
+                    {option.dropdown && (
+                      <ChevronRight
+                        className={`absolute left-[90%] duration-300 ${
+                          dropdown[name as keyof DropdownState]
+                            ? "rotate-90"
+                            : ""
+                        }`}
+                      />
+                    )}
+                  </Link>
+                </li>
+              )}
               {option.dropdown && (
                 <ul
-                  className={`h-0 w-full overflow-hidden pl-10 pr-2 transition-all duration-300 ${
+                  className={`h-0 w-full overflow-hidden text-center transition-all duration-300 ${
                     dropdown[name as keyof DropdownState] ? "h-[180px]" : ""
                   }`}
                 >

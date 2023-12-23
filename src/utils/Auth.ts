@@ -26,7 +26,7 @@ export function isAuthenticated(): boolean {
   }
 }
 
-type RoleType = "admin" | "patient" | "hospital" | "staff";
+type RoleType = "admin" | "doctor" | "labtechnician" | "staff";
 export async function isAuthorized(role: RoleType) {
   try {
     const authToken = cookies().get("auth_token");
@@ -65,19 +65,19 @@ export async function getUserDetails() {
       const user = (await Labtechnician.findById(
         decoded._id,
       )) as LabtechnicianType;
-      return { ...user, role: "labtechnician" };
+      return { user, role: "labtechnician" };
     }
     if (decoded.role === "doctor") {
-      const user = (await Doctor.findById(decoded._id)) as DoctorType;
-      return { ...user, role: "doctor" };
+      const data = (await Doctor.findById(decoded._id)) as DoctorType;
+      return { data, role: "doctor" };
     }
     if (decoded.role === "staff") {
-      const user = (await Staff.findById(decoded._id)) as StaffType;
-      return { ...user, role: "staff" };
+      const data = (await Staff.findById(decoded._id)) as StaffType;
+      return { data, role: "staff" };
     }
     if (decoded.role === "admin") {
-      const user = (await Admin.findById(decoded._id)) as AdminType;
-      return { ...user, role: "admin" };
+      const data = (await Admin.findById(decoded._id)) as AdminType;
+      return { data, role: "admin" };
     }
     return null;
   } catch (err) {

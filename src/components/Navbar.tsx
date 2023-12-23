@@ -4,7 +4,7 @@ import { MdDashboard } from "react-icons/md";
 
 export default async function Navbar() {
   const user = await getUserDetails();
-
+  // console.log("The user is ", user);
   return (
     <nav className=" relative w-full bg-[#092635] p-2  ">
       <div className="relative flex items-center justify-between px-3 py-3">
@@ -21,7 +21,7 @@ export default async function Navbar() {
               alt=""
             />
             <div className="text-white">
-              <p className="text-lg">Sital Adhikari</p>
+              <p className="text-lg">{user.data?.name}</p>
               <p className="text-sm capitalize">{user?.role}</p>
             </div>
           </div>
