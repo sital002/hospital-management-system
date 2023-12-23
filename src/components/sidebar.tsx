@@ -1,8 +1,7 @@
-
-"use client"
+"use client";
 import { MdDashboard } from "react-icons/md";
 import "@/components/CSS/style.css";
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Accessibility,
   BookOpenCheck,
@@ -14,9 +13,10 @@ import {
   ChevronRight,
   PlusSquare,
   FolderKanban,
-  Eye
+  Eye,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const sideBarOptions = [
   {
@@ -32,17 +32,17 @@ const sideBarOptions = [
       {
         name: "Register Patient",
         url: "demo",
-        icon:<PlusSquare />
+        icon: <PlusSquare />,
       },
       {
         name: "View Patient",
         url: "demo",
-        icon:<Eye />
+        icon: <Eye />,
       },
       {
         name: "Manage Patient",
         url: "demo",
-        icon:<FolderKanban />
+        icon: <FolderKanban />,
       },
     ],
   },
@@ -54,17 +54,17 @@ const sideBarOptions = [
       {
         name: "Register Staff",
         url: "demo",
-        icon:<PlusSquare />
+        icon: <PlusSquare />,
       },
       {
         name: "View Staff",
         url: "demo",
-        icon:<Eye />
+        icon: <Eye />,
       },
       {
         name: "Manage Staff",
         url: "demo",
-        icon:<FolderKanban />
+        icon: <FolderKanban />,
       },
     ],
   },
@@ -76,17 +76,17 @@ const sideBarOptions = [
       {
         name: "Register Doctor",
         url: "demo",
-        icon:<PlusSquare />
+        icon: <PlusSquare />,
       },
       {
         name: "View Doctor",
         url: "demo",
-        icon:<Eye />
+        icon: <Eye />,
       },
       {
         name: "Manage Doctor",
         url: "demo",
-        icon:<FolderKanban />
+        icon: <FolderKanban />,
       },
     ],
   },
@@ -108,94 +108,122 @@ const sideBarOptions = [
       {
         name: "Add Lab Report",
         url: "demo",
-        icon:<PlusSquare />
+        icon: <PlusSquare />,
       },
       {
         name: "View Lab Report",
         url: "demo",
-        icon:<Eye />
+        icon: <Eye />,
       },
       {
         name: "Manage Lab Report",
         url: "demo",
-        icon:<FolderKanban />
+        icon: <FolderKanban />,
       },
     ],
   },
 ];
 export default function Sidebar() {
-
+  
   interface Option {
     name: string;
     url: string;
     icon: React.ReactNode;
     dropdown?: Option[];
   }
-  
+
   interface DropdownState {
     patient: boolean;
     staff: boolean;
     doctor: boolean;
     labreport: boolean;
   }
-  
-  interface SidebarProps {
-    sideBarOptions: Option[];
-  }
-  
-
-  const[dropdown,setDropdown]=useState<DropdownState>({
-    patient:false,
-    staff:false,
-    doctor:false,
-    labreport:false
-  })
 
   interface SidebarProps {
     sideBarOptions: Option[];
   }
 
-  const dropDownHandler=(name: keyof DropdownState)=>{
-    console.log(name);
+  const [dropdown, setDropdown] = useState<DropdownState>({
+    patient: false,
+    staff: false,
+    doctor: false,
+    labreport: false,
+  });
+
+  interface SidebarProps {
+    sideBarOptions: Option[];
+  }
+
+  const dropDownHandler = (name: keyof DropdownState) => {
+
+
     setDropdown((prv)=>({
-      ...prv,
-      [name]:!prv[name]
+      patient:name==="patient"?!prv.patient:false,
+      staff:name==="staff"?!prv.staff:false,
+      doctor:name==="doctor"?!prv.doctor:false,
+      labreport:name==="labreport"?!prv.labreport:false,
+
     }))
-  }
+  };
+
+  const router=usePathname()
+  console.log(router);
+
 
   return (
     <div className="sticky left-0 top-0 h-[100vh] w-[20vw] border-r-2 border-gray-300 bg-[#fafbfb]">
-      <div className="flex items-center gap-2 px-3 pt-4 text-xl font-semibold">
-        <MdDashboard />
-        <span>Hospital MS</span>
-      </div>
       <ul className="my-5 min-h-[85vh] border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
-          const name=option.name.toLowerCase().trim()
+          const name = option.name.toLowerCase().trim();
           return (
-            <Link className="duration-300 transition-all" href={option.url} key={option.name + index}>
-              <li onClick={option.dropdown && (()=>dropDownHandler(name as keyof DropdownState))} className="mx-2  flex items-center gap-2 px-1 py-2 hover:bg-gray-200 sm:px-3 relative">
-                <div className="text-2xl">{option.icon}</div>
-                <span className=" hidden sm:block">{option.name}</span>
-                <hr />
-              {option.dropdown && <ChevronRight className={`absolute duration-300 left-[90%] ${dropdown[name as keyof DropdownState] ? "rotate-90":""}`} />}
+            <Fragment key={option.name + index}>
+              <li className={`relative hover:bg-[#75e9e6] ${router===option.url ? "bg-[#75e9e6]":""} `}
+                onClick={
+                  option.dropdown &&
+                  (() => dropDownHandler(name as keyof DropdownState))
+                }
+              >
+                <Link
+                  className={`${router===option.url ? "bg-[#75e9e6]":""}  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
+                  href={option.url}
+                  
+                >
+                  <span className="text-2xl">{option.icon}</span>
+                  <span className=" hidden sm:block">{option.name}</span>
+                  <hr />
+                  {option.dropdown && (
+                    <ChevronRight
+                      className={`absolute left-[90%] duration-300 ${
+                        dropdown[name as keyof DropdownState] ? "rotate-90" : ""
+                      }`}
+                    />
+                  )}
+                </Link>
               </li>
               {option.dropdown && (
-                  <ul className={`w-full h-0 transition-all duration-300 overflow-hidden pl-10 pr-2 ${dropdown[name as keyof DropdownState] ? "h-[180px]":""}`}>
-                    {option.dropdown.map((element, index) => {
-                      return (
-                        <Link  key={element.name + index} href={element.url}>
-                          <li>
-                            <div>{element.icon}</div>
-                            <span>{element.name}</span>
-                            <hr />
-                          </li>
+                <ul
+                  className={`h-0 w-full overflow-hidden pl-10 pr-2 transition-all duration-300 ${
+                    dropdown[name as keyof DropdownState] ? "h-[180px]" : ""
+                  }`}
+                >
+                  {option.dropdown.map((element, index) => {
+                    return (
+                      <li className={`hover:bg-[#75e9e6] ${router===element.url ? "bg-[#75e9e6]":""}`} key={element.name + index}>
+                        <Link
+                          className={`flex gap-3 w-full  ${router===element.url ? "bg-[#75e9e6]":""} `}
+                          
+                          href={element.url}
+                        >
+                          {element.icon}
+                          <span>{element.name}</span>
+                          <hr />
                         </Link>
-                      );
-                    })}
-                  </ul>
-                )}
-            </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </Fragment>
           );
         })}
       </ul>
