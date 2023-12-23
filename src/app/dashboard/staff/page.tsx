@@ -1,7 +1,5 @@
-import Sidebar from "@/components/sidebar";
 import StaffDashboard from "@/components/staff/StaffDashboard";
-import { PatientType } from "@/database/modals/PatientModel";
-import { Staff, StaffType } from "@/database/modals/StaffModal";
+import { StaffType } from "@/database/modals/StaffModal";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

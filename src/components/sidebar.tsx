@@ -210,18 +210,20 @@ export default function Sidebar() {
               </li>
               {option.dropdown && (
                 <ul
-                  className={`h-0 w-full overflow-hidden pl-10 pr-2 transition-all duration-300 ${
+                  className={`h-0 w-full overflow-hidden px-1 transition-all duration-300 ${
                     dropdown[name as keyof DropdownState] ? "h-[180px]" : ""
                   }`}
                 >
                   {option.dropdown.map((element, index) => {
                     return (
-                      <Link key={element.name + index} href={element.url}>
-                        <li>
-                          <div>{element.icon}</div>
-                          <span>{element.name}</span>
-                          <hr />
-                        </li>
+                      <Link
+                        key={element.name + index}
+                        href={element.url}
+                        className="flex w-full gap-2 px-1 py-2 hover:bg-gray-500"
+                      >
+                        <p>{element.icon}</p>
+                        <span>{element.name}</span>
+                        <hr />
                       </Link>
                     );
                   })}

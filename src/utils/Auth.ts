@@ -65,19 +65,19 @@ export async function getUserDetails() {
       const user = (await Labtechnician.findById(
         decoded._id,
       )) as LabtechnicianType;
-      return user;
+      return { ...user, role: "labtechnician" };
     }
     if (decoded.role === "doctor") {
       const user = (await Doctor.findById(decoded._id)) as DoctorType;
-      return user;
+      return { ...user, role: "doctor" };
     }
     if (decoded.role === "staff") {
       const user = (await Staff.findById(decoded._id)) as StaffType;
-      return user;
+      return { ...user, role: "staff" };
     }
     if (decoded.role === "admin") {
       const user = (await Admin.findById(decoded._id)) as AdminType;
-      return user;
+      return { ...user, role: "admin" };
     }
     return null;
   } catch (err) {
