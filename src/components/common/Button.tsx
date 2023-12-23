@@ -27,7 +27,8 @@ const Button: React.FC<ButtonProps> = ({
   const rootClass = clsx(
     variant === "primary" && styles.primary,
     disabled && "bg-gray-600 border-none pointer-events-none",
-    "my-1 w-full rounded-lg border border-black bg-black px-5 py-2 text-white transition duration-300 hover:bg-white hover:text-black",
+    href && "bg-none text-gray-600 hover:text-gray-800",
+    "my-1 w-full rounded-lg px-5 py-2 transition duration-300 ease-in-out border-2 border-gray-600 hover:border-gray-800",
     className,
   );
   return href ? (

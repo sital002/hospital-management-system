@@ -22,7 +22,7 @@ export default async function Navbar() {
             />
             <div className="text-white">
               <p className="text-lg">Sital Adhikari</p>
-              <p className="text-sm">Admin</p>
+              <p className="text-sm capitalize">{user?.role}</p>
             </div>
           </div>
         ) : (

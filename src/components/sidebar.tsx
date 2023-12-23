@@ -143,7 +143,6 @@ const sideBarOptions = [
   },
 ];
 export default function Sidebar() {
-
   interface Option {
     name: string;
     url?: string;
@@ -174,42 +173,38 @@ export default function Sidebar() {
   }
 
   const dropDownHandler = (name: keyof DropdownState) => {
-
-
-    setDropdown((prv)=>({
-      patient:name==="patient"?!prv.patient:false,
-      staff:name==="staff"?!prv.staff:false,
-      doctor:name==="doctor"?!prv.doctor:false,
-      labreport:name==="labreport"?!prv.labreport:false,
-
-    }))
+    setDropdown((prv) => ({
+      patient: name === "patient" ? !prv.patient : false,
+      staff: name === "staff" ? !prv.staff : false,
+      doctor: name === "doctor" ? !prv.doctor : false,
+      labreport: name === "labreport" ? !prv.labreport : false,
+    }));
   };
 
-  const router=usePathname()
+  const router = usePathname();
   console.log(router);
-
 
   return (
     <div className="sticky left-0 top-0 h-[100vh] w-[20vw] border-r-2 border-gray-300 bg-[#fafbfb]">
-
       <ul className="my-5 min-h-[85vh] border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
           return (
-
             <Fragment key={option.name + index}>
-              <li className={`relative hover:bg-[#75e9e6] ${router===option?.url ? "bg-[#75e9e6]":""} `}
-
+              <li
+                className={`relative hover:bg-[#75e9e6] ${
+                  router === option?.url ? "bg-[#75e9e6]" : ""
+                } `}
                 onClick={
                   option.dropdown &&
                   (() => dropDownHandler(name as keyof DropdownState))
                 }
-
               >
                 <Link
-                  className={`${router===option?.url ? "bg-[#75e9e6]":""}  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
+                  className={`${
+                    router === option?.url ? "bg-[#75e9e6]" : ""
+                  }  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
                   href={option?.url || ""}
-                  
                 >
                   <span className="text-2xl">{option.icon}</span>
                   <span className=" hidden sm:block">{option.name}</span>
@@ -226,18 +221,21 @@ export default function Sidebar() {
               {option.dropdown && (
                 <ul
                   className={`h-0 w-full overflow-hidden pl-10 pr-2 transition-all duration-300 ${
-
-               
                     dropdown[name as keyof DropdownState] ? "h-[180px]" : ""
                   }`}
                 >
                   {option.dropdown.map((element, index) => {
                     return (
-
-                      <li className={`hover:bg-[#75e9e6] ${router===element.url ? "bg-[#75e9e6]":""}`} key={element.name + index}>
+                      <li
+                        className={`hover:bg-[#75e9e6] ${
+                          router === element.url ? "bg-[#75e9e6]" : ""
+                        }`}
+                        key={element.name + index}
+                      >
                         <Link
-                          className={`flex gap-3 w-full  ${router===element.url ? "bg-[#75e9e6]":""} `}
-                          
+                          className={`flex w-full gap-3  ${
+                            router === element.url ? "bg-[#75e9e6]" : ""
+                          } `}
                           href={element.url}
                         >
                           {element.icon}
