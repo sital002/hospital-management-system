@@ -27,6 +27,8 @@ jobs:
       - name: Merge to Main if Deployment Passes
         if: success()
         run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
           git checkout main
-          git merge --no-ff development -m "Merge branch 'development' into main"
+          git merge development
           git push origin main
