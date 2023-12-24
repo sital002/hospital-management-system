@@ -1,0 +1,25 @@
+name: Debugging
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  deploy_and_merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Log branch
+        run: |
+          echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+          git branch -a
+          git branch -v
