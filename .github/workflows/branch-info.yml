@@ -19,8 +19,5 @@ jobs:
           node-version: 18
 
       - name: Log branch
-      run: |
-        echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-        git branch -a
-        git branch -v
-        
+        run: |
+          echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github
