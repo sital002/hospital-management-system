@@ -23,7 +23,7 @@ jobs:
       - name: Deploy to Vercel Preview
         run: |
           npm install vercel
-          npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --scope=hospital-management-system --confirm
+          npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --confirm
 
       - name: Run Tests
         run: npm test
