@@ -159,7 +159,7 @@ const PatientForm: FC<PatientFormProps> = ({
   };
 
   return (
-    <div className="px-4">
+    <div className="w-full max-w-[600px] px-4 bg-neutral-200 rounded-lg py-8 absolute left-[55%] top-[55%] -translate-x-[50%] -translate-y-[50%]">
       {" "}
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-center text-3xl font-medium">
@@ -222,38 +222,46 @@ const PatientForm: FC<PatientFormProps> = ({
           placeholder="Ratnapark, Kathmandu"
         />
         <p className="text-red-800">{errors.address?.message}</p>
-        <Label>Gender</Label>
-        <Select
-          options={genderOptions}
-          {...register("gender", {
-            required: {
-              value: true,
-              message: "Gender is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.gender?.message}</p>
-        <Label>Admit Type</Label>
-        <Select
-          options={admitType}
-          {...register("admitType", {
-            required: {
-              value: true,
-              message: "Admit Type is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.admitType?.message}</p>
-        <Label>Patient Type</Label>
-        <Select
-          options={patientTypeOption}
-          {...register("patientType", {
-            required: {
-              value: true,
-              message: "PatientType is required",
-            },
-          })}
-        />
+        <div className="flex items-center justify-center gap-6">
+          <div>
+            <Label className="block">Gender</Label>
+            <Select
+              options={genderOptions}
+              {...register("gender", {
+                required: {
+                  value: true,
+                  message: "Gender is required",
+                },
+              })}
+            />
+            <p className="text-red-800">{errors.gender?.message}</p>
+          </div>
+          <div>
+            <Label>Admit Type</Label>
+            <Select
+              options={admitType}
+              {...register("admitType", {
+                required: {
+                  value: true,
+                  message: "Admit Type is required",
+                },
+              })}
+            />
+            <p className="text-red-800">{errors.admitType?.message}</p>
+          </div>
+          <div>
+            <Label>Patient Type</Label>
+            <Select
+              options={patientTypeOption}
+              {...register("patientType", {
+                required: {
+                  value: true,
+                  message: "PatientType is required",
+                },
+              })}
+            />
+          </div>
+        </div>
         <Button>Add</Button>
       </form>
     </div>
