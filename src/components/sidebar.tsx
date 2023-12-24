@@ -97,10 +97,25 @@ const sideBarOptions = [
     ],
   },
   {
-    name: "Lab Technician",
-    url: "/dashboard/labtechnician",
-    icon: <FlaskConical />,
-    roles: ["admin", "staff"],
+    name: "LabTechnician",
+    icon: <Accessibility />,
+    dropdown: [
+      {
+        name: "Register Lab Technician",
+        url: "/dashboard/patient/new",
+        icon: <PlusSquare />,
+      },
+      {
+        name: "View Lab Technician",
+        url: "/dashboard/patient",
+        icon: <Eye />,
+      },
+      {
+        name: "Manage Lab Technicaian",
+        url: "/dashboard/patient",
+        icon: <FolderKanban />,
+      },
+    ],
   },
   {
     name: "Pharmacy",
@@ -143,6 +158,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
     staff: boolean;
     doctor: boolean;
     labreport: boolean;
+    labtechnician:boolean;
   }
 
   interface SidebarProps {
@@ -154,6 +170,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
     staff: false,
     doctor: false,
     labreport: false,
+    labtechnician: false,
   });
 
   const dropDownHandler = (name: keyof DropdownState) => {
@@ -162,6 +179,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
       staff: name === "staff" ? !prv.staff : false,
       doctor: name === "doctor" ? !prv.doctor : false,
       labreport: name === "labreport" ? !prv.labreport : false,
+      labtechnician: name === "labtechnician" ? !prv.labtechnician : false,
     }));
   };
 
@@ -169,7 +187,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
   console.log(router);
 
   return (
-    <div className="sticky left-0 top-0 h-[100vh] w-[20vw] border-r-2 border-gray-300 bg-[#fafbfb]">
+    <div className="sticky left-0 top-0 h-[100vh] w-[20vw] bg-[#fafbfb]">
       <ul className="my-5 min-h-[85vh] border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
@@ -178,8 +196,8 @@ export default function Sidebar({ role }: { role: string | undefined }) {
               {(option?.roles === undefined ||
                 option?.roles?.includes(role || "")) && (
                 <li
-                  className={`relative hover:bg-[#75e9e6] ${
-                    router === option?.url ? "bg-[#75e9e6]" : ""
+                  className={`relative rounded-none hover:text-[#75e9e6] ${
+                    router === option?.url ? "text-[#75e9e6]" : ""
                   } `}
                   onClick={
                     option.dropdown &&
@@ -188,7 +206,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
                 >
                   <Link
                     className={`${
-                      router === option?.url ? "bg-[#75e9e6]" : ""
+                      router === option?.url ? "text-[#75e9e6]" : ""
                     }  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
                     href={option?.url || ""}
                   >
@@ -216,14 +234,14 @@ export default function Sidebar({ role }: { role: string | undefined }) {
                   {option.dropdown.map((element, index) => {
                     return (
                       <li
-                        className={`hover:bg-[#75e9e6] ${
-                          router === element.url ? "bg-[#75e9e6]" : ""
+                        className={`rounded-none hover:text-[#75e9e6] ${
+                          router === element.url ? "text-[#75e9e6]" : ""
                         }`}
                         key={element.name + index}
                       >
                         <Link
                           className={`flex w-full gap-3  ${
-                            router === element.url ? "bg-[#75e9e6]" : ""
+                            router === element.url ? "text-[#75e9e6]" : ""
                           } `}
                           href={element.url}
                         >
