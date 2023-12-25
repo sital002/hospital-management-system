@@ -15,12 +15,14 @@ interface PatientDashboardProps {
 }
 export default function StaffDashboard({ users }: PatientDashboardProps) {
   const [showModal, setShowModal] = useState(false);
-  console.log("saroj: ", users);
 
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<StaffType>();
+  const router = useRouter();
   function clickBtn() {
     setShowModal(!showModal);
   }
-  const router = useRouter();
+
 
   const handleDelete = async (id: string) => {
     try {
@@ -28,15 +30,24 @@ export default function StaffDashboard({ users }: PatientDashboardProps) {
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${id}`,
         {
           method: "DELETE",
+          cache: "no-store",
+          credentials: "include",
         },
       );
       const data = await res.json();
-      toast.success(data.message);
       router.refresh();
+      toast.success("Account Deleted Successfully");
+      return data;
     } catch (err: any) {
-      console.log(err.message);
-      toast.error(err.message);
+      console.log(err?.message);
+      toast.error(err?.message);
+      return [];
     }
+  };
+
+  const handleEdit = async (item: StaffType) => {
+    setShowEditModal(true);
+    setSelectedPatient(item);
   };
 
   return (

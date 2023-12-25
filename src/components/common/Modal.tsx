@@ -49,7 +49,7 @@ export const Modal: FC<ModalProps> = ({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className=" min-h-[600px] w-full max-w-2xl transform overflow-hidden  p-6 text-left align-middle  transition-all">
                   {title && (
                     <Dialog.Title
                       as="h3"

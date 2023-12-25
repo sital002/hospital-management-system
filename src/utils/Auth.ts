@@ -62,10 +62,10 @@ export async function getUserDetails() {
     await connectToDB();
 
     if (decoded.role === "labtechnician") {
-      const user = (await Labtechnician.findById(
+      const data = (await Labtechnician.findById(
         decoded._id,
       )) as LabtechnicianType;
-      return { user, role: "labtechnician" };
+      return { data, role: "labtechnician" };
     }
     if (decoded.role === "doctor") {
       const data = (await Doctor.findById(decoded._id)) as DoctorType;

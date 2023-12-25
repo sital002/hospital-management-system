@@ -95,7 +95,7 @@ const StaffForm: FC<StaffFormProps> = () => {
   };
 
   return (
-    <div>
+    <div className="absolute left-[55%] top-[55%] w-full max-w-[600px] -translate-x-[50%] -translate-y-[40%] rounded-lg bg-neutral-200 px-4 py-8">
       {" "}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="ml-auto w-fit cursor-pointer "></div>
@@ -176,28 +176,34 @@ const StaffForm: FC<StaffFormProps> = () => {
           placeholder="Ratnapark, Kathmandu"
         />
         <p className="text-red-800">{errors.address?.message}</p>
-        <Label>Gender</Label>
-        <Select
-          options={genderOptions}
-          {...register("gender", {
-            required: {
-              value: true,
-              message: "Gender is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.gender?.message}</p>
-        <Label>Shift</Label>
-        <Select
-          options={workShift}
-          {...register("shift", {
-            required: {
-              value: true,
-              message: "Shift is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.shift?.message}</p>
+        <div className="flex items-center gap-10">
+          <div>
+            <Label>Gender</Label>
+            <Select
+              options={genderOptions}
+              {...register("gender", {
+                required: {
+                  value: true,
+                  message: "Gender is required",
+                },
+              })}
+            />
+            <p className="text-red-800">{errors.gender?.message}</p>
+          </div>
+          <div>
+            <Label>Shift</Label>
+            <Select
+              options={workShift}
+              {...register("shift", {
+                required: {
+                  value: true,
+                  message: "Shift is required",
+                },
+              })}
+            />
+            <p className="text-red-800">{errors.shift?.message}</p>
+          </div>
+        </div>
         <Label>Password</Label>
         <Input
           {...register("password", {

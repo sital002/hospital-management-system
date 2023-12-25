@@ -81,7 +81,7 @@ const DoctorForm: FC<DoctorFormProps> = ({}) => {
   };
 
   return (
-    <div>
+    <div className="w-full max-w-[600px] px-4 bg-neutral-200 rounded-lg py-8 absolute left-[55%] top-[55%] -translate-x-[50%] -translate-y-[36%]">
       {""}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="ml-auto w-fit cursor-pointer "></div>

@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { UserType } from "@/database/modals/UserModel";
 import { formatDate } from "@/utils/formatDate";
 import AddProfileModal from "../AddProfileModal";
 import Button from "../common/Button";
