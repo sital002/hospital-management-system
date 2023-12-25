@@ -8,13 +8,14 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { PatientType } from "@/database/modals/PatientModel";
+import { formatDate } from "@/utils/formatDate";
 
 type FormInputs = {
   name: string;
   id?: string;
   phone: number;
   address: string;
-  dob: Date | null;
+  dob: Date | undefined;
   gender: string;
   patientType: "inpatient" | "outpatient";
   admitType: "normal" | "emergency";
@@ -94,7 +95,7 @@ const PatientForm: FC<PatientFormProps> = ({
   setShow,
   update = false,
 }) => {
-  console.log(patient);
+  console.log(patient?.dob);
   const {
     register,
     handleSubmit,
@@ -118,27 +119,35 @@ const PatientForm: FC<PatientFormProps> = ({
           gender: "male",
           admitType: "emergency",
           patientType: "inpatient",
-          dob: null,
+          dob: undefined,
         },
   });
 
   const router = useRouter();
   const updatePatientDetail = async ({ data }: { data: FormInputs }) => {
     try {
+      console.log(data);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${data?.id}`,
         {
           method: "PUT",
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            name: data?.name,
+            phone: data?.phone,
+            address: data?.address,
+            admitType: data?.admitType,
+            patientType: data?.patientType,
+            dob: data?.dob,
+            gender: data.gender,
+          }),
         },
       );
       const json = await res.json();
-      if (json.success) {
-        toast.success("Detail updated successfully");
-        console.log(json);
+      if (json) {
         if (setShow) {
           setShow(false);
         }
+        toast.success("Detail updated successfully");
         router.refresh();
         return;
       }
@@ -149,8 +158,6 @@ const PatientForm: FC<PatientFormProps> = ({
     }
   };
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    // console.log(data);
-
     if (update) {
       updatePatientDetail({ data });
     } else {
@@ -159,7 +166,7 @@ const PatientForm: FC<PatientFormProps> = ({
   };
 
   return (
-    <div className="w-full max-w-[600px] px-4 bg-neutral-200 rounded-lg py-8 absolute left-[55%] top-[55%] -translate-x-[50%] -translate-y-[50%]">
+    <div className="absolute left-[55%] top-[55%] w-full max-w-[600px] -translate-x-[50%] -translate-y-[50%] rounded-lg bg-neutral-200 px-4 py-8">
       {" "}
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-center text-3xl font-medium">
@@ -197,6 +204,7 @@ const PatientForm: FC<PatientFormProps> = ({
         <p className="text-red-800">{errors.phone?.message}</p>
         <Label>DOB</Label>
         <Input
+          type="date"
           {...register("dob", {
             required: {
               value: true,
@@ -204,7 +212,6 @@ const PatientForm: FC<PatientFormProps> = ({
             },
           })}
           placeholder="2002/01/01"
-          type="date"
         />
         <p className="text-red-800">{errors.dob?.message}</p>
         <Label>Address</Label>
