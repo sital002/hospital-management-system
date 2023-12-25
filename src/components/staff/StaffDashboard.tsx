@@ -14,6 +14,9 @@ interface PatientDashboardProps {
 }
 export default function StaffDashboard({ users }: PatientDashboardProps) {
   const [showModal, setShowModal] = useState(false);
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<StaffType>();
   const router = useRouter();
   function clickBtn() {
     setShowModal(!showModal);
@@ -39,6 +42,12 @@ export default function StaffDashboard({ users }: PatientDashboardProps) {
       return [];
     }
   };
+
+  const handleEdit = async (item: StaffType) => {
+    setShowEditModal(true);
+    setSelectedPatient(item);
+  };
+
   return (
     <div>
       {showModal && (
@@ -65,7 +74,9 @@ export default function StaffDashboard({ users }: PatientDashboardProps) {
               <td className="uppercase">{item?.gender}</td>
               <td className="uppercase">
                 <Button className="mr-3 w-fit">View</Button>
-                <Button className="mr-3 w-fit">Edit</Button>
+                <Button
+                onClick={() => handleEdit(item)}
+                className="mr-3 w-fit">Edit</Button>
                 <Button
                   className="mr-3 w-fit"
                   onClick={() => handleDelete(item._id.toString())}
