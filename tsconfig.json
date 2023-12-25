@@ -34,11 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-<<<<<<< HEAD
   ],
-=======
-, "src/components/staff/EditStaffModel.jsx"  ],
->>>>>>> 731e339668bd7ea5a033e6e714eea4805491288f
   "exclude": [
     "node_modules"
   ]
