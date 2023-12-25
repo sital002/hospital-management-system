@@ -1,8 +1,18 @@
 import { Patient, PatientType } from "@/database/modals/PatientModel";
+import { getUserDetails } from "@/utils/Auth";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
+    const user = await getUserDetails();
+    if (!user)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not logged in",
+        }),
+        { status: 401 },
+      );
     const id = req.nextUrl.pathname.split("/")[3];
 
     if (!id)
@@ -28,6 +38,15 @@ export async function GET(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    const user = await getUserDetails();
+    if (!user)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not logged in",
+        }),
+        { status: 401 },
+      );
     const id = req.nextUrl.pathname.split("/")[3];
 
     if (!id)
@@ -58,6 +77,15 @@ export async function DELETE(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    const user = await getUserDetails();
+    if (!user)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not logged in",
+        }),
+        { status: 401 },
+      );
     const id = req.nextUrl.pathname.split("/")[3];
     if (!id)
       return new Response(
@@ -69,11 +97,24 @@ export async function PUT(req: NextRequest) {
       );
 
     const data = await req.json();
+    // console.log(data);
 
-    const patient = (await Patient.findByIdAndUpdate(id, data, {
-      new: true,
-    })) as PatientType;
-    return new Response(JSON.stringify(patient));
+    const patient = (await Patient.findByIdAndUpdate(id, data)) as PatientType;
+    console.log(patient);
+    if (!patient)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Patient not found",
+        }),
+        { status: 404 },
+      );
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: "Updated successfully",
+      }),
+    );
   } catch (err: any) {
     return new Response(
       JSON.stringify({

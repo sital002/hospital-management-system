@@ -15,6 +15,7 @@ interface PatientDashboardProps {
 export default function PatientDashboard({ users }: PatientDashboardProps) {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<PatientType>();
   // console.log(user);
   const router = useRouter();
 
@@ -37,6 +38,11 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
       console.log(err.message);
       toast.error(err.message);
     }
+  };
+
+  const handleEdit = async (item: PatientType) => {
+    setShowEditModal(true);
+    setSelectedPatient(item);
   };
 
   return (
@@ -79,7 +85,7 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
                   </Link>
                   <Button
                     className="mr-3 w-fit"
-                    onClick={() => setShowEditModal(true)}
+                    onClick={() => handleEdit(item)}
                   >
                     Edit
                   </Button>
@@ -91,17 +97,17 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
                   </Button>
                 </td>
               </tr>
-              {/* {setShowEditModal ? (
-                <EditPatientModal
-                  show={showEditModal}
-                  patient={item}
-                  setShow={setShowEditModal}
-                />
-              ) : null} */}
             </>
           ))}
         </tbody>
       </table>
+      {setShowEditModal ? (
+        <EditPatientModal
+          show={showEditModal}
+          patient={selectedPatient}
+          setShow={setShowEditModal}
+        />
+      ) : null}
     </div>
   );
 }
