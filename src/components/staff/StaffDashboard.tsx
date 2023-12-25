@@ -6,6 +6,9 @@ import { PatientType } from "@/database/modals/PatientModel";
 import AddProfileModal from "../AddProfileModal";
 import Button from "../common/Button";
 import { Staff, StaffType } from "@/database/modals/StaffModal";
+import Link from "next/link";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface PatientDashboardProps {
   users: StaffType[];
@@ -17,6 +20,24 @@ export default function StaffDashboard({ users }: PatientDashboardProps) {
   function clickBtn() {
     setShowModal(!showModal);
   }
+  const router = useRouter();
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
+      const data = await res.json();
+      toast.success(data.message);
+      router.refresh();
+    } catch (err: any) {
+      console.log(err.message);
+      toast.error(err.message);
+    }
+  };
 
   return (
     <div>
@@ -43,9 +64,16 @@ export default function StaffDashboard({ users }: PatientDashboardProps) {
               <td className="uppercase">{item?.shift}</td>
               <td className="uppercase">{item?.gender}</td>
               <td className="uppercase">
-                <Button className="mr-3 w-fit">View</Button>
+              <Link href={`/dashboard/staff/${item._id.toString()}`}>
+                    <Button className="mr-3 w-fit">view</Button>
+                  </Link>
                 <Button className="mr-3 w-fit">Edit</Button>
-                <Button className="mr-3 w-fit">Delete</Button>
+                <Button
+                    className="mr-3 w-fit"
+                    onClick={() => handleDelete(item._id.toString())}
+                  >
+                    Delete
+                  </Button>
               </td>
             </tr>
           ))}

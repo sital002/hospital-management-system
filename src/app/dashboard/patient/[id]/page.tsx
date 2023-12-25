@@ -5,6 +5,7 @@ import PatientReportDetails from "@/components/patientDetails/table/VitalsTable"
 import { PatientType } from "@/database/modals/PatientModel";
 
 async function getPatientDetail(id: string) {
+  console.log('params is : ',id)
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${id}`,
