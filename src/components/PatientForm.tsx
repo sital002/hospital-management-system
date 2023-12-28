@@ -269,7 +269,7 @@ const PatientForm: FC<PatientFormProps> = ({
             />
           </div>
         </div>
-        <Button>Add</Button>
+        <Button>{update ? 'Update' : 'Add'}</Button>
       </form>
     </div>
   );

@@ -6,19 +6,52 @@ import AddProfileModal from "../AddProfileModal";
 import Button from "../common/Button";
 import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
 import Link from "next/link";
+import EditLabTechnicianModal from "./EditLabTechnician";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
-interface PatientDashboardProps {
+interface LabTechnicianDashboardProps {
   users: LabtechnicianType[];
 }
 export default function LabTechnicianDashboard({
   users,
-}: PatientDashboardProps) {
+}: LabTechnicianDashboardProps) {
   const [showModal, setShowModal] = useState(false);
+  const[selectedLabTechnician,setSelectedLabTechnician]=useState<LabtechnicianType>()
+  const [showEditModal, setShowEditModal] = useState(false);
+
   // console.log(user);
 
   function clickBtn() {
     setShowModal(!showModal);
   }
+
+  const handleEdit = async (item: LabtechnicianType) => {
+    setShowEditModal(true);
+    setSelectedLabTechnician(item);
+  };
+  const router = useRouter();
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician/${id}`,
+        {
+          method: "DELETE",
+          cache: "no-store",
+          credentials: "include",
+        },
+      );
+      const data = await res.json();
+      router.refresh();
+      toast.success("Account Deleted Successfully");
+      return data;
+    } catch (err: any) {
+      console.log(err?.message);
+      toast.error(err?.message);
+      return [];
+    }
+  };
+
 
   return (
     <div>
@@ -51,13 +84,25 @@ export default function LabTechnicianDashboard({
                 <Link href={`/dashboard/labtechnician/${item._id.toString()}`}>
                   <Button className="mr-3 w-fit">view</Button>
                 </Link>
-                <Button className="mr-3 w-fit">Edit</Button>
-                <Button className="mr-3 w-fit">Delete</Button>
+                <Button className="mr-3 w-fit" onClick={()=>handleEdit(item)}>Edit</Button>
+                <Button
+                    className="mr-3 w-fit"
+                    onClick={() => handleDelete(item._id.toString())}
+                  >
+                    Delete
+                  </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {setShowEditModal ? (
+        <EditLabTechnicianModal
+          show={showEditModal}
+          labtechnician={selectedLabTechnician}
+          setShow={setShowEditModal}
+        />
+      ) : null}
     </div>
   );
 }

@@ -8,15 +8,16 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { X } from "lucide-react";
+import { StaffType } from "@/database/modals/StaffModal";
 
 type FormInputs = {
   name: string;
   email: string;
   password: string;
   cpassword: string;
-  phone: number;
+  phone: string;
   address: string;
-  dob: string;
+  dob: Date | null ;
   gender: string;
   role: string;
   shift: string;
@@ -50,21 +51,32 @@ const workShift = [
 ];
 
 interface StaffFormProps {
-  // showModal: boolean;
+  show:boolean;
+  setShow: (e: boolean) => void;
+  staff?: StaffType;
+  update:boolean;
 }
-const StaffForm: FC<StaffFormProps> = () => {
+const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormInputs>({
-    defaultValues: {
+    defaultValues: update ?{
+      name:staff?.name,
+      address:staff?.address,
+      gender:staff?.gender,
+      phone:staff?.phone,
+      dob:staff?.dob,
+      shift:staff?.shift,
+      email:staff?.email
+    } :{
       name: "John Doe",
       email: "johndoe33@gmail.com",
-      phone: 9860098600,
+      phone: "s",
       address: "Ratnapark, Kathmandu",
       gender: "male",
-      dob: "2000-01-01",
+      dob: null,
       shift: "morning",
       password: "Password@123",
       cpassword: "Password@123",

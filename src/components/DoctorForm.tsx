@@ -7,16 +7,17 @@ import Button from "./common/Button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { DoctorType } from "@/database/modals/DoctorModel";
 
 type FormInputs = {
   name: string;
   email: string;
   password: string;
   cpassword: string;
-  phone: number;
+  phone: string;
   address: string;
   department: string;
-  dob: string;
+  dob: Date | null;
   gender: string;
 };
 
@@ -32,24 +33,35 @@ const genderOptions = [
 ];
 
 interface DoctorFormProps {
-  // showModal: boolean;
+  show:boolean;
+  setShow: (e: boolean) => void;
+  doctor?: DoctorType;
+  update:boolean;
 }
 
-const DoctorForm: FC<DoctorFormProps> = ({}) => {
+const DoctorForm: FC<DoctorFormProps> = ({show,setShow,doctor,update=false}) => {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<FormInputs>({
-    defaultValues: {
+    defaultValues: update ?{
+      name:doctor?.name,
+      email:doctor?.email,
+      phone:doctor?.phone,
+      address:doctor?.address,
+      gender:doctor?.gender,
+      department:doctor?.department,
+      dob:doctor?.dob
+    }:{
       name: "John Doe",
       email: "johndoe33@gmail.com",
-      phone: 9860098600,
+      phone: "9860098600",
       address: "Ratnapark, Kathmandu",
       gender: "male",
       department: "Cardiology",
-      dob: "2000-01-01",
+      dob:null,
       password: "Password@123",
       cpassword: "Password@123",
     },
@@ -188,6 +200,8 @@ const DoctorForm: FC<DoctorFormProps> = ({}) => {
           placeholder="John Doe"
         />
         <p className="text-red-800">{errors.department?.message}</p>
+        {!update ? 
+        <>
         <Label>Password</Label>
         <Input
           {...register("password", {
@@ -218,6 +232,8 @@ const DoctorForm: FC<DoctorFormProps> = ({}) => {
           placeholder="xxxxxxxxx"
         />
         <p className="text-red-800">{errors.cpassword?.message}</p>
+        </>
+        :""}
         <Button>Add</Button>
       </form>
     </div>

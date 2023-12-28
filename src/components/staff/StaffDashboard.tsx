@@ -1,14 +1,12 @@
 "use client";
 import { useState } from "react";
-import { UserType } from "@/database/modals/UserModel";
-import { formatDate } from "@/utils/formatDate";
-import { PatientType } from "@/database/modals/PatientModel";
 import AddProfileModal from "../AddProfileModal";
 import Button from "../common/Button";
-import { Staff, StaffType } from "@/database/modals/StaffModal";
+import { StaffType } from "@/database/modals/StaffModal";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import EditStaffModal from "./EditStaffModal";
 
 interface PatientDashboardProps {
   users: StaffType[];
@@ -17,7 +15,7 @@ export default function StaffDashboard({ users }: PatientDashboardProps) {
   const [showModal, setShowModal] = useState(false);
 
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState<StaffType>();
+  const [seletectedStaff, setSelectedStaff] = useState<StaffType>();
   const router = useRouter();
   function clickBtn() {
     setShowModal(!showModal);
@@ -47,7 +45,7 @@ export default function StaffDashboard({ users }: PatientDashboardProps) {
 
   const handleEdit = async (item: StaffType) => {
     setShowEditModal(true);
-    setSelectedPatient(item);
+    setSelectedStaff(item);
   };
 
   return (
@@ -78,7 +76,7 @@ export default function StaffDashboard({ users }: PatientDashboardProps) {
               <Link href={`/dashboard/staff/${item._id.toString()}`}>
                     <Button className="mr-3 w-fit">view</Button>
                   </Link>
-                <Button className="mr-3 w-fit">Edit</Button>
+                <Button className="mr-3 w-fit" onClick={()=>handleEdit(item)}>Edit</Button>
                 <Button
                     className="mr-3 w-fit"
                     onClick={() => handleDelete(item._id.toString())}
@@ -90,6 +88,13 @@ export default function StaffDashboard({ users }: PatientDashboardProps) {
           ))}
         </tbody>
       </table>
+      {setShowEditModal ? (
+        <EditStaffModal
+          show={showEditModal}
+          staff={seletectedStaff}
+          setShow={setShowEditModal}
+        />
+      ) : null}
     </div>
   );
 }

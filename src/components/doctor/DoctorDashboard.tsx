@@ -7,6 +7,7 @@ import { type DoctorType } from "@/database/modals/DoctorModel";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import EditDoctorModal from "./EditDoctorModal";
 
 interface DoctorDashboardProps {
   users: DoctorType[];
@@ -14,6 +15,7 @@ interface DoctorDashboardProps {
 export default function DoctorDashboard({ users }: DoctorDashboardProps) {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [seletectedDoctor, setSelectedDoctor] = useState<DoctorType>();
   // console.log(user);
 
   function clickBtn() {
@@ -37,6 +39,13 @@ export default function DoctorDashboard({ users }: DoctorDashboardProps) {
       toast.error(err.message);
     }
   };
+  
+  const handleEdit = async (item: DoctorType) => {
+    setShowEditModal(true);
+    setSelectedDoctor(item);
+  };
+
+
 
   return (
     <div>
@@ -73,7 +82,7 @@ export default function DoctorDashboard({ users }: DoctorDashboardProps) {
                   </Link>
                   <Button
                     className="mr-3 w-fit"
-                    onClick={() => setShowEditModal(true)}
+                    onClick={()=>handleEdit(item)}
                   >
                     Edit
                   </Button>
@@ -88,6 +97,13 @@ export default function DoctorDashboard({ users }: DoctorDashboardProps) {
           ))}
         </tbody>
       </table>
+      {setShowEditModal ? (
+        <EditDoctorModal
+          show={showEditModal}
+          doctor={seletectedDoctor}
+          setShow={setShowEditModal}
+        />
+      ) : null}
     </div>
   );
 }

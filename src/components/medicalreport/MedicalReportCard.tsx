@@ -2,21 +2,14 @@
 
 import React, { useRef } from "react";
 import Button from "../common/Button";
-import { useReactToPrint } from "react-to-print";
 import "../CSS/style.css";
 
 const MedicalReportCard = ({ report }:any) => {
-  const reportView = useRef(null);
 
-  const printReport = () =>
-    useReactToPrint({
-      content: () => reportView.current,
-    });
 
   console.log("medicalReport: ", report);
   return (
     <div
-      ref={reportView}
       className="mx-auto w-full max-w-[1000px] drop-shadow-lg overflow-hidden rounded-lg bg-neutral-50  p-3"
     >
       <div className="p-4">
@@ -49,7 +42,7 @@ const MedicalReportCard = ({ report }:any) => {
           </p>
         </div>
       </div>
-      <Button onClick={printReport} className=" left-full float-right w-fit">
+      <Button  className=" left-full float-right w-fit">
         Print
       </Button>
     </div>

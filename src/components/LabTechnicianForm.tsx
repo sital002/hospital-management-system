@@ -9,15 +9,17 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { X } from "lucide-react";
+import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
 
 type FormInputs = {
   name: string;
+  id?:string;
   email: string;
   password: string;
   cpassword: string;
-  phone: number;
+  phone: string;
   address: string;
-  dob: string;
+  dob: Date | null;
   gender: string;
 };
 
@@ -33,32 +35,48 @@ const genderOptions = [
 ];
 
 interface LabTechnicianFormProps {
-  // showModal: boolean;
+  show: boolean;
+  setShow: (e: boolean) => void;
+  labtechnician?: LabtechnicianType;
+  update: boolean;
 }
 
-const LabTechnicianForm: FC<LabTechnicianFormProps> = () => {
+const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
+  show,
+  setShow,
+  labtechnician,
+  update = false,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormInputs>({
-    defaultValues: {
-      name: "John Doe",
-      email: "johndoe33@gmail.com",
-      phone: 9860098600,
-      address: "Ratnapark, Kathmandu",
-      gender: "male",
-      dob: "2000-01-01",
-      password: "Password@123",
-      cpassword: "Password@123",
-    },
+    defaultValues: update
+      ? {
+          name: labtechnician?.name,
+          email: labtechnician?.email,
+          address: labtechnician?.address,
+          phone: labtechnician?.phone,
+          dob: labtechnician?.dob,
+        }
+      : {
+          name: "John Doe",
+          email: "johndoe33@gmail.com",
+          phone: "9860098600",
+          address: "Ratnapark, Kathmandu",
+          gender: "male",
+          dob: null,
+          password: "Password@123",
+          cpassword: "Password@123",
+        },
   });
 
   const router = useRouter();
   // const [showModal, setShowModal] = useState(false);
 
-  const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    console.log(data);
+  const addNewLabTechnician: SubmitHandler<FormInputs> = async (data:FormInputs) => {
+    
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician`,
@@ -68,6 +86,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = () => {
         },
       );
       const json = await res.json();
+      console.log(json);
       if (json.success) {
         toast.success("Account created successfully");
         router.refresh();
@@ -80,13 +99,54 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = () => {
     }
   };
 
+  const updateLabTechnicianDetails = async ({ data,router }: { data: FormInputs,router:any }) => {
+    try {
+      console.log('labdata: ',data);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician/${data?.id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            name: data?.name,
+            email: data?.email,
+            address: data?.address,
+            phone: data?.phone,
+            dob: data?.dob,
+          }),
+        },
+      );
+      const json = await res.json();
+      if (json) {
+        if (setShow) {
+          setShow(false);
+        }
+        toast.success("Detail updated successfully");
+        router.refresh();
+        return;
+      }
+      return toast.error(json.message);
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+  };
+
+  const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+    console.log('edit data',data);
+    if (update) {
+      updateLabTechnicianDetails({ data,router });
+    } else {
+      addNewLabTechnician(data);
+    }
+  };
+
   return (
     <div>
       {" "}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="ml-auto w-fit cursor-pointer "></div>
         <h1 className="text-center text-3xl font-medium">
-          Create New LabTechnician
+          {update ? "Update LabTechnician" : "Create New LabTechnician"}
         </h1>
         <Label>Name</Label>
         <Input
@@ -174,6 +234,8 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = () => {
           })}
         />
         <p className="text-red-800">{errors.gender?.message}</p>
+        {!update ?
+        <>
         <Label>Password</Label>
         <Input
           {...register("password", {
@@ -204,7 +266,9 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = () => {
           placeholder="xxxxxxxxx"
         />
         <p className="text-red-800">{errors.cpassword?.message}</p>
-        <Button>Add</Button>
+        </>
+        :""}
+        <Button>{update ? "Update" : "Create New LabTechnician"}</Button>
       </form>
     </div>
   );

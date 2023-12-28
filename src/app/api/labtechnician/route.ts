@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     const { name, email, phone, dob, address, gender, password, cpassword } =
       data;
-
+console.log(name,email);
     if (!name)
       return new Response(
         JSON.stringify({ success: false, message: "Please provide a name" }),

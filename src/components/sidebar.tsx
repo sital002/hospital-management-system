@@ -102,17 +102,17 @@ const sideBarOptions = [
     dropdown: [
       {
         name: "Register Lab Technician",
-        url: "/dashboard/patient/new",
+        url: "/dashboard/labtechnician/new",
         icon: <PlusSquare />,
       },
       {
         name: "View Lab Technician",
-        url: "/dashboard/patient",
+        url: "/dashboard/labtechnician",
         icon: <Eye />,
       },
       {
         name: "Manage Lab Technicaian",
-        url: "/dashboard/patient",
+        url: "/dashboard/labtechnician",
         icon: <FolderKanban />,
       },
     ],
