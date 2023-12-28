@@ -51,10 +51,10 @@ const workShift = [
 ];
 
 interface StaffFormProps {
-  show:boolean;
-  setShow: (e: boolean) => void;
+  show?:boolean;
+  setShow?: (e: boolean) => void;
   staff?: StaffType;
-  update:boolean;
+  update?:boolean;
 }
 const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
   const {

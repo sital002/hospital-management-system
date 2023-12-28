@@ -33,10 +33,10 @@ const genderOptions = [
 ];
 
 interface DoctorFormProps {
-  show:boolean;
-  setShow: (e: boolean) => void;
+  show?:boolean;
+  setShow?: (e: boolean) => void;
   doctor?: DoctorType;
-  update:boolean;
+  update?:boolean;
 }
 
 const DoctorForm: FC<DoctorFormProps> = ({show,setShow,doctor,update=false}) => {

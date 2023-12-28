@@ -16,11 +16,13 @@ export default async function Navbar() {
 
         {user ? (
           <div className=" flex cursor-pointer gap-3">
-            <Image
+            <Image src="" className=" rounded-full border-2 border-white p-[1px]" alt="profile-image" height={50} width={50}/>
+            {/* <Image
+            width={80}
               className="h-[50px] w-[50px] rounded-full border-2 border-white p-[1px]"
-              src="https://th.bing.com/th/id/OIP.HLuY60jzx5puuKjbqmWRRwHaEK?rs=1&pid=ImgDetMain"
-              alt=""
-            />
+              src="https://th.bing.com/th/id/OIP.IrUBHhdMo6wWLFueKNreRwHaHa?rs=1&pid=ImgDetMain"
+              alt="person-image"
+            /> */}
             <div className="text-white">
               <p className="text-lg">{user.data?.name}</p>
               <p className="text-sm capitalize">{user?.role}</p>

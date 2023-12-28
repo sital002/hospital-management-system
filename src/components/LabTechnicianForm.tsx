@@ -35,10 +35,10 @@ const genderOptions = [
 ];
 
 interface LabTechnicianFormProps {
-  show: boolean;
-  setShow: (e: boolean) => void;
+  show?: boolean;
+  setShow?: (e: boolean) => void;
   labtechnician?: LabtechnicianType;
-  update: boolean;
+  update?: boolean;
 }
 
 const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
