@@ -1,3 +1,4 @@
+import connectToDB from "@/database/connectToDB";
 import { Patient, PatientType } from "@/database/modals/PatientModel";
 import { getUserDetails } from "@/utils/Auth";
 import { NextRequest } from "next/server";
@@ -23,7 +24,7 @@ export async function GET(req: NextRequest) {
         }),
         { status: 400 },
       );
-
+        await connectToDB()
     const patient = (await Patient.findById(id)) as PatientType;
     return new Response(JSON.stringify(patient));
   } catch (err: any) {
@@ -78,6 +79,7 @@ export async function DELETE(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     const user = await getUserDetails();
+    console.log(user)
     if (!user)
       return new Response(
         JSON.stringify({

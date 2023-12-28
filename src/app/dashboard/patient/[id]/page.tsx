@@ -9,6 +9,11 @@ async function getPatientDetail(id: string) {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${id}`,
+      {
+      credentials: "include",
+
+      }
+
     );
     const data = (await res.json()) as PatientType;
     console.log("The data is: ", data);

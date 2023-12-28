@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
                 }),
                 { status: 400 },
             );
-        connectToDB()
+        await connectToDB()
 
         const staff = (await Staff.findById(id)) as StaffType;
         console.log(staff)

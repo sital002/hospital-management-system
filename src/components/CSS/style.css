@@ -14,3 +14,5 @@ li {
 li:hover {
   background-color: #f3f4f6;
 }
+
+@media print { html, body { height: initial !important; overflow: initial !important; }}

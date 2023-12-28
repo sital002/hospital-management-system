@@ -124,25 +124,9 @@ const sideBarOptions = [
   },
   {
     name: "Medical Report",
+    url:'/dashboard/medicalreport',
     icon: <BookOpenCheck />,
     roles: ["admin", "labtechnician", "doctor"],
-    dropdown: [
-      {
-        name: "Add Lab Report",
-        url: "demo",
-        icon: <PlusSquare />,
-      },
-      {
-        name: "View Lab Report",
-        url: "demo",
-        icon: <Eye />,
-      },
-      {
-        name: "Manage Lab Report",
-        url: "demo",
-        icon: <FolderKanban />,
-      },
-    ],
   },
 ];
 export default function Sidebar({ role }: { role: string | undefined }) {
@@ -196,8 +180,8 @@ export default function Sidebar({ role }: { role: string | undefined }) {
               {(option?.roles === undefined ||
                 option?.roles?.includes(role || "")) && (
                 <li
-                  className={`relative rounded-none hover:text-[#75e9e6] ${
-                    router === option?.url ? "text-[#75e9e6]" : ""
+                  className={`relative rounded-none hover:text-[#00FFFF] ${
+                    router === option?.url ? "text-[#00FFFF]" : ""
                   } `}
                   onClick={
                     option.dropdown &&
@@ -206,7 +190,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
                 >
                   <Link
                     className={`${
-                      router === option?.url ? "text-[#75e9e6]" : ""
+                      router === option?.url ? "text-[#00FFFF]" : ""
                     }  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
                     href={option?.url || ""}
                   >
@@ -234,14 +218,14 @@ export default function Sidebar({ role }: { role: string | undefined }) {
                   {option.dropdown.map((element, index) => {
                     return (
                       <li
-                        className={`rounded-none hover:text-[#75e9e6] ${
-                          router === element.url ? "text-[#75e9e6]" : ""
+                        className={`rounded-none hover:text-[#00FFFF] ${
+                          router === element.url ? "text-[#00FFFF]" : ""
                         }`}
                         key={element.name + index}
                       >
                         <Link
                           className={`flex w-full gap-3  ${
-                            router === element.url ? "text-[#75e9e6]" : ""
+                            router === element.url ? "text-[#00FFFF]" : ""
                           } `}
                           href={element.url}
                         >

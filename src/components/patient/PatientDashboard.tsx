@@ -57,7 +57,7 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
       <table className="mt-3 w-[77vw] border-collapse border-2 border-gray-200 text-center  ">
         <tbody>
           <tr className="py-2">
-            <td className="py-3 font-semibold uppercase">Name</td>
+            <td className="py-3 font-semibold uppercase">Namess</td>
             <td className="py-3 font-semibold uppercase">Address</td>
             <td className="py-3 font-semibold uppercase">Patient Type</td>
 
