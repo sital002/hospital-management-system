@@ -141,9 +141,9 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
   };
 
   return (
-    <div>
+    <div className="w-full">
       {" "}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="mx-auto rounded-lg  px-4 py-8 mt-4 max-w-[600px] bg-neutral-200" onSubmit={handleSubmit(onSubmit)}>
         <div className="ml-auto w-fit cursor-pointer "></div>
         <h1 className="text-center text-3xl font-medium">
           {update ? "Update LabTechnician" : "Create New LabTechnician"}
@@ -268,7 +268,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
         <p className="text-red-800">{errors.cpassword?.message}</p>
         </>
         :""}
-        <Button>{update ? "Update" : "Create New LabTechnician"}</Button>
+        <Button>{update ? "Update" : "Add LabTechnician"}</Button>
       </form>
     </div>
   );

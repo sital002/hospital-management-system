@@ -107,9 +107,9 @@ const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
   };
 
   return (
-    <div className="absolute left-[55%] top-[55%] w-full max-w-[600px] -translate-x-[50%] -translate-y-[40%] rounded-lg bg-neutral-200 px-4 py-8">
+    <div className=" w-full">
       {" "}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="mx-auto rounded-lg  px-4 py-8 mt-4 max-w-[600px] bg-neutral-200" onSubmit={handleSubmit(onSubmit)}>
         <div className="ml-auto w-fit cursor-pointer "></div>
         <h1 className="text-center text-3xl font-medium">Create New Staff</h1>
         <Label>Name</Label>
@@ -246,7 +246,7 @@ const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
           placeholder="xxxxxxxxx"
         />
         <p className="text-red-800">{errors.cpassword?.message}</p>
-        <Button>Add</Button>
+        <Button>{`${update ? 'Update': 'Add Staff'}`}</Button>
       </form>
     </div>
   );

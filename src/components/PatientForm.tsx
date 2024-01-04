@@ -166,9 +166,9 @@ const PatientForm: FC<PatientFormProps> = ({
   };
 
   return (
-    <div className="absolute left-[55%] top-[55%] w-full max-w-[600px] -translate-x-[50%] -translate-y-[50%] rounded-lg bg-neutral-200 px-4 py-8">
+    <div className=" w-full mx-auto  ">
       {" "}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="mx-auto rounded-lg  px-4 py-8 mt-4 max-w-[600px] bg-neutral-200" onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-center text-3xl font-medium">
           {update ? "Update Patient Detail" : "Add New Patient"}
         </h1>

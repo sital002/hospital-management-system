@@ -93,9 +93,9 @@ const DoctorForm: FC<DoctorFormProps> = ({show,setShow,doctor,update=false}) => 
   };
 
   return (
-    <div className="w-full max-w-[600px] px-4 bg-neutral-200 rounded-lg py-8 absolute left-[55%] top-[55%] -translate-x-[50%] -translate-y-[36%]">
+    <div className="w-full ">
       {""}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="mx-auto rounded-lg  px-4 py-8 mt-4 max-w-[600px] bg-neutral-200" onSubmit={handleSubmit(onSubmit)}>
         <div className="ml-auto w-fit cursor-pointer "></div>
         <h1 className="text-center text-3xl font-medium">Add New Doctor</h1>
         <Label>Name</Label>
@@ -234,7 +234,7 @@ const DoctorForm: FC<DoctorFormProps> = ({show,setShow,doctor,update=false}) => 
         <p className="text-red-800">{errors.cpassword?.message}</p>
         </>
         :""}
-        <Button>Add</Button>
+        <Button>{`${update ? 'Update':'Add Doctor'}`}</Button>
       </form>
     </div>
   );
