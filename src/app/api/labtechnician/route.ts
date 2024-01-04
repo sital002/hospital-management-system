@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     const { name, email, phone, dob, address, gender, password, cpassword } =
       data;
-console.log(name,email);
+    console.log(name, email);
     if (!name)
       return new Response(
         JSON.stringify({ success: false, message: "Please provide a name" }),
@@ -75,7 +75,7 @@ console.log(name,email);
       return new Response(
         JSON.stringify({
           success: false,
-          message: "Staff already exists",
+          message: "Labtechnician already exists",
         }),
         { status: 400 },
       );
