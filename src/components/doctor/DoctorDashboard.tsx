@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { formatDate } from "@/utils/formatDate";
 import AddProfileModal from "../AddProfileModal";
-import Button from "../common/Button";
+import { Button } from "../ui/button";
 import { type DoctorType } from "@/database/modals/DoctorModel";
 import Link from "next/link";
 import { toast } from "react-toastify";
@@ -39,13 +39,11 @@ export default function DoctorDashboard({ users }: DoctorDashboardProps) {
       toast.error(err.message);
     }
   };
-  
+
   const handleEdit = async (item: DoctorType) => {
     setShowEditModal(true);
     setSelectedDoctor(item);
   };
-
-
 
   return (
     <div>
@@ -77,21 +75,18 @@ export default function DoctorDashboard({ users }: DoctorDashboardProps) {
               <td className="uppercase">{formatDate(item?.dob)}</td>
               <td className="uppercase">{item?.gender}</td>
               <td className="uppercase">
-              <Link href={`/dashboard/doctor/${item._id.toString()}`}>
-                    <Button className="mr-3 w-fit">view</Button>
-                  </Link>
-                  <Button
-                    className="mr-3 w-fit"
-                    onClick={()=>handleEdit(item)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    className="mr-3 w-fit"
-                    onClick={() => handleDelete(item._id.toString())}
-                  >
-                    Delete
-                  </Button>
+                <Link href={`/dashboard/doctor/${item._id.toString()}`}>
+                  <Button className="mr-3 w-fit">view</Button>
+                </Link>
+                <Button className="mr-3 w-fit" onClick={() => handleEdit(item)}>
+                  Edit
+                </Button>
+                <Button
+                  className="mr-3 w-fit"
+                  onClick={() => handleDelete(item._id.toString())}
+                >
+                  Delete
+                </Button>
               </td>
             </tr>
           ))}

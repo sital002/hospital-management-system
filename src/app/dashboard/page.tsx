@@ -3,7 +3,9 @@ import { PatientType } from "@/database/modals/PatientModel";
 import { getUserDetails, isAuthenticated } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
+import { Button } from "@/components/ui/button";
+import { TableDemo } from "@/components/common/Demo";
+import { DialogDemo } from "@/components/common/Dialog";
 const getAllUsers = async () => {
   const authToken = cookies().get("auth_token")?.value;
   try {
@@ -26,8 +28,11 @@ export default async function Dashboard() {
   if (!user) return redirect("/auth/admin");
   const data = await getAllUsers();
   return (
-    <div>
+    <>
+      <Button>Click me</Button>
+      <DialogDemo />
+      <TableDemo />
       <Maindashboard users={data} />
-    </div>
+    </>
   );
 }

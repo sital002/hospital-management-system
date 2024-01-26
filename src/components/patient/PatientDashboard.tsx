@@ -3,7 +3,7 @@ import { useState } from "react";
 import { formatDate } from "@/utils/formatDate";
 import { type PatientType } from "@/database/modals/PatientModel";
 import AddProfileModal from "../AddProfileModal";
-import Button from "../common/Button";
+import { Button } from "../ui/button";
 import EditPatientModal from "./EditPatientModal";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";

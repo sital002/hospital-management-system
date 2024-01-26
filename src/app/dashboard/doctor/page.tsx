@@ -29,7 +29,7 @@ export default async function Dashboard() {
   const data = await getAllUsers();
   console.log(data);
   return (
-    <div className="flex items-start justify-around bg-[#fafbfb]">
+    <div className="flex items-start justify-around ">
       <DoctorDashboard users={data} />
     </div>
   );
