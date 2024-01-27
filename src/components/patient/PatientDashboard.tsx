@@ -17,6 +17,7 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<PatientType>();
   // console.log(user);
+
   const router = useRouter();
 
   function clickBtn() {
@@ -90,7 +91,7 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
                     Edit
                   </Button>
                   <Button
-                    className="mr-3 w-fit"
+                    className="mr-3 w-fit bg-destructive hover:bg-red-700 "
                     onClick={() => handleDelete(item._id.toString())}
                   >
                     Delete

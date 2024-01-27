@@ -27,7 +27,7 @@ const getAllUsers = async () => {
 };
 export default async function Dashboard() {
   const user = await getUserDetails();
-  if (!user) return redirect("/signin");
+  if (!user) return redirect("/auth/admin");
 
   const data = await getAllUsers();
   console.log(data);
