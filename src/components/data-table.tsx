@@ -1,11 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  CaretSortIcon,
-  ChevronDownIcon,
-  DotsHorizontalIcon,
-} from "@radix-ui/react-icons";
+import { CaretSortIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -25,9 +21,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -115,8 +108,8 @@ export const columns: ColumnDef<PatientType>[] = [
     cell: () => {
       return (
         <div className="flex gap-2">
-          <Button variant="default">Edit</Button>
           <Button variant="outline">View</Button>
+          <Button variant="default">Edit</Button>
           <Button variant="destructive">Delete</Button>
         </div>
       );

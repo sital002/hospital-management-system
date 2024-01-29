@@ -171,7 +171,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
   console.log(router);
 
   return (
-    <div className="sticky left-0 top-0 h-[100vh] w-[20vw] ">
+    <div className="sticky left-0 top-0 h-[100vh] w-[20vw]">
       <ul className="my-5 min-h-[85vh] border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
@@ -180,8 +180,8 @@ export default function Sidebar({ role }: { role: string | undefined }) {
               {(option?.roles === undefined ||
                 option?.roles?.includes(role || "")) && (
                 <li
-                  className={`relative rounded-none hover:text-[#4d7e7e] ${
-                    router === option?.url ? "text-[#4d7e7e]" : ""
+                  className={`relative rounded-none hover:text-primary${
+                    router === option?.url ? "text-primary" : ""
                   } `}
                   onClick={
                     option.dropdown &&
@@ -190,7 +190,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
                 >
                   <Link
                     className={`${
-                      router === option?.url ? "text-[#4d7e7e]" : ""
+                      router === option?.url ? "text-primary" : ""
                     }  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
                     href={option?.url || ""}
                   >
@@ -217,23 +217,23 @@ export default function Sidebar({ role }: { role: string | undefined }) {
                 >
                   {option.dropdown.map((element, index) => {
                     return (
-                      <li
-                        className={`rounded-none hover:text-[#4d7e7e] ${
-                          router === element.url ? "text-[#4d7e7e]" : ""
-                        }`}
+                      <Link
+                        className={`flex w-full  gap-3  ${
+                          router === element.url ? "text-primary" : ""
+                        } `}
+                        href={element.url}
                         key={element.name + index}
                       >
-                        <Link
-                          className={`flex w-full gap-3  ${
-                            router === element.url ? "text-[#4d7e7e]" : ""
-                          } `}
-                          href={element.url}
+                        <li
+                          className={`rounded-none hover:text-primary  w-full${
+                            router === element.url ? "text-primary" : ""
+                          }`}
                         >
                           {element.icon}
                           <span>{element.name}</span>
                           <hr />
-                        </Link>
-                      </li>
+                        </li>
+                      </Link>
                     );
                   })}
                 </ul>
