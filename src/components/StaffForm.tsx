@@ -1,14 +1,15 @@
 "use client";
 import React, { FC, useState } from "react";
 import Label from "./common/Label";
-import Select from "./common/Select";
-import Input from "./common/Input";
-import Button from "./common/Button";
+import {Select, SelectContent, SelectItem, SelectTrigger,SelectValue} from "./ui/select";
+import {Input} from "./ui/input";
+import {Button} from "./ui/button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { X } from "lucide-react";
 import { StaffType } from "@/database/modals/StaffModal";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
 
 type FormInputs = {
   name: string;
@@ -56,10 +57,44 @@ interface StaffFormProps {
   staff?: StaffType;
   update?:boolean;
 }
+const FormSchema = z.object({
+  email: z
+    .string({
+      required_error: "Please select an email to display.",
+    })
+    .email(),
+    name:z.string({
+      required_error:"Name is required"
+    }),
+    password:z.string(
+      {
+        required_error:"Password is required"
+      }
+    ),
+    cpassword:z.string({
+      required_error:"Password is required"
+    }),
+    phone:z.string({
+      required_error:"Phone is required"
+    }),
+    address:z.string({
+      required_error:"Address is required"
+    }),
+    dob:z.string({
+      required_error:"date is requireds"
+    }),
+    gender:z.string({
+      required_error:"Gender is required"
+    }),
+    shift:z.string({
+      required_error:'shift is required'
+    })
+})
 const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: update ?{
@@ -82,10 +117,33 @@ const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
       cpassword: "Password@123",
     },
   });
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: update ?{
+      name:staff?.name || "",
+      address:staff?.address || "",
+      gender:staff?.gender || "",
+      phone:staff?.phone || "",
+      dob:staff?.dob || "",
+      shift:staff?.shift || "",
+      email:staff?.email || ""
+    } :{
+      name: "John Doe",
+      email: "johndoe33@gmail.com",
+      phone: "s",
+      address: "Ratnapark, Kathmandu",
+      gender: "male",
+      dob: "",
+      shift: "morning",
+      password: "Password@123",
+      cpassword: "Password@123",
+    },
+    
+  })
 
   const router = useRouter();
   // const [showModal, setShowModal] = useState(false);
-
+console.log(watch());
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     console.log(data);
     try {
@@ -109,10 +167,12 @@ const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
   return (
     <div className=" w-full">
       {" "}
-      <form className="mx-auto rounded-lg  px-4 py-8 mt-4 max-w-[600px] bg-neutral-200" onSubmit={handleSubmit(onSubmit)}>
+      <form className="mx-auto rounded-lg px-28 py-8 mt-4 w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="ml-auto w-fit cursor-pointer "></div>
-        <h1 className="text-center text-3xl font-medium">Create New Staff</h1>
-        <Label>Name</Label>
+        <h1 className="text-center my-10 text-4xl font-medium">Create New Staff</h1>
+       <div className="flex gap-6 my-10">
+       <div className="grow ">
+       <Label>Name</Label>
         <Input
           {...register("name", {
             required: {
@@ -127,7 +187,9 @@ const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
           placeholder="John Doe"
         />
         <p className="text-red-800">{errors.name?.message}</p>
-        <Label>Email</Label>
+       </div>
+       <div className="grow">
+       <Label>Email</Label>
         <Input
           {...register("email", {
             required: {
@@ -142,6 +204,8 @@ const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
           placeholder="johndoe@gmail.com"
         />
         <p className="text-red-800">{errors.email?.message}</p>
+       </div>
+        <div className="grow">
         <Label>Phone</Label>
         <Input
           {...register("phone", {
@@ -155,9 +219,13 @@ const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
             },
           })}
           placeholder="+97700000000"
-        />
+          />
         <p className="text-red-800">{errors.phone?.message}</p>
-        <Label>DOB</Label>
+        </div>
+          </div>
+       <div className="flex gap-6 my-10">
+       <div className="grow ">
+       <Label>DOB</Label>
         <Input
           {...register("dob", {
             required: {
@@ -173,7 +241,9 @@ const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
           type="date"
         />
         <p className="text-red-800">{errors.dob?.message}</p>
-        <Label>Address</Label>
+       </div>
+       <div className="grow ">
+       <Label>Address</Label>
         <Input
           {...register("address", {
             required: {
@@ -188,34 +258,54 @@ const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
           placeholder="Ratnapark, Kathmandu"
         />
         <p className="text-red-800">{errors.address?.message}</p>
-        <div className="flex items-center gap-10">
+       </div>
+       </div>
+        <div className="flex items-center gap-10 my-10">
           <div>
             <Label>Gender</Label>
-            <Select
-              options={genderOptions}
-              {...register("gender", {
-                required: {
-                  value: true,
-                  message: "Gender is required",
-                },
-              })}
-            />
-            <p className="text-red-800">{errors.gender?.message}</p>
+           
+<Select   {
+        ...register("gender", {
+          required: {
+            value: true,
+            message: "Gender is required",
+          },
+        })
+} defaultValue={"female"} >
+  <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder="Select Gender"  />
+  </SelectTrigger>
+  <SelectContent>
+    {
+      genderOptions.map((item,index)=>{
+return ( <SelectItem key={index} value={item.value}>{item.name}</SelectItem>)
+      })
+    }
+  </SelectContent>
+</Select>
           </div>
+<div>
+<Label>Shift</Label>
+          <Select >
+  <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder="Workshift"  />
+  </SelectTrigger>
+  <SelectContent>
+    {
+      workShift.map((item,index)=>{
+return ( <SelectItem key={index} value={item.value}>{item.name}</SelectItem>)
+      })
+    }
+  </SelectContent>
+</Select>
+</div>
+
           <div>
-            <Label>Shift</Label>
-            <Select
-              options={workShift}
-              {...register("shift", {
-                required: {
-                  value: true,
-                  message: "Shift is required",
-                },
-              })}
-            />
             <p className="text-red-800">{errors.shift?.message}</p>
           </div>
         </div>
+       <div className="flex gap-4">
+       <div className="grow">
         <Label>Password</Label>
         <Input
           {...register("password", {
@@ -231,6 +321,8 @@ const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
           placeholder="xxxxxxxxx"
         />
         <p className="text-red-800">{errors.password?.message}</p>
+        </div>
+        <div className="grow">
         <Label>Confirm password</Label>
         <Input
           {...register("cpassword", {
@@ -246,7 +338,9 @@ const StaffForm: FC<StaffFormProps> = ({show,setShow,staff,update=false}) => {
           placeholder="xxxxxxxxx"
         />
         <p className="text-red-800">{errors.cpassword?.message}</p>
-        <Button>{`${update ? 'Update': 'Add Staff'}`}</Button>
+        </div>
+       </div>
+        <Button className=" p-6 w-full my-8">{`${update ? 'Update': 'Add Staff'}`}</Button>
       </form>
     </div>
   );
