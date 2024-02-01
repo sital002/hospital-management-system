@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Button from "./common/Button";
 import AddProfileModal from "./AddProfileModal";
-import { formatDate } from "@/utils/formatDate";
 import { PatientType } from "@/database/modals/PatientModel";
 
 interface AdminDashboardProps {
@@ -42,7 +41,7 @@ export default function MainDashboard({ users }: AdminDashboardProps) {
               <td className="uppercase">{item?.address}</td>
               <td className="uppercase">{item?.patientType}</td>
               {/* <td>{item?.email}</td> */}
-              <td className="uppercase">{formatDate(item?.dob)}</td>
+              <td className="uppercase">{item?.dob}</td>
               <td className="uppercase">{item?.gender}</td>
               {/* <td className="uppercase">{item.role}</td> */}
             </tr>
