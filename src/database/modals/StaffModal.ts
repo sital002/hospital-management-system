@@ -36,7 +36,7 @@ const StaffSchema = new Schema({
     maxLength: [64, `Password must be at most 64 characters`],
   },
   dob: {
-    type: Date,
+    type: String,
     required: [true, "Please provide a dob"],
   },
 });
