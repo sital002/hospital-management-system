@@ -1,9 +1,9 @@
 "use client";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Label from "./common/Label";
 import Select from "./common/Select";
-import Input from "./common/Input";
-import Button from "./common/Button";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -122,7 +122,19 @@ const PatientForm: FC<PatientFormProps> = ({
           dob: undefined,
         },
   });
-
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+  //       const targetUrl = "https://www.investing.com/rss/news_1.rss";
+  //       const res = await fetch(proxyUrl + targetUrl);
+  //       console.log(res);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  //   fetchData();
+  // }, []);
   const router = useRouter();
   const updatePatientDetail = async ({ data }: { data: FormInputs }) => {
     try {
@@ -166,9 +178,12 @@ const PatientForm: FC<PatientFormProps> = ({
   };
 
   return (
-    <div className=" w-full mx-auto  ">
+    <div className=" mx-auto w-full  ">
       {" "}
-      <form className="mx-auto rounded-lg  px-4 py-8 mt-4 max-w-[600px] bg-neutral-200" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="mx-auto mt-4  max-w-[600px] rounded-lg  px-4 py-8"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <h1 className="text-center text-3xl font-medium">
           {update ? "Update Patient Detail" : "Add New Patient"}
         </h1>
@@ -269,7 +284,7 @@ const PatientForm: FC<PatientFormProps> = ({
             />
           </div>
         </div>
-        <Button>{update ? 'Update' : 'Add'}</Button>
+        <Button className="w-full">{update ? "Update" : "Add"}</Button>
       </form>
     </div>
   );

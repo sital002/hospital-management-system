@@ -13,7 +13,7 @@ const EditLabTechnicianModal: FC<EditLabtestModalProps> = ({
   labtechnician,
   show,
 }) => {
-  console.log(labtechnician);
+  // console.log(labtechnician);
   return (
     <div>
       <Modal showModal={show} setShowModal={setShow}>
