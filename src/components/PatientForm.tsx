@@ -205,7 +205,7 @@ const PatientForm: FC<PatientFormProps> = ({
         <p className="text-red-800">{errors.phone?.message}</p>
         <Label>DOB</Label>
         <Input
-          type="date"
+          type="text"
           {...register("dob", {
             required: {
               value: true,
