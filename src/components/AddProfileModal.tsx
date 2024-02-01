@@ -56,7 +56,7 @@ const AddProfileModal: FC<PopUpFormProps> = ({ setShowModal, showModal }) => {
         showModal={showModal}
         // title="Choose a profile"
       >
-        <div className="mt-4 grid grid-cols-2 grid-rows-2 items-center justify-center gap-2 text-xl">
+        <div className="mt-4 grid grid-cols-2 bg-white grid-rows-2 items-center justify-center gap-2 text-xl">
           {profileOptions.map((profile, index) => (
             <Link href={profile.url} key={profile.name + index}>
               <div className="flex cursor-pointer flex-col items-center rounded-xl p-4 py-12 transition-all duration-300 hover:bg-gray-100">

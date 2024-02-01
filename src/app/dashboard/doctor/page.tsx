@@ -9,7 +9,7 @@ const getAllUsers = async () => {
   const authToken = cookies().get("auth_token")?.value;
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor`, {
-      cache: "no-store",
+      // cache: "no-store",
       credentials: "include",
       headers: {
         Cookie: `auth_token=${authToken};`,
@@ -29,7 +29,7 @@ export default async function Dashboard() {
   const data = await getAllUsers();
   console.log(data);
   return (
-    <div className="flex items-start justify-around bg-[#fafbfb]">
+    <div className="flex items-start justify-around ">
       <DoctorDashboard users={data} />
     </div>
   );

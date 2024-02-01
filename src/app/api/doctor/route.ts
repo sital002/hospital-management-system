@@ -2,6 +2,44 @@ import connectToDB from "@/database/connectToDB";
 import { Doctor } from "@/database/modals/DoctorModel";
 import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
+import { z } from "zod";
+
+const UserSchema = z.object({
+  name: z.string(),
+  email: z.string({
+    invalid_type_error: "Please enter a valid email",
+    required_error: "Email is required",
+  }),
+  password: z.string({
+    invalid_type_error: "Please enter a valid password",
+    required_error: "Password is required",
+  }),
+  cpassword: z.string({
+    invalid_type_error: "Please enter a valid Confirm password",
+    required_error: "Confirm password is required",
+  }),
+  department: z.string({
+    invalid_type_error: "Please enter a valid department",
+    required_error: "Department is required",
+  }),
+
+  dob: z.string({
+    invalid_type_error: "Please enter a valid dob",
+    required_error: "DOB is required",
+  }),
+  gender: z.enum(["male", "female"], {
+    required_error: "Gender is required",
+    invalid_type_error: "Please enter a valid Gender",
+  }),
+  phone: z.string({
+    invalid_type_error: "Please enter a valid phone",
+    required_error: "Phone is required",
+  }),
+  address: z.string({
+    invalid_type_error: "Please enter a valid address",
+    required_error: "Address is required",
+  }),
+});
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();

@@ -1,8 +1,19 @@
+import connectToDB from "@/database/connectToDB";
 import { Patient, PatientType } from "@/database/modals/PatientModel";
+import { getUserDetails } from "@/utils/Auth";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
+    const user = await getUserDetails();
+    if (!user)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not logged in",
+        }),
+        { status: 401 },
+      );
     const id = req.nextUrl.pathname.split("/")[3];
 
     if (!id)
@@ -13,7 +24,7 @@ export async function GET(req: NextRequest) {
         }),
         { status: 400 },
       );
-
+    await connectToDB();
     const patient = (await Patient.findById(id)) as PatientType;
     return new Response(JSON.stringify(patient));
   } catch (err: any) {
@@ -28,6 +39,15 @@ export async function GET(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    const user = await getUserDetails();
+    if (!user)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not logged in",
+        }),
+        { status: 401 },
+      );
     const id = req.nextUrl.pathname.split("/")[3];
 
     if (!id)
@@ -39,11 +59,12 @@ export async function DELETE(req: NextRequest) {
         { status: 400 },
       );
 
-    await Patient.findByIdAndDelete(id);
+    const deletedUser = await Patient.findByIdAndDelete(id);
     return new Response(
       JSON.stringify({
         success: true,
         message: "Deleted successfully",
+        deletedUser,
       }),
     );
   } catch (err: any) {
@@ -58,6 +79,16 @@ export async function DELETE(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    const user = await getUserDetails();
+    console.log(user);
+    if (!user)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not logged in",
+        }),
+        { status: 401 },
+      );
     const id = req.nextUrl.pathname.split("/")[3];
     if (!id)
       return new Response(
@@ -69,11 +100,24 @@ export async function PUT(req: NextRequest) {
       );
 
     const data = await req.json();
+    // console.log(data);
 
-    const patient = (await Patient.findByIdAndUpdate(id, data, {
-      new: true,
-    })) as PatientType;
-    return new Response(JSON.stringify(patient));
+    const patient = (await Patient.findByIdAndUpdate(id, data)) as PatientType;
+    console.log(patient);
+    if (!patient)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Patient not found",
+        }),
+        { status: 404 },
+      );
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: "Updated successfully",
+      }),
+    );
   } catch (err: any) {
     return new Response(
       JSON.stringify({

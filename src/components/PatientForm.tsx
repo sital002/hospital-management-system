@@ -1,9 +1,9 @@
 "use client";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Label from "./common/Label";
 import Select from "./common/Select";
-import Input from "./common/Input";
-import Button from "./common/Button";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -14,7 +14,7 @@ type FormInputs = {
   id?: string;
   phone: number;
   address: string;
-  dob: Date | null;
+  dob: string;
   gender: string;
   patientType: "inpatient" | "outpatient";
   admitType: "normal" | "emergency";
@@ -53,13 +53,12 @@ const admitType = [
   },
 ];
 
-interface PatientFormProps {
-  // showModal: boolean;S
-  show?: boolean;
-  setShow?: (e: boolean) => void;
+type PatientFormProps = {
   update?: boolean;
   patient?: PatientType;
-}
+  open?: boolean;
+  setOpen?: (value: boolean) => void;
+};
 
 const addNewPatient = async ({
   data,
@@ -90,11 +89,11 @@ const addNewPatient = async ({
 
 const PatientForm: FC<PatientFormProps> = ({
   patient,
-  show,
-  setShow,
   update = false,
+  open,
+  setOpen,
 }) => {
-  console.log(patient);
+  console.log(patient?.dob);
   const {
     register,
     handleSubmit,
@@ -118,28 +117,36 @@ const PatientForm: FC<PatientFormProps> = ({
           gender: "male",
           admitType: "emergency",
           patientType: "inpatient",
-          dob: null,
+          dob: "2002/07/33",
         },
   });
-
   const router = useRouter();
   const updatePatientDetail = async ({ data }: { data: FormInputs }) => {
     try {
+      console.log(data);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${data?.id}`,
         {
           method: "PUT",
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            name: data?.name,
+            phone: data?.phone,
+            address: data?.address,
+            admitType: data?.admitType,
+            patientType: data?.patientType,
+            dob: data?.dob,
+            gender: data.gender,
+          }),
         },
       );
       const json = await res.json();
-      if (json.success) {
+      if (json) {
         toast.success("Detail updated successfully");
-        console.log(json);
-        if (setShow) {
-          setShow(false);
-        }
         router.refresh();
+        if (setOpen) {
+          setOpen(false);
+        }
+
         return;
       }
       return toast.error(json.message);
@@ -149,8 +156,6 @@ const PatientForm: FC<PatientFormProps> = ({
     }
   };
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    // console.log(data);
-
     if (update) {
       updatePatientDetail({ data });
     } else {
@@ -159,9 +164,12 @@ const PatientForm: FC<PatientFormProps> = ({
   };
 
   return (
-    <div className="px-4">
+    <div className=" mx-auto w-full">
       {" "}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="mx-auto mt-4  max-w-[700px] rounded-lg  px-4 py-8"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <h1 className="text-center text-3xl font-medium">
           {update ? "Update Patient Detail" : "Add New Patient"}
         </h1>
@@ -197,6 +205,7 @@ const PatientForm: FC<PatientFormProps> = ({
         <p className="text-red-800">{errors.phone?.message}</p>
         <Label>DOB</Label>
         <Input
+          type="text"
           {...register("dob", {
             required: {
               value: true,
@@ -204,7 +213,6 @@ const PatientForm: FC<PatientFormProps> = ({
             },
           })}
           placeholder="2002/01/01"
-          type="date"
         />
         <p className="text-red-800">{errors.dob?.message}</p>
         <Label>Address</Label>
@@ -222,39 +230,50 @@ const PatientForm: FC<PatientFormProps> = ({
           placeholder="Ratnapark, Kathmandu"
         />
         <p className="text-red-800">{errors.address?.message}</p>
-        <Label>Gender</Label>
-        <Select
-          options={genderOptions}
-          {...register("gender", {
-            required: {
-              value: true,
-              message: "Gender is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.gender?.message}</p>
-        <Label>Admit Type</Label>
-        <Select
-          options={admitType}
-          {...register("admitType", {
-            required: {
-              value: true,
-              message: "Admit Type is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.admitType?.message}</p>
-        <Label>Patient Type</Label>
-        <Select
-          options={patientTypeOption}
-          {...register("patientType", {
-            required: {
-              value: true,
-              message: "PatientType is required",
-            },
-          })}
-        />
-        <Button>Add</Button>
+        <div className="flex items-center justify-center gap-6">
+          <div>
+            <Label className="block">Gender</Label>
+            <Select
+              options={genderOptions}
+              {...register("gender", {
+                required: {
+                  value: true,
+                  message: "Gender is required",
+                },
+              })}
+            />
+            <p className="text-red-800">{errors.gender?.message}</p>
+          </div>
+          <div>
+            <Label>Admit Type</Label>
+            <Select
+              options={admitType}
+              {...register("admitType", {
+                required: {
+                  value: true,
+                  message: "Admit Type is required",
+                },
+              })}
+            />
+            <p className="text-red-800">{errors.admitType?.message}</p>
+          </div>
+          <div>
+            <Label>Patient Type</Label>
+            <Select
+              options={patientTypeOption}
+              {...register("patientType", {
+                required: {
+                  value: true,
+                  message: "PatientType is required",
+                },
+              })}
+            />
+          </div>
+        </div>
+
+        <Button className="mt-4 w-full" type="submit">
+          {update ? "Update" : "Submit"}
+        </Button>
       </form>
     </div>
   );

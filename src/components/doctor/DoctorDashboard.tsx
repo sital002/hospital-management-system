@@ -1,21 +1,49 @@
 "use client";
 import { useState } from "react";
-import { UserType } from "@/database/modals/UserModel";
 import { formatDate } from "@/utils/formatDate";
 import AddProfileModal from "../AddProfileModal";
-import Button from "../common/Button";
+import { Button } from "../ui/button";
 import { type DoctorType } from "@/database/modals/DoctorModel";
+import Link from "next/link";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import EditDoctorModal from "./EditDoctorModal";
 
 interface DoctorDashboardProps {
   users: DoctorType[];
 }
 export default function DoctorDashboard({ users }: DoctorDashboardProps) {
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [seletectedDoctor, setSelectedDoctor] = useState<DoctorType>();
   // console.log(user);
 
   function clickBtn() {
     setShowModal(!showModal);
   }
+  const router = useRouter();
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
+      const data = await res.json();
+      toast.success(data.message);
+      router.refresh();
+    } catch (err: any) {
+      console.log(err.message);
+      toast.error(err.message);
+    }
+  };
+
+  const handleEdit = async (item: DoctorType) => {
+    setShowEditModal(true);
+    setSelectedDoctor(item);
+  };
 
   return (
     <div>
@@ -47,14 +75,30 @@ export default function DoctorDashboard({ users }: DoctorDashboardProps) {
               <td className="uppercase">{formatDate(item?.dob)}</td>
               <td className="uppercase">{item?.gender}</td>
               <td className="uppercase">
-                <Button className="mr-3 w-fit">View</Button>
-                <Button className="mr-3 w-fit">Edit</Button>
-                <Button className="mr-3 w-fit">Delete</Button>
+                <Link href={`/dashboard/doctor/${item._id.toString()}`}>
+                  <Button className="mr-3 w-fit">view</Button>
+                </Link>
+                <Button className="mr-3 w-fit" onClick={() => handleEdit(item)}>
+                  Edit
+                </Button>
+                <Button
+                  className="mr-3 w-fit"
+                  onClick={() => handleDelete(item._id.toString())}
+                >
+                  Delete
+                </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {setShowEditModal ? (
+        <EditDoctorModal
+          show={showEditModal}
+          doctor={seletectedDoctor}
+          setShow={setShowEditModal}
+        />
+      ) : null}
     </div>
   );
 }

@@ -3,11 +3,11 @@ import { useState } from "react";
 import { formatDate } from "@/utils/formatDate";
 import { type PatientType } from "@/database/modals/PatientModel";
 import AddProfileModal from "../AddProfileModal";
-import Button from "../common/Button";
-import EditPatientModal from "./EditPatientModal";
+import { Button } from "../ui/button";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Dialog, DialogTrigger } from "../ui/dialog";
 
 interface PatientDashboardProps {
   users: PatientType[];
@@ -15,7 +15,9 @@ interface PatientDashboardProps {
 export default function PatientDashboard({ users }: PatientDashboardProps) {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<PatientType>();
   // console.log(user);
+
   const router = useRouter();
 
   function clickBtn() {
@@ -39,6 +41,11 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
     }
   };
 
+  const handleEdit = async (item: PatientType) => {
+    setShowEditModal(true);
+    setSelectedPatient(item);
+  };
+
   return (
     <div>
       {showModal && (
@@ -51,7 +58,7 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
       <table className="mt-3 w-[77vw] border-collapse border-2 border-gray-200 text-center  ">
         <tbody>
           <tr className="py-2">
-            <td className="py-3 font-semibold uppercase">Name</td>
+            <td className="py-3 font-semibold uppercase">Namess</td>
             <td className="py-3 font-semibold uppercase">Address</td>
             <td className="py-3 font-semibold uppercase">Patient Type</td>
 
@@ -71,33 +78,25 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
                 <td className="uppercase">{item?.address}</td>
                 <td className="uppercase">{item?.patientType}</td>
                 {/* <td>{item?.email}</td> */}
-                <td className="uppercase">{formatDate(item?.dob)}</td>
+                <td className="uppercase">{item?.dob}</td>
                 <td className="uppercase">{item?.gender}</td>
                 <td className="uppercase">
                   <Link href={`/dashboard/patient/${item._id.toString()}`}>
                     <Button className="mr-3 w-fit">view</Button>
                   </Link>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline">Edit Profile fdsf</Button>
+                    </DialogTrigger>
+                  </Dialog>
                   <Button
-                    className="mr-3 w-fit"
-                    onClick={() => setShowEditModal(true)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    className="mr-3 w-fit"
+                    className="mr-3 w-fit bg-destructive hover:bg-red-700 "
                     onClick={() => handleDelete(item._id.toString())}
                   >
                     Delete
                   </Button>
                 </td>
               </tr>
-              {/* {setShowEditModal ? (
-                <EditPatientModal
-                  show={showEditModal}
-                  patient={item}
-                  setShow={setShowEditModal}
-                />
-              ) : null} */}
             </>
           ))}
         </tbody>

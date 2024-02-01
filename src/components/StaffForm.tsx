@@ -1,27 +1,29 @@
 "use client";
-import React, { FC, useState } from "react";
-import Label from "./common/Label";
-import Select from "./common/Select";
-import Input from "./common/Input";
-import Button from "./common/Button";
+import React, { FC } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { X } from "lucide-react";
-
-type FormInputs = {
-  name: string;
-  email: string;
-  password: string;
-  cpassword: string;
-  phone: number;
-  address: string;
-  dob: string;
-  gender: string;
-  role: string;
-  shift: string;
-  department: string;
-};
+import { StaffType } from "@/database/modals/StaffModal";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
 
 const genderOptions = [
   {
@@ -50,31 +52,77 @@ const workShift = [
 ];
 
 interface StaffFormProps {
-  // showModal: boolean;
+  show?: boolean;
+  setShow?: (e: boolean) => void;
+  staff?: StaffType;
+  update?: boolean;
 }
-const StaffForm: FC<StaffFormProps> = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormInputs>({
-    defaultValues: {
-      name: "John Doe",
-      email: "johndoe33@gmail.com",
-      phone: 9860098600,
-      address: "Ratnapark, Kathmandu",
-      gender: "male",
-      dob: "2000-01-01",
-      shift: "morning",
-      password: "Password@123",
-      cpassword: "Password@123",
-    },
+const FormSchema = z.object({
+  email: z
+    .string({
+      required_error: "Please select an email to display.",
+    })
+    .email(),
+  name: z.string({
+    required_error: "Name is required",
+  }),
+  password: z.string({
+    required_error: "Password is required",
+  }),
+  cpassword: z.string({
+    required_error: "Password is required",
+  }),
+  phone: z.string({
+    required_error: "Phone is required",
+  }),
+  address: z.string({
+    required_error: "Address is required",
+  }),
+  dob: z.string({
+    required_error: "date is requireds",
+  }),
+  gender: z.string({
+    required_error: "Gender is required",
+  }),
+  shift: z.string({
+    required_error: "shift is required",
+  }),
+});
+const StaffForm: FC<StaffFormProps> = ({
+  show,
+  setShow,
+  staff,
+  update = false,
+}) => {
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: update
+      ? {
+          name: staff?.name || "",
+          address: staff?.address || "",
+          gender: staff?.gender || "",
+          phone: staff?.phone || "",
+          dob: staff?.dob?.toString() || "",
+          shift: staff?.shift || "",
+          email: staff?.email || "",
+        }
+      : {
+          name: "John Doe",
+          email: "johndoe33@gmail.com",
+          phone: "s",
+          address: "Ratnapark, Kathmandu",
+          gender: "male",
+          dob: "2002",
+          shift: "morning",
+          password: "Password@123",
+          cpassword: "Password@123",
+        },
   });
 
   const router = useRouter();
   // const [showModal, setShowModal] = useState(false);
-
-  const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+  console.log(form.watch());
+  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
     console.log(data);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`, {
@@ -95,141 +143,159 @@ const StaffForm: FC<StaffFormProps> = () => {
   };
 
   return (
-    <div>
-      {" "}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="ml-auto w-fit cursor-pointer "></div>
-        <h1 className="text-center text-3xl font-medium">Create New Staff</h1>
-        <Label>Name</Label>
-        <Input
-          {...register("name", {
-            required: {
-              value: true,
-              message: "Name is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Name must be less than 64 characters long",
-            },
-          })}
-          placeholder="John Doe"
-        />
-        <p className="text-red-800">{errors.name?.message}</p>
-        <Label>Email</Label>
-        <Input
-          {...register("email", {
-            required: {
-              value: true,
-              message: "Email is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Email must be less than 64 characters long",
-            },
-          })}
-          placeholder="johndoe@gmail.com"
-        />
-        <p className="text-red-800">{errors.email?.message}</p>
-        <Label>Phone</Label>
-        <Input
-          {...register("phone", {
-            required: {
-              value: true,
-              message: "Phone is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Phone must be less than 64 characters long",
-            },
-          })}
-          placeholder="+97700000000"
-        />
-        <p className="text-red-800">{errors.phone?.message}</p>
-        <Label>DOB</Label>
-        <Input
-          {...register("dob", {
-            required: {
-              value: true,
-              message: "DOB is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "DOb must be less than 64 characters long",
-            },
-          })}
-          placeholder="2002/01/01"
-          type="date"
-        />
-        <p className="text-red-800">{errors.dob?.message}</p>
-        <Label>Address</Label>
-        <Input
-          {...register("address", {
-            required: {
-              value: true,
-              message: "Address is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Address must be less than 64 characters long",
-            },
-          })}
-          placeholder="Ratnapark, Kathmandu"
-        />
-        <p className="text-red-800">{errors.address?.message}</p>
-        <Label>Gender</Label>
-        <Select
-          options={genderOptions}
-          {...register("gender", {
-            required: {
-              value: true,
-              message: "Gender is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.gender?.message}</p>
-        <Label>Shift</Label>
-        <Select
-          options={workShift}
-          {...register("shift", {
-            required: {
-              value: true,
-              message: "Shift is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.shift?.message}</p>
-        <Label>Password</Label>
-        <Input
-          {...register("password", {
-            required: {
-              value: true,
-              message: "Password is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Password must be less than 64 characters long",
-            },
-          })}
-          placeholder="xxxxxxxxx"
-        />
-        <p className="text-red-800">{errors.password?.message}</p>
-        <Label>Confirm password</Label>
-        <Input
-          {...register("cpassword", {
-            required: {
-              value: true,
-              message: "Confirm password is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Confirm password must be less than 64 characters long",
-            },
-          })}
-          placeholder="xxxxxxxxx"
-        />
-        <p className="text-red-800">{errors.cpassword?.message}</p>
-        <Button>Add</Button>
-      </form>
+    <div className="px-3">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="John Doe" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="johndoe@gmail.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ratnangar-3" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone</FormLabel>
+                <FormControl>
+                  <Input placeholder="97++++++++" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gender</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {genderOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="shift"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Shift</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {workShift.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="dob"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>DOB</FormLabel>
+                <FormControl>
+                  <Input placeholder="2002-09-22" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="*********" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="cpassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="*********" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="w-full">
+            Submit
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };

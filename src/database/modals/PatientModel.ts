@@ -12,7 +12,7 @@ const PatientSchema = new Schema({
     required: [true, "Please provide a gender"],
   },
   dob: {
-    type: Date,
+    type: String,
     required: [true, "Please provide a dob"],
   },
   admitType: {

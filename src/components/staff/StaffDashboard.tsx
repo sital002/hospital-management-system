@@ -1,22 +1,52 @@
 "use client";
 import { useState } from "react";
-import { UserType } from "@/database/modals/UserModel";
-import { formatDate } from "@/utils/formatDate";
-import { PatientType } from "@/database/modals/PatientModel";
 import AddProfileModal from "../AddProfileModal";
 import Button from "../common/Button";
-import { Staff, StaffType } from "@/database/modals/StaffModal";
+import { StaffType } from "@/database/modals/StaffModal";
+import Link from "next/link";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import EditStaffModal from "./EditStaffModal";
 
 interface PatientDashboardProps {
   users: StaffType[];
 }
 export default function StaffDashboard({ users }: PatientDashboardProps) {
   const [showModal, setShowModal] = useState(false);
-  console.log("saroj: ", users);
 
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [seletectedStaff, setSelectedStaff] = useState<StaffType>();
+  const router = useRouter();
   function clickBtn() {
     setShowModal(!showModal);
   }
+
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${id}`,
+        {
+          method: "DELETE",
+          cache: "no-store",
+          credentials: "include",
+        },
+      );
+      const data = await res.json();
+      router.refresh();
+      toast.success("Account Deleted Successfully");
+      return data;
+    } catch (err: any) {
+      console.log(err?.message);
+      toast.error(err?.message);
+      return [];
+    }
+  };
+
+  const handleEdit = async (item: StaffType) => {
+    setShowEditModal(true);
+    setSelectedStaff(item);
+  };
 
   return (
     <div>
@@ -43,14 +73,28 @@ export default function StaffDashboard({ users }: PatientDashboardProps) {
               <td className="uppercase">{item?.shift}</td>
               <td className="uppercase">{item?.gender}</td>
               <td className="uppercase">
-                <Button className="mr-3 w-fit">View</Button>
-                <Button className="mr-3 w-fit">Edit</Button>
-                <Button className="mr-3 w-fit">Delete</Button>
+              <Link href={`/dashboard/staff/${item._id.toString()}`}>
+                    <Button className="mr-3 w-fit">view</Button>
+                  </Link>
+                <Button className="mr-3 w-fit" onClick={()=>handleEdit(item)}>Edit</Button>
+                <Button
+                    className="mr-3 w-fit"
+                    onClick={() => handleDelete(item._id.toString())}
+                  >
+                    Delete
+                  </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {setShowEditModal ? (
+        <EditStaffModal
+          show={showEditModal}
+          staff={seletectedStaff}
+          setShow={setShowEditModal}
+        />
+      ) : null}
     </div>
   );
 }

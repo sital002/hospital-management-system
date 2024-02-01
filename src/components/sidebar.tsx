@@ -97,10 +97,25 @@ const sideBarOptions = [
     ],
   },
   {
-    name: "Lab Technician",
-    url: "/dashboard/labtechnician",
-    icon: <FlaskConical />,
-    roles: ["admin", "staff"],
+    name: "LabTechnician",
+    icon: <Accessibility />,
+    dropdown: [
+      {
+        name: "Register Lab Technician",
+        url: "/dashboard/labtechnician/new",
+        icon: <PlusSquare />,
+      },
+      {
+        name: "View Lab Technician",
+        url: "/dashboard/labtechnician",
+        icon: <Eye />,
+      },
+      {
+        name: "Manage Lab Technicaian",
+        url: "/dashboard/labtechnician",
+        icon: <FolderKanban />,
+      },
+    ],
   },
   {
     name: "Pharmacy",
@@ -109,25 +124,9 @@ const sideBarOptions = [
   },
   {
     name: "Medical Report",
+    url: "/dashboard/medicalreport",
     icon: <BookOpenCheck />,
     roles: ["admin", "labtechnician", "doctor"],
-    dropdown: [
-      {
-        name: "Add Lab Report",
-        url: "demo",
-        icon: <PlusSquare />,
-      },
-      {
-        name: "View Lab Report",
-        url: "demo",
-        icon: <Eye />,
-      },
-      {
-        name: "Manage Lab Report",
-        url: "demo",
-        icon: <FolderKanban />,
-      },
-    ],
   },
 ];
 export default function Sidebar({ role }: { role: string | undefined }) {
@@ -143,6 +142,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
     staff: boolean;
     doctor: boolean;
     labreport: boolean;
+    labtechnician: boolean;
   }
 
   interface SidebarProps {
@@ -154,6 +154,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
     staff: false,
     doctor: false,
     labreport: false,
+    labtechnician: false,
   });
 
   const dropDownHandler = (name: keyof DropdownState) => {
@@ -162,6 +163,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
       staff: name === "staff" ? !prv.staff : false,
       doctor: name === "doctor" ? !prv.doctor : false,
       labreport: name === "labreport" ? !prv.labreport : false,
+      labtechnician: name === "labtechnician" ? !prv.labtechnician : false,
     }));
   };
 
@@ -169,8 +171,8 @@ export default function Sidebar({ role }: { role: string | undefined }) {
   console.log(router);
 
   return (
-    <div className="sticky left-0 top-0 h-[100vh] w-[20vw] border-r-2 border-gray-300 bg-[#fafbfb]">
-      <ul className="my-5 min-h-[85vh] border-t-2 border-gray-200  ">
+    <div className="stick max-h-[88vh] overflow-scroll left-0 top-0  w-[20vw]">
+      <ul className="my-5  border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
           return (
@@ -178,8 +180,8 @@ export default function Sidebar({ role }: { role: string | undefined }) {
               {(option?.roles === undefined ||
                 option?.roles?.includes(role || "")) && (
                 <li
-                  className={`relative hover:bg-[#75e9e6] ${
-                    router === option?.url ? "bg-[#75e9e6]" : ""
+                  className={`relative rounded-none hover:text-primary${
+                    router === option?.url ? "text-primary" : ""
                   } `}
                   onClick={
                     option.dropdown &&
@@ -188,7 +190,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
                 >
                   <Link
                     className={`${
-                      router === option?.url ? "bg-[#75e9e6]" : ""
+                      router === option?.url ? "text-primary" : ""
                     }  flex w-full items-center gap-2 px-1 py-1  sm:px-3`}
                     href={option?.url || ""}
                   >
@@ -215,23 +217,23 @@ export default function Sidebar({ role }: { role: string | undefined }) {
                 >
                   {option.dropdown.map((element, index) => {
                     return (
-                      <li
-                        className={`hover:bg-[#75e9e6] ${
-                          router === element.url ? "bg-[#75e9e6]" : ""
-                        }`}
+                      <Link
+                        className={`flex w-full  gap-3  ${
+                          router === element.url ? "text-primary" : ""
+                        } `}
+                        href={element.url}
                         key={element.name + index}
                       >
-                        <Link
-                          className={`flex w-full gap-3  ${
-                            router === element.url ? "bg-[#75e9e6]" : ""
-                          } `}
-                          href={element.url}
+                        <li
+                          className={`rounded-none hover:text-primary  w-full${
+                            router === element.url ? "text-primary" : ""
+                          }`}
                         >
                           {element.icon}
                           <span>{element.name}</span>
                           <hr />
-                        </Link>
-                      </li>
+                        </li>
+                      </Link>
                     );
                   })}
                 </ul>
