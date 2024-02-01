@@ -8,15 +8,13 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { PatientType } from "@/database/modals/PatientModel";
-import { formatDate } from "@/utils/formatDate";
-import { DialogClose } from "./ui/dialog";
 
 type FormInputs = {
   name: string;
   id?: string;
   phone: number;
   address: string;
-  dob: Date | undefined;
+  dob: string;
   gender: string;
   patientType: "inpatient" | "outpatient";
   admitType: "normal" | "emergency";
@@ -119,7 +117,7 @@ const PatientForm: FC<PatientFormProps> = ({
           gender: "male",
           admitType: "emergency",
           patientType: "inpatient",
-          dob: undefined,
+          dob: "",
         },
   });
   const router = useRouter();

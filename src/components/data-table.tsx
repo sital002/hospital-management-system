@@ -97,9 +97,7 @@ export const columns: ColumnDef<PatientType>[] = [
   {
     accessorKey: "dob",
     header: "DOB",
-    cell: ({ row }) => (
-      <div className="uppercase">{formatDate(row.getValue("dob"))}</div>
-    ),
+    cell: ({ row }) => <div className="uppercase">{row.getValue("dob")}</div>,
   },
   {
     accessorKey: "address",

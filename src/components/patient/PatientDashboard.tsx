@@ -78,7 +78,7 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
                 <td className="uppercase">{item?.address}</td>
                 <td className="uppercase">{item?.patientType}</td>
                 {/* <td>{item?.email}</td> */}
-                <td className="uppercase">{formatDate(item?.dob)}</td>
+                <td className="uppercase">{item?.dob}</td>
                 <td className="uppercase">{item?.gender}</td>
                 <td className="uppercase">
                   <Link href={`/dashboard/patient/${item._id.toString()}`}>
