@@ -171,8 +171,8 @@ export default function Sidebar({ role }: { role: string | undefined }) {
   console.log(router);
 
   return (
-    <div className="sticky left-0 top-0 h-[100vh] w-[20vw]">
-      <ul className="my-5 min-h-[85vh] border-t-2 border-gray-200  ">
+    <div className="stick max-h-[88vh] overflow-scroll left-0 top-0  w-[20vw]">
+      <ul className="my-5  border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
           return (
