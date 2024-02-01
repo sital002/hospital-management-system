@@ -117,7 +117,7 @@ const PatientForm: FC<PatientFormProps> = ({
           gender: "male",
           admitType: "emergency",
           patientType: "inpatient",
-          dob: "",
+          dob: "2002/07/33",
         },
   });
   const router = useRouter();
