@@ -4,7 +4,7 @@ import Sidebar from "@/components/sidebar";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { DataTableDemo } from "@/components/data-table";
+import { PatientTable } from "@/components/data-table";
 import Stats from "@/components/stats";
 
 const getAllUsers = async () => {
@@ -33,7 +33,7 @@ export default async function Dashboard() {
   return (
     <div className="px-2">
       <Stats />
-      <DataTableDemo users={data} />
+      <PatientTable users={data} />
     </div>
   );
 }

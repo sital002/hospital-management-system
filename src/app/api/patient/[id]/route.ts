@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
         }),
         { status: 400 },
       );
-        await connectToDB()
+    await connectToDB();
     const patient = (await Patient.findById(id)) as PatientType;
     return new Response(JSON.stringify(patient));
   } catch (err: any) {
@@ -59,11 +59,12 @@ export async function DELETE(req: NextRequest) {
         { status: 400 },
       );
 
-    await Patient.findByIdAndDelete(id);
+    const deletedUser = await Patient.findByIdAndDelete(id);
     return new Response(
       JSON.stringify({
         success: true,
         message: "Deleted successfully",
+        deletedUser,
       }),
     );
   } catch (err: any) {
@@ -79,7 +80,7 @@ export async function DELETE(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     const user = await getUserDetails();
-    console.log(user)
+    console.log(user);
     if (!user)
       return new Response(
         JSON.stringify({

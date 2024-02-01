@@ -33,25 +33,26 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PatientType } from "@/database/modals/PatientModel";
-import { formatDate } from "@/utils/formatDate";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { Dialog, DialogTrigger } from "./ui/dialog";
 import EditPatientModal from "./patient/EditPatientModal";
 
-const handleDelete = async (id: string) => {
+const handleDelete = async (id: string, router: any) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${id}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${id}`,
       {
         method: "DELETE",
         cache: "no-store",
         credentials: "include",
       },
     );
+    if (!res.ok) return toast.error("Failed to delete account");
     const data = await res.json();
+    // console.log(data);
     toast.success("Account Deleted Successfully");
-    return data;
+    router.refresh();
+    // return data;
   } catch (err: any) {
     console.log(err?.message);
     toast.error(err?.message);
@@ -59,91 +60,10 @@ const handleDelete = async (id: string) => {
   }
 };
 
-export const columns: ColumnDef<PatientType>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-  },
-  {
-    accessorKey: "patientType",
-    header: "Patient Type",
-    cell: ({ row }) => (
-      <div className="uppercase">{row.getValue("patientType")}</div>
-    ),
-  },
-  {
-    accessorKey: "dob",
-    header: "DOB",
-    cell: ({ row }) => <div className="uppercase">{row.getValue("dob")}</div>,
-  },
-  {
-    accessorKey: "address",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Address
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <div className="uppercase">{row.getValue("address")}</div>
-    ),
-  },
-  {
-    accessorKey: "gender",
-    header: "Gender",
-    cell: ({ row }) => (
-      <div className="uppercase">{row.getValue("gender")}</div>
-    ),
-  },
-  {
-    id: "actions",
-    header: "Actions",
-    enableHiding: false,
-
-    cell: ({ row }) => {
-      return (
-        <div className="flex gap-2">
-          <Button variant="outline">View</Button>
-          <EditPatientModal patient={row.original} />
-          <Button variant="destructive">Delete</Button>
-        </div>
-      );
-    },
-  },
-];
-
-interface DataTableDemoProps {
+interface PatientTableProps {
   users: PatientType[];
 }
-export function DataTableDemo({ users }: DataTableDemoProps) {
+export function PatientTable({ users }: PatientTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -154,6 +74,95 @@ export function DataTableDemo({ users }: DataTableDemoProps) {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  const columns: ColumnDef<PatientType>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "name",
+      header: "Name",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("name")}</div>
+      ),
+    },
+    {
+      accessorKey: "patientType",
+      header: "Patient Type",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("patientType")}</div>
+      ),
+    },
+    {
+      accessorKey: "dob",
+      header: "DOB",
+      cell: ({ row }) => <div className="uppercase">{row.getValue("dob")}</div>,
+    },
+    {
+      accessorKey: "address",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Address
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("address")}</div>
+      ),
+    },
+    {
+      accessorKey: "gender",
+      header: "Gender",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("gender")}</div>
+      ),
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      enableHiding: false,
+
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-2">
+            <Button variant="outline">View</Button>
+            <EditPatientModal patient={row.original} />
+            <Button
+              variant="destructive"
+              onClick={() => {
+                handleDelete(row.original._id.toString(), router);
+              }}
+            >
+              Delete
+            </Button>
+          </div>
+        );
+      },
+    },
+  ];
   const table = useReactTable({
     data: users,
     columns,
