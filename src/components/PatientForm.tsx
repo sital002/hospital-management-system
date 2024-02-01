@@ -53,12 +53,12 @@ const admitType = [
   },
 ];
 
-interface PatientFormProps {
+type PatientFormProps = {
   update?: boolean;
   patient?: PatientType;
   open?: boolean;
   setOpen?: (value: boolean) => void;
-}
+};
 
 const addNewPatient = async ({
   data,
