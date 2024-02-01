@@ -9,6 +9,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { PatientType } from "@/database/modals/PatientModel";
 import { formatDate } from "@/utils/formatDate";
+import { DialogClose } from "./ui/dialog";
 
 type FormInputs = {
   name: string;
@@ -55,11 +56,10 @@ const admitType = [
 ];
 
 interface PatientFormProps {
-  // showModal: boolean;S
-  show?: boolean;
-  setShow?: (e: boolean) => void;
   update?: boolean;
   patient?: PatientType;
+  open?: boolean;
+  setOpen?: (value: boolean) => void;
 }
 
 const addNewPatient = async ({
@@ -91,9 +91,9 @@ const addNewPatient = async ({
 
 const PatientForm: FC<PatientFormProps> = ({
   patient,
-  show,
-  setShow,
   update = false,
+  open,
+  setOpen,
 }) => {
   console.log(patient?.dob);
   const {
@@ -122,19 +122,6 @@ const PatientForm: FC<PatientFormProps> = ({
           dob: undefined,
         },
   });
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-  //       const targetUrl = "https://www.investing.com/rss/news_1.rss";
-  //       const res = await fetch(proxyUrl + targetUrl);
-  //       console.log(res);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-  //   fetchData();
-  // }, []);
   const router = useRouter();
   const updatePatientDetail = async ({ data }: { data: FormInputs }) => {
     try {
@@ -156,11 +143,12 @@ const PatientForm: FC<PatientFormProps> = ({
       );
       const json = await res.json();
       if (json) {
-        if (setShow) {
-          setShow(false);
-        }
         toast.success("Detail updated successfully");
         router.refresh();
+        if (setOpen) {
+          setOpen(false);
+        }
+
         return;
       }
       return toast.error(json.message);
@@ -178,10 +166,10 @@ const PatientForm: FC<PatientFormProps> = ({
   };
 
   return (
-    <div className=" mx-auto w-full  ">
+    <div className=" mx-auto w-full">
       {" "}
       <form
-        className="mx-auto mt-4  max-w-[600px] rounded-lg  px-4 py-8"
+        className="mx-auto mt-4  max-w-[700px] rounded-lg  px-4 py-8"
         onSubmit={handleSubmit(onSubmit)}
       >
         <h1 className="text-center text-3xl font-medium">
@@ -284,7 +272,10 @@ const PatientForm: FC<PatientFormProps> = ({
             />
           </div>
         </div>
-        <Button className="w-full">{update ? "Update" : "Add"}</Button>
+
+        <Button className="mt-4 w-full" type="submit">
+          {update ? "Update" : "Submit"}
+        </Button>
       </form>
     </div>
   );

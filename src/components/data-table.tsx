@@ -36,6 +36,8 @@ import { PatientType } from "@/database/modals/PatientModel";
 import { formatDate } from "@/utils/formatDate";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { Dialog, DialogTrigger } from "./ui/dialog";
+import EditPatientModal from "./patient/EditPatientModal";
 
 const handleDelete = async (id: string) => {
   try {
@@ -127,13 +129,13 @@ export const columns: ColumnDef<PatientType>[] = [
     id: "actions",
     header: "Actions",
     enableHiding: false,
-  
-    cell: ({row}) => {
+
+    cell: ({ row }) => {
       return (
         <div className="flex gap-2">
           <Button variant="outline">View</Button>
-          <Button variant="default" >Edit</Button>
-          <Button variant="destructive" >Delete</Button>
+          <EditPatientModal patient={row.original} />
+          <Button variant="destructive">Delete</Button>
         </div>
       );
     },
@@ -148,7 +150,7 @@ export function DataTableDemo({ users }: DataTableDemoProps) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-const router = useRouter();
+  const router = useRouter();
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});

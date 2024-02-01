@@ -4,10 +4,10 @@ import { formatDate } from "@/utils/formatDate";
 import { type PatientType } from "@/database/modals/PatientModel";
 import AddProfileModal from "../AddProfileModal";
 import { Button } from "../ui/button";
-import EditPatientModal from "./EditPatientModal";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Dialog, DialogTrigger } from "../ui/dialog";
 
 interface PatientDashboardProps {
   users: PatientType[];
@@ -84,12 +84,11 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
                   <Link href={`/dashboard/patient/${item._id.toString()}`}>
                     <Button className="mr-3 w-fit">view</Button>
                   </Link>
-                  <Button
-                    className="mr-3 w-fit"
-                    onClick={() => handleEdit(item)}
-                  >
-                    Edit
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline">Edit Profile fdsf</Button>
+                    </DialogTrigger>
+                  </Dialog>
                   <Button
                     className="mr-3 w-fit bg-destructive hover:bg-red-700 "
                     onClick={() => handleDelete(item._id.toString())}
@@ -102,13 +101,6 @@ export default function PatientDashboard({ users }: PatientDashboardProps) {
           ))}
         </tbody>
       </table>
-      {setShowEditModal ? (
-        <EditPatientModal
-          show={showEditModal}
-          patient={selectedPatient}
-          setShow={setShowEditModal}
-        />
-      ) : null}
     </div>
   );
 }

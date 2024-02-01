@@ -1,35 +1,30 @@
-import { FC } from "react";
-import Modal from "../common/Modal";
+import { FC, useState } from "react";
 import PatientForm from "../PatientForm";
 import { PatientType } from "@/database/modals/PatientModel";
-import { Dialog, DialogTrigger } from "../ui/dialog";
-import { DialogContent } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 
 interface EditLabtestModalProps {
-  setShow: (e: boolean) => void;
-  show: boolean;
   patient?: PatientType;
 }
-const EditPatientModal: FC<EditLabtestModalProps> = ({
-  setShow,
-  patient,
-  show,
-}) => {
+const EditPatientModal: FC<EditLabtestModalProps> = ({ patient }) => {
   console.log(patient);
+  const [open, setOpen] = useState(false);
   return (
     <div>
-      <Dialog>
+      <Dialog onOpenChange={setOpen} open={open}>
         <DialogTrigger asChild>
-          <Button variant="outline">Edit Profile</Button>
+          <Button variant="default">Edit</Button>
         </DialogTrigger>
         <DialogContent>
-          <PatientForm
-            show={show}
-            setShow={setShow}
-            update={true}
-            patient={patient}
-          />
+          <div className="w-full">
+            <PatientForm
+              update={true}
+              patient={patient}
+              open={open}
+              setOpen={setOpen}
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </div>
