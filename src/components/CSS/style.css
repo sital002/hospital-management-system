@@ -15,4 +15,12 @@ li:hover {
   background-color: #f3f4f6;
 }
 
+  ::-webkit-scrollbar {
+    display: none; /* For Chrome */
+  }
+
+
+
+
+
 @media print { html, body { height: initial !important; overflow: initial !important; }}

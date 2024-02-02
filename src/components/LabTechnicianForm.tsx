@@ -199,10 +199,10 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
           {update ? "Update LabTechnician" : "Create New LabTechnician"}
         </h1>
         <form
-          className="mx-auto mt-10  rounded-lg px-20 py-8 "
+          className="mx-auto   rounded-lg px-6 py-8 "
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <div className="my-10 flex gap-4">
+          <div className="my-6 flex gap-4">
             <div className="grow">
               <FormField
                 control={form.control}
@@ -233,7 +233,10 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                 )}
               />
             </div>
-            <div className="grow">
+            
+          </div>
+          <div className="my-6 flex gap-4">
+          <div className="grow">
               <FormField
                 control={form.control}
                 name="phone"
@@ -248,8 +251,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                 )}
               />
             </div>
-          </div>
-          <div className="my-10 flex gap-4">
+
             <div className="grow">
               <FormField
                 control={form.control}
@@ -265,6 +267,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                 )}
               />
             </div>
+              </div>
             <div className="grow">
               <FormField
                 control={form.control}
@@ -280,7 +283,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                 )}
               />
             </div>
-            <div className="grow">
+            <div className="my-6">
               <FormField
                 control={form.control}
                 name="gender"
@@ -309,11 +312,10 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                 )}
               />
             </div>
-          </div>
 
          {
           !update ? (<>
-           <div className="my-10 flex gap-4">
+           <div className="my-6 flex gap-4">
             <div className="grow">
               <FormField
                 control={form.control}
@@ -348,7 +350,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
           </>):null
          }
 
-          <Button className="my-4 w-full">
+          <Button className="my-2 w-full">
             {update ? "Update" : "Add LabTechnician"}
           </Button>
         </form>

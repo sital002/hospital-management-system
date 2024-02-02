@@ -148,7 +148,6 @@ export function StaffTable({ users }: StaffTableProps) {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
-            <Button variant="outline">View</Button>
             <EditStaffModal staff={row.original} />
             <Button
               variant="destructive"

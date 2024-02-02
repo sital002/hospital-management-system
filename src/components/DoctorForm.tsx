@@ -47,12 +47,16 @@ const FormSchema = z.object({
   name: z.string({
     required_error: "Name is required",
   }),
-  password: z.string({
-    required_error: "Password is required",
-  }).optional(),
-  cpassword: z.string({
-    required_error: "Confirm Password is required",
-  }).optional(),
+  password: z
+    .string({
+      required_error: "Password is required",
+    })
+    .optional(),
+  cpassword: z
+    .string({
+      required_error: "Confirm Password is required",
+    })
+    .optional(),
   phone: z.string({
     required_error: "Phone is required",
   }),
@@ -132,7 +136,10 @@ const DoctorForm: FC<DoctorFormProps> = ({
 
   const router = useRouter();
 
-  const addNewDoctor = async (data: z.infer<typeof FormSchema> ,router:any) => {
+  const addNewDoctor = async (
+    data: z.infer<typeof FormSchema>,
+    router: any,
+  ) => {
     console.log(data);
     try {
       const res = await fetch(
@@ -196,7 +203,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
     if (update) {
       updateDoctor({ data });
     } else {
-      addNewDoctor(data, router );
+      addNewDoctor(data, router);
     }
   };
 
@@ -204,12 +211,14 @@ const DoctorForm: FC<DoctorFormProps> = ({
     <div className="w-full ">
       {""}
       <Form {...form}>
-        <h1 className="text-center text-3xl font-bold">{update ? 'Update Doctor':'Create New Doctor'}</h1>
+        <h1 className="text-center text-3xl font-bold">
+          {update ? "Update Doctor" : "Create New Doctor"}
+        </h1>
         <form
-          className="mx-auto rounded-lg  px-10 py-8  "
+          className="mx-auto rounded-lg  px-6 py-8  "
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <div className="my-10 flex gap-4">
+          <div className="my-4 flex gap-4">
             <div className="grow">
               <FormField
                 control={form.control}
@@ -240,6 +249,8 @@ const DoctorForm: FC<DoctorFormProps> = ({
                 )}
               />
             </div>
+          </div>
+          <div className="my-6 flex gap-4">
             <div className="grow">
               <FormField
                 control={form.control}
@@ -255,8 +266,6 @@ const DoctorForm: FC<DoctorFormProps> = ({
                 )}
               />
             </div>
-          </div>
-          <div className="my-16 flex gap-4">
             <div className="grow">
               <FormField
                 control={form.control}
@@ -272,21 +281,53 @@ const DoctorForm: FC<DoctorFormProps> = ({
                 )}
               />
             </div>
+          </div>
+          <div className="grow">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ratnangar-3" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="my-6 flex gap-4">
             <div className="grow">
               <FormField
                 control={form.control}
-                name="address"
+                name="department"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Address</FormLabel>
+                    <FormLabel>Department</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ratnangar-3" {...field} />
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {departmentOption.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
+
             <div className="grow">
               <FormField
                 control={form.control}
@@ -317,74 +358,44 @@ const DoctorForm: FC<DoctorFormProps> = ({
               />
             </div>
           </div>
-          <div className="my-16 flex gap-4">
-            <div className="grow">
-              <FormField
-                control={form.control}
-                name="department"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Department</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {departmentOption.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
-                              {option.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            {
-              !update  ? 
-              (<>
-              <div className="grow">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="*********" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-                />
-            </div>
-            <div className="grow">
-              <FormField
-                control={form.control}
-                name="cpassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="*********" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-                />
-            </div>
-                </>
-            ): null
-        }
-        </div>
-          <Button className="w-full">{`${
+
+          {!update ? (
+            <>
+              <div className="flex gap-4">
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="cpassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            </>
+          ) : null}
+          <Button className="w-full my-6">{`${
             update ? "Update" : "Add Doctor"
           }`}</Button>
         </form>

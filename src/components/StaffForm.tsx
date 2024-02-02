@@ -189,11 +189,11 @@ const StaffForm: FC<StaffFormProps> = ({
   }
 
   return (
-    <div className="max-h-[600px] px-20">
+    <div className="max-h-[600px] px-6">
       <Form {...form}>
-        <h1 className="my-14 text-center text-4xl font-semibold">Create New Staff</h1>
+        <h1 className=" text-center text-4xl font-semibold">Create New Staff</h1>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="my-10 flex gap-4 ">
+          <div className="my-4 flex gap-4 ">
             <div className="grow">
               <FormField
                 control={form.control}
@@ -224,6 +224,7 @@ const StaffForm: FC<StaffFormProps> = ({
                 )}
               />
             </div>
+          </div>
             <div className="grow">
               <FormField
                 control={form.control}
@@ -239,7 +240,6 @@ const StaffForm: FC<StaffFormProps> = ({
                 )}
               />
             </div>
-          </div>
           <div className="my-10 flex gap-4 ">
             <div className="grow">
               <FormField
@@ -273,7 +273,7 @@ const StaffForm: FC<StaffFormProps> = ({
             </div>
           </div>
          <div className="flex gap-4">
-            <div className="w-[250px]">
+            <div className="grow">
             <FormField
               control={form.control}
               name="gender"
@@ -302,7 +302,7 @@ const StaffForm: FC<StaffFormProps> = ({
               )}
             />
             </div>
-            <div className="w-[250px]">
+            <div className="grow">
             <FormField
               control={form.control}
               name="shift"

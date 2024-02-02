@@ -205,11 +205,11 @@ const PatientForm = ({
   return (
     <div className=" w-full">
       <Form {...form}>
-        <h1 className="my-14 text-center text-4xl font-semibold">
+        <h1 className="my-6 text-center text-4xl font-semibold">
           {update ? "Update Patient Detail" : "Add New Patient"}
         </h1>
 
-        <form className=" mt-4  px-24" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className=" mt-4  px-10" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex gap-4">
             <div className="grow">
               <FormField
