@@ -1,18 +1,29 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
-import {Label} from "./ui/label";
-import {Select} from "./ui/select";
+import { Label } from "./ui/label";
+import { Select } from "./ui/select";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import {  SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { PatientType } from "@/database/modals/PatientModel";
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { FormControl,Form, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import {
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import {
+  FormControl,
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
 
 type FormInputs = {
   name: string;
@@ -59,15 +70,11 @@ const admitType = [
 ];
 
 type PatientFormProps = {
-  update: boolean;
-  patient: PatientType;
-  open: boolean;
-  setOpen: (value: boolean) => void;
+  update?: boolean;
+  patient?: PatientType;
+  open?: boolean;
+  setOpen?: (value: boolean) => void;
 };
-
-type UpdateProps = PatientFormProps['update'] extends true ? PatientFormProps : {};
-
-
 
 const FormSchema = z.object({
   name: z.string({
@@ -97,7 +104,7 @@ const addNewPatient = async ({
   data,
   router,
 }: {
-  data:z.infer<typeof FormSchema> ;
+  data: z.infer<typeof FormSchema>;
   router: any;
 }) => {
   try {
@@ -124,19 +131,19 @@ const PatientForm = ({
   update = false,
   open,
   setOpen,
-}:any) => {
+}: PatientFormProps) => {
   console.log(patient?.dob);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: update
       ? {
-          name: patient.name || "",
-          phone: patient.phone || "",
-          address: patient.address || "",
-          admitType: patient.admitType || "",
-          patientType: patient.patientType || "",
-          dob: patient.dob || "",
-          gender: patient.gender || "",
+          name: patient?.name ?? "",
+          phone: patient?.phone ?? "",
+          address: patient?.address ?? "",
+          admitType: patient?.admitType ?? "",
+          patientType: patient?.patientType ?? "",
+          dob: patient?.dob ?? "",
+          gender: patient?.gender ?? "",
         }
       : {
           name: "John Doe",
@@ -149,11 +156,15 @@ const PatientForm = ({
         },
   });
   const router = useRouter();
-  const updatePatientDetail = async ({ data }: { data: z.infer<typeof FormSchema>  }) => {
+  const updatePatientDetail = async ({
+    data,
+  }: {
+    data: z.infer<typeof FormSchema>;
+  }) => {
     try {
       console.log(data);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${patient?.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${patient?._id}`,
         {
           method: "PUT",
           body: JSON.stringify({
@@ -185,7 +196,7 @@ const PatientForm = ({
   };
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
     if (update) {
-      updatePatientDetail({data});
+      updatePatientDetail({ data });
     } else {
       addNewPatient({ data, router });
     }
@@ -195,171 +206,164 @@ const PatientForm = ({
     <div className=" w-full">
       <Form {...form}>
         <h1 className="my-14 text-center text-4xl font-semibold">
-          Create New Patient
+          {update ? "Update Patient Detail" : "Add New Patient"}
         </h1>
 
-        <form
-          className=" mt-4  px-24"
-          onSubmit={form.handleSubmit(onSubmit)}
-        >
-         <div className="flex gap-4">
-         <div className="grow">
-         <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="John Doe" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-         </div>
-
-          <div className="grow">
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input placeholder="97++++++++" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          </div>
-         </div>
-         <div className="flex gap-4 my-10">
-         
-         <div className="grow">
-         <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Address</FormLabel>
-                <FormControl>
-                  <Input placeholder="Ratnangar-3" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-         </div>
-         <div className="w-[250px]">
-         <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Gender</FormLabel>
-                <FormControl>
-                  <Select
-      
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {genderOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-         </div>
-         <div className="w-[250px]">
-         <FormField
-            control={form.control}
-            name="admitType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>AdmitType</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {admitType.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-         </div>
-         </div>
-
-         <div className="flex gap-4 my-10">
-         <div className="grow">
-         <FormField
-            control={form.control}
-            name="dob"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>DOB</FormLabel>
-                <FormControl>
-                  <Input placeholder="2002-09-22" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-         </div>
-         <div className="grow">
-         <FormField
-            control={form.control}
-            name="patientType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>PatientType</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {patientTypeOption.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-            />
+        <form className=" mt-4  px-24" onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-         </div>
-         <Button type="submit" className="w-full">
-            Submit
+
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="97++++++++" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="my-10 flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ratnangar-3" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="w-[250px]">
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gender</FormLabel>
+                    <FormControl>
+                      <Select defaultValue={field.value}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {genderOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="w-[250px]">
+              <FormField
+                control={form.control}
+                name="admitType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>AdmitType</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {admitType.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          <div className="my-10 flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>DOB</FormLabel>
+                    <FormControl>
+                      <Input placeholder="2002-09-22" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="patientType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>PatientType</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {patientTypeOption.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <Button type="submit" className="w-full">
+            {update ? "Update" : "Create"}
           </Button>
         </form>
       </Form>
