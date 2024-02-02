@@ -79,8 +79,15 @@ export async function PUT(req: NextRequest) {
     const data = await req.json();
     const labtechnician = (await Labtechnician.findByIdAndUpdate(
       id,
-      data,
-      { new: true },
+      {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+        dob: data.dob,
+        gender:data.gender
+
+      },
     )) as LabtechnicianType;
     return new Response(JSON.stringify(labtechnician));
   } catch (err: any) {

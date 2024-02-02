@@ -49,10 +49,10 @@ const FormSchema = z.object({
   }),
   password: z.string({
     required_error: "Password is required",
-  }),
+  }).optional(),
   cpassword: z.string({
-    required_error: "Password is required",
-  }),
+    required_error: "Confirm Password is required",
+  }).optional(),
   phone: z.string({
     required_error: "Phone is required",
   }),
@@ -321,7 +321,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
             <div className="grow">
               <FormField
                 control={form.control}
-                name="gender"
+                name="department"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Department</FormLabel>
@@ -347,7 +347,10 @@ const DoctorForm: FC<DoctorFormProps> = ({
                 )}
               />
             </div>
-            <div className="grow">
+            {
+              !update  ? 
+              (<>
+              <div className="grow">
               <FormField
                 control={form.control}
                 name="password"
@@ -360,7 +363,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+                />
             </div>
             <div className="grow">
               <FormField
@@ -375,9 +378,12 @@ const DoctorForm: FC<DoctorFormProps> = ({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+                />
             </div>
-          </div>
+                </>
+            ): null
+        }
+        </div>
           <Button className="w-full">{`${
             update ? "Update" : "Add Doctor"
           }`}</Button>
