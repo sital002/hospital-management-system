@@ -311,7 +311,9 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
             </div>
           </div>
 
-          <div className="my-10 flex gap-4">
+         {
+          !update ? (<>
+           <div className="my-10 flex gap-4">
             <div className="grow">
               <FormField
                 control={form.control}
@@ -343,6 +345,8 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
               />
             </div>
           </div>
+          </>):null
+         }
 
           <Button className="my-4 w-full">
             {update ? "Update" : "Add LabTechnician"}

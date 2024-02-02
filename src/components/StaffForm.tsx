@@ -332,7 +332,10 @@ const StaffForm: FC<StaffFormProps> = ({
             />
             </div>
          </div>
-          <div className="my-10 flex gap-4 ">
+          {
+            !update ?(
+              <>
+              <div className="my-10 flex gap-4 ">
             <div className="grow">
               <FormField
                 control={form.control}
@@ -364,6 +367,9 @@ const StaffForm: FC<StaffFormProps> = ({
               />
             </div>
           </div>
+              </>
+            ):null
+          }
           <Button type="submit" className="w-full">
             Submit
           </Button>
