@@ -243,23 +243,40 @@ const PatientForm = ({
               />
             </div>
           </div>
+
+          <div className="grow my-6">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ratnangar-3" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grow my-6">
+            <FormField
+              control={form.control}
+              name="dob"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>DOB</FormLabel>
+                  <FormControl>
+                    <Input placeholder="2002-09-22" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <div className="my-10 flex gap-4">
             <div className="grow">
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ratnangar-3" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="w-[250px]">
               <FormField
                 control={form.control}
                 name="gender"
@@ -285,7 +302,7 @@ const PatientForm = ({
                 )}
               />
             </div>
-            <div className="w-[250px]">
+            <div className="grow">
               <FormField
                 control={form.control}
                 name="admitType"
@@ -308,24 +325,6 @@ const PatientForm = ({
                           ))}
                         </SelectContent>
                       </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
-          <div className="my-10 flex gap-4">
-            <div className="grow">
-              <FormField
-                control={form.control}
-                name="dob"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>DOB</FormLabel>
-                    <FormControl>
-                      <Input placeholder="2002-09-22" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
