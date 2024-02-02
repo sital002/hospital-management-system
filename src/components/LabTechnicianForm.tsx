@@ -69,10 +69,10 @@ const FormSchema = z.object({
   }),
   password: z.string({
     required_error: "Password is required",
-  }),
+  }).optional(),
   cpassword: z.string({
     required_error: "Password is required",
-  }),
+  }).optional(),
   phone: z.string({
     required_error: "Phone is required",
   }),
