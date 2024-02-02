@@ -92,14 +92,14 @@ const departmentOption=[
 }
 ]
 
-interface DoctorFormProps {
-  show?:boolean;
-  setShow?: (e: boolean) => void;
-  doctor?: DoctorType;
-  update?:boolean;
-}
+type DoctorFormProps = {
+  update: boolean;
+  doctor: DoctorType;
+  open: boolean;
+  setOpen: (value: boolean) => void;
+};
 
-const DoctorForm: FC<DoctorFormProps> = ({show,setShow,doctor,update=false}) => {
+const DoctorForm: FC<DoctorFormProps> = ({open,setOpen,doctor,update=false}) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: update ?{
@@ -153,8 +153,8 @@ const DoctorForm: FC<DoctorFormProps> = ({show,setShow,doctor,update=false}) => 
       {""}
       <Form {...form}>
         <h1 className="text-center text-3xl font-bold">Create New Doctor</h1>
-      <form className="mx-auto rounded-lg  px-16 py-8  " onSubmit={form.handleSubmit(onSubmit)}>
-       <div className="flex my-10">
+      <form className="mx-auto rounded-lg  px-10 py-8  " onSubmit={form.handleSubmit(onSubmit)}>
+       <div className="flex gap-4 my-10">
        <div className="grow">
        <FormField
                 control={form.control}

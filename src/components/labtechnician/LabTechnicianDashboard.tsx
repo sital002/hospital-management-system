@@ -96,13 +96,6 @@ export default function LabTechnicianDashboard({
           ))}
         </tbody>
       </table>
-      {setShowEditModal ? (
-        <EditLabTechnicianModal
-          show={showEditModal}
-          labtechnician={selectedLabTechnician}
-          setShow={setShowEditModal}
-        />
-      ) : null}
     </div>
   );
 }

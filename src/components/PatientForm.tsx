@@ -192,7 +192,7 @@ const PatientForm = ({
   };
 
   return (
-    <div className=" border-2 border-red-500 w-full">
+    <div className=" w-full">
       <Form {...form}>
         <h1 className="my-14 text-center text-4xl font-semibold">
           Create New Patient

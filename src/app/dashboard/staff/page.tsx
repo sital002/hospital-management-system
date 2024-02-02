@@ -1,14 +1,17 @@
+
 import StaffDashboard from "@/components/staff/StaffDashboard";
-import { StaffType } from "@/database/modals/StaffModal";
+import Sidebar from "@/components/sidebar";
+import { type StaffType } from "@/database/modals/StaffModal";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { StaffTable } from "@/components/staff-data-table";
 
 const getAllUsers = async () => {
   const authToken = cookies().get("auth_token")?.value;
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`, {
-      cache: "no-store",
+      // cache: "no-store",
       credentials: "include",
       headers: {
         Cookie: `auth_token=${authToken};`,
@@ -28,8 +31,8 @@ export default async function Dashboard() {
   const data = await getAllUsers();
   console.log(data);
   return (
-    <div className="flex items-start justify-around bg-[#fafbfb]">
-      <StaffDashboard users={data} />
+    <div className="flex items-start justify-around ">
+      <StaffTable users={data} />
     </div>
   );
 }

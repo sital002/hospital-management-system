@@ -1,3 +1,5 @@
+import { PatientTable } from "@/components/data-table";
+import { DoctorTable } from "@/components/doctor-data-table";
 import DoctorDashboard from "@/components/doctor/DoctorDashboard";
 import Sidebar from "@/components/sidebar";
 import { type DoctorType } from "@/database/modals/DoctorModel";
@@ -30,7 +32,7 @@ export default async function Dashboard() {
   console.log(data);
   return (
     <div className="flex items-start justify-around ">
-      <DoctorDashboard users={data} />
+      <DoctorTable users={data} />
     </div>
   );
 }

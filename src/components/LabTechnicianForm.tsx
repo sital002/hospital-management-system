@@ -51,12 +51,12 @@ const genderOptions = [
   },
 ];
 
-interface LabTechnicianFormProps {
-  show?: boolean;
-  setShow?: (e: boolean) => void;
-  labtechnician?: LabtechnicianType;
-  update?: boolean;
-}
+type LabTechnicianFormProps = {
+  update: boolean;
+  labtechnician: LabtechnicianType;
+  open: boolean;
+  setOpen: (value: boolean) => void;
+};
 
 const FormSchema = z.object({
   email: z
@@ -88,8 +88,8 @@ const FormSchema = z.object({
 });
 
 const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
-  show,
-  setShow,
+  open,
+  setOpen,
   labtechnician,
   update = false,
 }) => {
@@ -168,8 +168,8 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
       );
       const json = await res.json();
       if (json) {
-        if (setShow) {
-          setShow(false);
+        if (setOpen) {
+          setOpen(false);
         }
         toast.success("Detail updated successfully");
         router.refresh();

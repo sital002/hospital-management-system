@@ -1,3 +1,4 @@
+import { LabTechnicaianTable } from "@/components/labtechnician-data-table";
 import LabTechnicianDashboard from "@/components/labtechnician/LabTechnicianDashboard";
 import Sidebar from "@/components/sidebar";
 import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
@@ -34,7 +35,7 @@ export default async function Dashboard() {
   console.log(data);
   return (
     <div className="flex items-start justify-around bg-[#fafbfb]">
-      <LabTechnicianDashboard users={data} />
+      <LabTechnicaianTable users={data} />
     </div>
   );
 }

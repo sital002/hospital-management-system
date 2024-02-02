@@ -1,31 +1,33 @@
-import { FC } from "react";
-import Modal from "../common/Modal";
-import LabTechnicianForm from "../LabTechnicianForm";
+import { FC, useState } from "react";
+import LabTechnicianForm from "../StaffForm";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Button } from "../ui/button";
 import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
 
 interface EditLabtestModalProps {
-  setShow: (e: boolean) => void;
-  show: boolean;
   labtechnician?: LabtechnicianType;
 }
-const EditLabTechnicianModal: FC<EditLabtestModalProps> = ({
-  setShow,
-  labtechnician,
-  show,
-}) => {
-  // console.log(labtechnician);
+const EditStaffModal: FC<EditLabtestModalProps> = ({ labtechnician }) => {
+  const [open, setOpen] = useState(false);
   return (
     <div>
-      <Modal showModal={show} setShowModal={setShow}>
-        <LabTechnicianForm
-          show={show}
-          setShow={setShow}
-          update={true}
-          labtechnician={labtechnician}
-        />
-      </Modal>
+      <Dialog onOpenChange={setOpen} open={open}>
+        <DialogTrigger asChild>
+          <Button variant="default">Edit</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <div className="w-full">
+            <LabTechnicianForm
+              update={true}
+              labtechnician={labtechnician}
+              open={open}
+              setOpen={setOpen}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
 
-export default EditLabTechnicianModal;
+export default EditStaffModal;

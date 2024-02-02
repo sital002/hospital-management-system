@@ -51,12 +51,14 @@ const workShift = [
   },
 ];
 
-interface StaffFormProps {
-  show?: boolean;
-  setShow?: (e: boolean) => void;
-  staff?: StaffType;
-  update?: boolean;
-}
+type StaffFormProps = {
+  update: boolean;
+  staff: StaffType;
+  open: boolean;
+  setOpen: (value: boolean) => void;
+};
+
+type UpdateProps = StaffFormProps['update'] extends true ? StaffFormProps : {};
 const FormSchema = z.object({
   email: z
     .string({
@@ -89,8 +91,8 @@ const FormSchema = z.object({
   }),
 });
 const StaffForm: FC<StaffFormProps> = ({
-  show,
-  setShow,
+  open,
+  setOpen,
   staff,
   update = false,
 }) => {
