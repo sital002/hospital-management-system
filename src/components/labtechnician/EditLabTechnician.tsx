@@ -1,11 +1,11 @@
 import { FC, useState } from "react";
-import LabTechnicianForm from "../StaffForm";
+import LabTechnicianForm from "../LabTechnicianForm";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
 
 interface EditLabtestModalProps {
-  labtechnician?: LabtechnicianType;
+  labtechnician: LabtechnicianType;
 }
 const EditStaffModal: FC<EditLabtestModalProps> = ({ labtechnician }) => {
   const [open, setOpen] = useState(false);

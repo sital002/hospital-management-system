@@ -17,9 +17,9 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import {Label} from '@/components/ui/label'
-import {Button} from '@/components/ui/button'
-import {Input} from '@/components/ui/input'
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -30,7 +30,7 @@ import {
 
 type FormInputs = {
   name: string;
-  id?:string;
+  id?: string;
   email: string;
   password: string;
   cpassword: string;
@@ -84,7 +84,7 @@ const FormSchema = z.object({
   }),
   gender: z.string({
     required_error: "Gender is required",
-  })
+  }),
 });
 
 const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
@@ -118,16 +118,13 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
   const router = useRouter();
   // const [showModal, setShowModal] = useState(false);
 
- 
-
   const addNewLabTechnician = async ({
     data,
     router,
   }: {
-    data:z.infer<typeof FormSchema> ;
+    data: z.infer<typeof FormSchema>;
     router: any;
   }) => {
-    
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician`,
@@ -150,7 +147,11 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
     }
   };
 
-  const updateLabTechnicianDetails = async ({ data }: { data: z.infer<typeof FormSchema>  }) => {
+  const updateLabTechnicianDetails = async ({
+    data,
+  }: {
+    data: z.infer<typeof FormSchema>;
+  }) => {
     try {
       // console.log('labdata: ',data);
       const res = await fetch(
@@ -181,14 +182,13 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
       toast.error(err?.message);
     }
   };
-  
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
-    console.log('edit data',data);
+    console.log("edit data", data);
     if (update) {
-      updateLabTechnicianDetails( {data} );
+      updateLabTechnicianDetails({ data });
     } else {
-      addNewLabTechnician({data,router});
+      addNewLabTechnician({ data, router });
     }
   };
 
@@ -198,10 +198,13 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
         <h1 className="text-center text-3xl font-medium">
           {update ? "Update LabTechnician" : "Create New LabTechnician"}
         </h1>
-        <form className="mx-auto rounded-lg  px-20 py-8 mt-10 " onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex gap-4 my-10">
-        <div className="grow">
-        <FormField
+        <form
+          className="mx-auto mt-10  rounded-lg px-20 py-8 "
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <div className="my-10 flex gap-4">
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
@@ -214,9 +217,9 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                   </FormItem>
                 )}
               />
-        </div>
-        <div className="grow">
-        <FormField
+            </div>
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
@@ -229,9 +232,9 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                   </FormItem>
                 )}
               />
-        </div>
-        <div className="grow">
-        <FormField
+            </div>
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="phone"
                 render={({ field }) => (
@@ -244,26 +247,26 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                   </FormItem>
                 )}
               />
-        </div>
-        </div>
-        <div className="flex gap-4 my-10">
-        <div className="grow">
-        <FormField
-                  control={form.control}
-                  name="dob"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>DOB</FormLabel>
-                      <FormControl>
-                        <Input placeholder="2002-09-22" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-        </div>
-       <div className="grow">
-       <FormField
+            </div>
+          </div>
+          <div className="my-10 flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>DOB</FormLabel>
+                    <FormControl>
+                      <Input placeholder="2002-09-22" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="address"
                 render={({ field }) => (
@@ -276,41 +279,41 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                   </FormItem>
                 )}
               />
-       </div>
-        <div className="grow">
-        <FormField
-              control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Gender</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {genderOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-        </div>
-        </div>
-        
-        <div className="flex gap-4 my-10">
-        <div className="grow">
-        <FormField
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gender</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {genderOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          <div className="my-10 flex gap-4">
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
@@ -323,9 +326,9 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                   </FormItem>
                 )}
               />
-        </div>
-        <div className="grow">
-        <FormField
+            </div>
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="cpassword"
                 render={({ field }) => (
@@ -338,11 +341,13 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                   </FormItem>
                 )}
               />
-        </div>
-        </div>
+            </div>
+          </div>
 
-        <Button className="w-full my-4">{update ? "Update" : "Add LabTechnician"}</Button>
-      </form>
+          <Button className="my-4 w-full">
+            {update ? "Update" : "Add LabTechnician"}
+          </Button>
+        </form>
       </Form>
     </div>
   );

@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { DoctorType } from "@/database/modals/DoctorModel";
 
 interface EditLabtestModalProps {
-  doctor?: DoctorType;
+  doctor: DoctorType;
 }
 const EditDoctorModal: FC<EditLabtestModalProps> = ({ doctor }) => {
   console.log(doctor);

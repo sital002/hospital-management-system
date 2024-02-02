@@ -15,9 +15,9 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import {Label} from '@/components/ui/label'
-import {Button} from '@/components/ui/button'
-import {Input} from '@/components/ui/input'
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -81,16 +81,16 @@ const genderOptions = [
   },
 ];
 
-const departmentOption=[
+const departmentOption = [
   {
-    name:'Physician',
-  value:'physician'
-},
-{
-  name:'Dentiest',
-  value:'dentiest'
-}
-]
+    name: "Physician",
+    value: "physician",
+  },
+  {
+    name: "Dentiest",
+    value: "dentiest",
+  },
+];
 
 type DoctorFormProps = {
   update: boolean;
@@ -99,28 +99,35 @@ type DoctorFormProps = {
   setOpen: (value: boolean) => void;
 };
 
-const DoctorForm: FC<DoctorFormProps> = ({open,setOpen,doctor,update=false}) => {
+const DoctorForm: FC<DoctorFormProps> = ({
+  open,
+  setOpen,
+  doctor,
+  update = false,
+}) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: update ?{
-      name:doctor?.name || "",
-      email:doctor?.email || "",
-      phone:doctor?.phone || "",
-      address:doctor?.address || "",
-      gender:doctor?.gender || "",
-      department:doctor?.department || "",
-      dob:doctor?.dob.toString() || ""
-    }:{
-      name: "John Doe",
-      email: "johndoe33@gmail.com",
-      phone: "9860098600",
-      address: "Ratnapark, Kathmandu",
-      gender: "male",
-      department: "Cardiology",
-      dob:"2002",
-      password: "Password@123",
-      cpassword: "Password@123",
-    },
+    defaultValues: update
+      ? {
+          name: doctor?.name || "",
+          email: doctor?.email || "",
+          phone: doctor?.phone || "",
+          address: doctor?.address || "",
+          gender: doctor?.gender || "",
+          department: doctor?.department || "",
+          dob: doctor?.dob.toString() || "",
+        }
+      : {
+          name: "John Doe",
+          email: "johndoe33@gmail.com",
+          phone: "9860098600",
+          address: "Ratnapark, Kathmandu",
+          gender: "male",
+          department: "Cardiology",
+          dob: "2002",
+          password: "Password@123",
+          cpassword: "Password@123",
+        },
   });
 
   const router = useRouter();
@@ -153,10 +160,13 @@ const DoctorForm: FC<DoctorFormProps> = ({open,setOpen,doctor,update=false}) => 
       {""}
       <Form {...form}>
         <h1 className="text-center text-3xl font-bold">Create New Doctor</h1>
-      <form className="mx-auto rounded-lg  px-10 py-8  " onSubmit={form.handleSubmit(onSubmit)}>
-       <div className="flex gap-4 my-10">
-       <div className="grow">
-       <FormField
+        <form
+          className="mx-auto rounded-lg  px-10 py-8  "
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <div className="my-10 flex gap-4">
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
@@ -169,9 +179,9 @@ const DoctorForm: FC<DoctorFormProps> = ({open,setOpen,doctor,update=false}) => 
                   </FormItem>
                 )}
               />
-       </div>
-        <div className="grow">
-        <FormField
+            </div>
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
@@ -184,9 +194,9 @@ const DoctorForm: FC<DoctorFormProps> = ({open,setOpen,doctor,update=false}) => 
                   </FormItem>
                 )}
               />
-        </div>
-        <div className="grow">
-        <FormField
+            </div>
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="phone"
                 render={({ field }) => (
@@ -199,26 +209,26 @@ const DoctorForm: FC<DoctorFormProps> = ({open,setOpen,doctor,update=false}) => 
                   </FormItem>
                 )}
               />
-        </div>
-       </div>
-      <div className="flex gap-4 my-16">
-      <div className="grow">
-       <FormField
-                  control={form.control}
-                  name="dob"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>DOB</FormLabel>
-                      <FormControl>
-                        <Input placeholder="2002-09-22" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-       </div>
-       <div className="grow">
-       <FormField
+            </div>
+          </div>
+          <div className="my-16 flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>DOB</FormLabel>
+                    <FormControl>
+                      <Input placeholder="2002-09-22" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="address"
                 render={({ field }) => (
@@ -231,69 +241,69 @@ const DoctorForm: FC<DoctorFormProps> = ({open,setOpen,doctor,update=false}) => 
                   </FormItem>
                 )}
               />
-       </div>
-        <div className="grow">
-        <FormField
-              control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Gender</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {genderOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-        </div>
-      </div>
-        <div className="flex gap-4 my-16">
-        <div className="grow">
-        <FormField
-              control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Department</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {departmentOption.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-        </div>
-        <div className="grow">
-        <FormField
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gender</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {genderOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="my-16 flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Department</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {departmentOption.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
@@ -306,9 +316,9 @@ const DoctorForm: FC<DoctorFormProps> = ({open,setOpen,doctor,update=false}) => 
                   </FormItem>
                 )}
               />
-        </div>
-        <div className="grow">
-        <FormField
+            </div>
+            <div className="grow">
+              <FormField
                 control={form.control}
                 name="cpassword"
                 render={({ field }) => (
@@ -321,10 +331,12 @@ const DoctorForm: FC<DoctorFormProps> = ({open,setOpen,doctor,update=false}) => 
                   </FormItem>
                 )}
               />
-        </div>
-        </div>
-        <Button className="w-full">{`${update ? 'Update':'Add Doctor'}`}</Button>
-      </form>
+            </div>
+          </div>
+          <Button className="w-full">{`${
+            update ? "Update" : "Add Doctor"
+          }`}</Button>
+        </form>
       </Form>
     </div>
   );
