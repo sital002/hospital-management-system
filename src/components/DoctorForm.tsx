@@ -132,7 +132,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
 
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+  const addNewDoctor = async (data: z.infer<typeof FormSchema> ,router:any) => {
     console.log(data);
     try {
       const res = await fetch(
@@ -155,11 +155,56 @@ const DoctorForm: FC<DoctorFormProps> = ({
     }
   };
 
+  const updateDoctor = async ({
+    data,
+  }: {
+    data: z.infer<typeof FormSchema>;
+  }) => {
+    try {
+      console.log(data);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor/${doctor?._id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            name: data?.name,
+            phone: data?.phone,
+            address: data?.address,
+            dob: data?.dob,
+            gender: data.gender,
+          }),
+        },
+      );
+      const json = await res.json();
+      if (json) {
+        toast.success("Detail updated successfully");
+        router.refresh();
+        if (setOpen) {
+          setOpen(false);
+        }
+
+        return;
+      }
+      return toast.error(json.message);
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+  };
+
+  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+    if (update) {
+      updateDoctor({ data });
+    } else {
+      addNewDoctor(data, router );
+    }
+  };
+
   return (
     <div className="w-full ">
       {""}
       <Form {...form}>
-        <h1 className="text-center text-3xl font-bold">Create New Doctor</h1>
+        <h1 className="text-center text-3xl font-bold">{update ? 'Update Doctor':'Create New Doctor'}</h1>
         <form
           className="mx-auto rounded-lg  px-10 py-8  "
           onSubmit={form.handleSubmit(onSubmit)}

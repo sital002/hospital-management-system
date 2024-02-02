@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { StaffType } from "@/database/modals/StaffModal";
 
 interface EditLabtestModalProps {
-  staff?: StaffType;
+  staff: StaffType;
 }
 const EditStaffModal: FC<EditLabtestModalProps> = ({ staff }) => {
   console.log(staff);

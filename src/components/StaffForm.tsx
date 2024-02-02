@@ -70,10 +70,10 @@ const FormSchema = z.object({
   }),
   password: z.string({
     required_error: "Password is required",
-  }),
+  }).optional(),
   cpassword: z.string({
     required_error: "Password is required",
-  }),
+  }).optional(),
   phone: z.string({
     required_error: "Phone is required",
   }),
@@ -124,7 +124,7 @@ const StaffForm: FC<StaffFormProps> = ({
   const router = useRouter();
   // const [showModal, setShowModal] = useState(false);
   console.log(form.watch());
-  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+  const createNewStaff = async (data: z.infer<typeof FormSchema>,router:any) => {
     console.log(data);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`, {
@@ -143,6 +143,50 @@ const StaffForm: FC<StaffFormProps> = ({
       toast.error(err.message);
     }
   };
+
+  const updateStaffDetail = async (data: z.infer<typeof FormSchema>) => {
+    try {
+      console.log(data);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${staff?._id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            name: data?.name,
+            phone: data?.phone,
+            address: data?.address,
+            shift:data?.shift,
+            email:data?.email,
+            dob: data?.dob,
+            gender: data.gender,
+          }),
+        },
+      );
+      const json = await res.json();
+      if (json) {
+        toast.success("Detail updated successfully");
+        router.refresh();
+        if (setOpen) {
+          setOpen(false);
+        }
+
+        return;
+      }
+      return toast.error(json.message);
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+  };
+
+  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+    if(update){
+      updateStaffDetail(data)
+    }
+    else{
+      createNewStaff(data,router)
+    }
+  }
 
   return (
     <div className="max-h-[600px] px-20">
