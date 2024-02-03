@@ -98,6 +98,11 @@ export function PatientTable({ users }: PatientTableProps) {
       enableHiding: false,
     },
     {
+      accessorKey: "_id",
+      header: "ID",
+      cell: ({ row }) => <div className="uppercase">{row.getValue("_id")}</div>,
+    },
+    {
       accessorKey: "name",
       header: "Name",
       cell: ({ row }) => (

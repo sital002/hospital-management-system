@@ -118,8 +118,8 @@ const sideBarOptions = [
     ],
   },
   {
-    name: "Pharmacy",
-    url: "/dashboard/pharmacy",
+    name: "Labtest",
+    url: "/dashboard/labtest",
     icon: <Pill />,
   },
   {
@@ -171,7 +171,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
   console.log(router);
 
   return (
-    <div className="stick max-h-[88vh] overflow-scroll left-0 top-0  w-[20vw]">
+    <div className="stick left-0 top-0 max-h-[88vh] w-[20vw]  overflow-scroll">
       <ul className="my-5  border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
