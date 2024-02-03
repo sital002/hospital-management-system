@@ -153,7 +153,6 @@ export function PatientTable({ users }: PatientTableProps) {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
-            <Button variant="outline">View</Button>
             <EditPatientModal patient={row.original} />
             <Button
               variant="destructive"

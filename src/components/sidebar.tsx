@@ -63,11 +63,6 @@ const sideBarOptions = [
         icon: <PlusSquare />,
       },
       {
-        name: "View Staff",
-        url: "/dashboard/staff",
-        icon: <Eye />,
-      },
-      {
         name: "Manage Staff",
         url: "/dashboard/staff",
         icon: <FolderKanban />,
@@ -85,11 +80,6 @@ const sideBarOptions = [
         icon: <PlusSquare />,
       },
       {
-        name: "View Doctor",
-        url: "/dashboard/doctor",
-        icon: <Eye />,
-      },
-      {
         name: "Manage Doctor",
         url: "/dashboard/doctor",
         icon: <FolderKanban />,
@@ -104,11 +94,6 @@ const sideBarOptions = [
         name: "Register Lab Technician",
         url: "/dashboard/labtechnician/new",
         icon: <PlusSquare />,
-      },
-      {
-        name: "View Lab Technician",
-        url: "/dashboard/labtechnician",
-        icon: <Eye />,
       },
       {
         name: "Manage Lab Technicaian",
@@ -171,7 +156,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
   console.log(router);
 
   return (
-    <div className="stick left-0 top-0 max-h-[88vh] w-[20vw]  overflow-scroll">
+    <div className="stick scrollbar-width-2 left-0 top-0 max-h-[88vh] w-[20vw]  overflow-y-scroll">
       <ul className="my-5  border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
@@ -211,8 +196,8 @@ export default function Sidebar({ role }: { role: string | undefined }) {
               )}
               {option.dropdown && (
                 <ul
-                  className={`h-0 w-full overflow-hidden text-center transition-all duration-300 ${
-                    dropdown[name as keyof DropdownState] ? "h-[180px]" : ""
+                  className={`h-0 w-full overflow-scroll text-center transition-all duration-300 ${
+                    dropdown[name as keyof DropdownState] ? "h-[180px] " : ""
                   }`}
                 >
                   {option.dropdown.map((element, index) => {
