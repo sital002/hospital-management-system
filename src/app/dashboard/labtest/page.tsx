@@ -3,13 +3,18 @@ import React, { useState } from "react";
 import LabtestCard from "./_component/LabtestCard";
 import { TestCategory, testCategory } from "./_utils/testCategory";
 import TestCategoryCard from "./_component/TestCategoryCard";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<TestCategory | null>(
     null,
   );
   const [selectedTests, setSelectedTests] = useState<any[]>([]);
+  const router = useRouter();
   // console.log(selectedTests);
+  const searchParams = new URLSearchParams();
   return (
     <div className="px-2">
       <h2 className="my-3 text-2xl font-extrabold">Select a Category</h2>
@@ -56,6 +61,21 @@ export default function Page() {
             })}
           </div>
         </div>
+      )}
+      {selectedCategory && (
+        <Button
+          disabled={selectedTests.length <= 0 ? true : false}
+          className="my-4 w-full"
+          onClick={() => {
+            console.log(selectedCategory.name);
+            searchParams.append("selectedCategory", selectedCategory.name);
+            searchParams.append("selectedTests", JSON.stringify(selectedTests));
+            console.log(searchParams.toString());
+            router.push(`/dashboard/labtest/new?${searchParams}`, {});
+          }}
+        >
+          Next
+        </Button>
       )}
     </div>
   );
