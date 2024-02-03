@@ -56,30 +56,28 @@ export default function LabtestForm({ data }: { data: PatientType[] }) {
 function PatientCard({ patient }: { patient: PatientType }) {
   return (
     <Card className="my-3 px-3 py-4 ">
-      <div className="my-4 flex gap-x-20">
-        <h2>
-          <span className="font-bold">Patient Name :</span> {patient.name}
-        </h2>
-        <h2>
-          <span className="font-bold">Patient Address :</span> {patient.address}
-        </h2>
-      </div>
-      <div className="my-4 flex gap-x-20">
-        <h2 className="uppercase">
-          <span className="font-bold">Patient Type :</span>{" "}
-          {patient.patientType}
-        </h2>
-        <h2>
-          <span className="font-bold">Date of birth :</span> {patient.dob}
-        </h2>
-      </div>
-      <div className="my-4 flex gap-x-20">
-        <h2 className="uppercase">
-          <span className="font-bold">Admit Type :</span> {patient.admitType}
-        </h2>
-        <h2 className="uppercase">
-          <span className="font-bold">Gender :</span> {patient.gender}
-        </h2>
+      <div className="grid grid-cols-3 gap-y-4 justify-center">
+       
+          <h2>
+            <span className="font-bold">Patient Name :</span> {patient.name}
+          </h2>
+          <h2>
+            <span className="font-bold">Patient Address :</span>{" "}
+            {patient.address}
+          </h2>
+          <h2 className="uppercase">
+            <span className="font-bold">Patient Type :</span>{" "}
+            {patient.patientType}
+          </h2>
+          <h2>
+            <span className="font-bold">Date of birth :</span> {patient.dob}
+          </h2>
+          <h2 className="uppercase">
+            <span className="font-bold">Admit Type :</span> {patient.admitType}
+          </h2>
+          <h2 className="uppercase">
+            <span className="font-bold">Gender :</span> {patient.gender}
+          </h2>
       </div>
     </Card>
   );

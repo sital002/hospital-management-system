@@ -1,5 +1,5 @@
 import { Pill } from "lucide-react";
-import { BloodTest } from "./bloodtest";
+import { BloodTest } from "./CBC";
 import CBCForm from "../_component/CBCForm";
 import LipidProfile from "../_component/LipidProfile";
 

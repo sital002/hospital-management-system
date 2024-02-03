@@ -12,10 +12,10 @@ interface MainComponentProps {
 export function MainComponent({ data }: MainComponentProps) {
   const searchParams = useSearchParams();
   const category = searchParams.get("selectedCategory");
-  console.log(category);
-  const selectedTests = searchParams.get("selectedTests");
+  // console.log(category);
   const selectedCategory = testCategory.find((item) => item.name === category);
-  console.log(selectedCategory);
+  // console.log(selectedCategory);
+  const selectedTests = searchParams.get("selectedTests");
   let selectedTestsArray: any[] = [];
   try {
     selectedTestsArray = JSON.parse(selectedTests || "[]");

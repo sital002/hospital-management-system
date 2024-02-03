@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
 
 const cbcReportDetails = [
   {
@@ -127,6 +128,15 @@ const cbcReportDetails = [
 ];
 
 const CBCForm = () => {
+    const searchParams = useSearchParams();
+    const selectedTests = searchParams.get("selectedTests")
+  let selectedTestsArray: any[] = [];
+  try {
+    selectedTestsArray = JSON.parse(selectedTests || "[]");
+    console.log(selectedTestsArray);
+  } catch (e) {
+    console.log(e);
+  }
   return (
     <div>
       <Table>
@@ -139,22 +149,22 @@ const CBCForm = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {cbcReportDetails.map((data, index) => (
+          {selectedTestsArray.map((data, index) => (
             <TableRow key={index}>
               <TableCell
                 className={data.upper ? "font-bold uppercase" : "capitalize"}
               >
-                {data.investigation}
+                {data.name}
               </TableCell>
               <TableCell>
                 {!data.input ? null : (
                   <Input
-                    defaultValue={data.result}
+                    defaultValue={'5000'}
                     className="h-[40px] w-[100px] p-1 text-sm"
                   />
                 )}
               </TableCell>
-              <TableCell>{data.ref}</TableCell>
+              <TableCell>{data.normalRange}</TableCell>
               <TableCell className="font-bold">{data.unit}</TableCell>
             </TableRow>
           ))}
