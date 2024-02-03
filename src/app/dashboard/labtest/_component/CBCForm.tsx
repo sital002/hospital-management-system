@@ -11,6 +11,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const cbcReportDetails = [
   {
@@ -127,61 +138,112 @@ const cbcReportDetails = [
   },
 ];
 
+const FormSchema = z.object({
+  Hemoglobin: z
+    .string({
+      required_error: "Name is required",
+    })
+    .optional(),
+  RBC: z
+    .string({
+      required_error: "Name is required",
+    })
+    .optional(),
+  WBC: z
+    .string({
+      required_error: "Name is required",
+    })
+    .optional(),
+  Platelets: z
+    .string({
+      required_error: "Name is required",
+    })
+    .optional(),
+  ESR: z
+    .string({
+      required_error: "Name is required",
+    })
+    .optional(),
+});
+
 const CBCForm = () => {
-    const searchParams = useSearchParams();
-    const selectedTests = searchParams.get("selectedTests")
+  const searchParams = useSearchParams();
+  const selectedTests = searchParams.get("selectedTests");
   let selectedTestsArray: any[] = [];
   try {
     selectedTestsArray = JSON.parse(selectedTests || "[]");
-    console.log(selectedTestsArray);
+    // console.log(selectedTestsArray);
   } catch (e) {
     console.log(e);
   }
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      Hemoglobin: "",
+      ESR: "",
+      Platelets: "",
+      RBC: "",
+      WBC: "",
+    },
+  });
+  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+    console.log(data);
+  };
   return (
     <div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Investigation</TableHead>
-            <TableHead>Result</TableHead>
-            <TableHead>Ref.Value</TableHead>
-            <TableHead>Unit</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {selectedTestsArray.map((data, index) => (
-            <TableRow key={index}>
-              <TableCell
-                className={data.upper ? "font-bold uppercase" : "capitalize"}
-              >
-                {data.name}
-              </TableCell>
-              <TableCell>
-                {!data.input ? null : (
-                  <Input
-                    defaultValue={'5000'}
-                    className="h-[40px] w-[100px] p-1 text-sm"
-                  />
-                )}
-              </TableCell>
-              <TableCell>{data.normalRange}</TableCell>
-              <TableCell className="font-bold">{data.unit}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Button className="my-2 mr-3" variant={"destructive"}>
-        DELETE
-      </Button>
-      <Button className="my-2 mr-3" variant={"default"}>
-        PRINT
-      </Button>
-      <Button className="my-2 mr-3 " variant={"outline"}>
-        Preview
-      </Button>
-      <Button className="my-2 mr-3" variant={"default"}>
-        SAVE
-      </Button>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Investigation</TableHead>
+                <TableHead>Result</TableHead>
+                <TableHead>Ref.Value</TableHead>
+                <TableHead>Unit</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {selectedTestsArray.map((data, index) => (
+                <TableRow key={index}>
+                  <TableCell className={"font-bold uppercase"}>
+                    {data.name}
+                  </TableCell>
+                  <TableCell>
+                    <div>
+                      <FormField
+                        control={form.control}
+                        name={data.name}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell>{data.normalRange}</TableCell>
+                  <TableCell className="font-bold">{data.unit}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <Button className="my-2 mr-3" variant={"destructive"}>
+            DELETE
+          </Button>
+          <Button className="my-2 mr-3" variant={"default"}>
+            PRINT
+          </Button>
+          <Button className="my-2 mr-3 " variant={"outline"}>
+            Preview
+          </Button>
+          <Button className="my-2 mr-3" variant={"default"}>
+            SAVE
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };
