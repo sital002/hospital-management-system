@@ -17,6 +17,7 @@ import { PatientType } from "@/database/modals/PatientModel";
 import { SelectPatient } from "./SelectPatient";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const formSchema = z.object({
   patientId: z
@@ -33,6 +34,10 @@ export default function LabtestForm({ data }: { data: PatientType[] }) {
   const [selectedPatient, setSelectedPatient] = useState<PatientType | null>(
     null,
   );
+  const searchParams = useSearchParams();
+  console.log(searchParams.get("selectedCategory"));
+  console.log(searchParams.get("selectedTests"));
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,32 +46,13 @@ export default function LabtestForm({ data }: { data: PatientType[] }) {
   });
   return (
     <div className="px-2">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-          <FormField
-            control={form.control}
-            name="patientId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Select a Patient</FormLabel>
-                <FormControl>
-                  <div>
-                    <SelectPatient
-                      {...field}
-                      data={data}
-                      selectedPatient={selectedPatient}
-                      setSelectedPatient={setSelectedPatient}
-                    />
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {selectedPatient && <PatientCard patient={selectedPatient} />}
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
+      <p>Select a Patient</p>
+      <SelectPatient
+        data={data}
+        selectedPatient={selectedPatient}
+        setSelectedPatient={setSelectedPatient}
+      />
+      {selectedPatient && <PatientCard patient={selectedPatient} />}
     </div>
   );
 }
