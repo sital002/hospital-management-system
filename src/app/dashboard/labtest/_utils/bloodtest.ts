@@ -24,9 +24,4 @@ export const BloodTest = [
     unit: "mm/hr",
     normalRange: "0-20",
   },
-  {
-    name: "CBC",
-    unit: "NA",
-    normalRange: "NA",
-  },
 ];

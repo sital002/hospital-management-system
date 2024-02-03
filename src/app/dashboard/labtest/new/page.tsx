@@ -1,11 +1,9 @@
 import React from "react";
-import LabtestForm from "../_component/LabtestForm";
 import { getUserDetails } from "@/utils/Auth";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { PatientType } from "@/database/modals/PatientModel";
-import CBCForm from "../_component/CBCForm";
-import LipidProfile from "../_component/LipidProfile";
+import { MainComponent } from "./MainComponent";
 
 async function getAllPatients() {
   const authToken = cookies().get("auth_token")?.value;
@@ -24,16 +22,10 @@ async function getAllPatients() {
   }
 }
 export default async function page() {
-  // const user = get
   const user = await getUserDetails();
   if (!user) return redirect("/auth/admin");
 
   const data = await getAllPatients();
 
-  return (
-    <div>
-      <LabtestForm data={data} />
-      <LipidProfile/>
-    </div>
-  );
+  return <MainComponent data={data} />;
 }
