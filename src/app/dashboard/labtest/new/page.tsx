@@ -4,6 +4,8 @@ import { getUserDetails } from "@/utils/Auth";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { PatientType } from "@/database/modals/PatientModel";
+import CBCForm from "../_component/CBCForm";
+import LipidProfile from "../_component/LipidProfile";
 
 async function getAllPatients() {
   const authToken = cookies().get("auth_token")?.value;
@@ -31,6 +33,7 @@ export default async function page() {
   return (
     <div>
       <LabtestForm data={data} />
+      <LipidProfile/>
     </div>
   );
 }

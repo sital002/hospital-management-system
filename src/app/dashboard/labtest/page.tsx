@@ -3,13 +3,14 @@ import React, { useState } from "react";
 import LabtestCard from "./_component/LabtestCard";
 import { TestCategory, testCategory } from "./_utils/testCategory";
 import TestCategoryCard from "./_component/TestCategoryCard";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<TestCategory | null>(
     null,
   );
   const [selectedTests, setSelectedTests] = useState<any[]>([]);
-  // console.log(selectedTests);
+  console.log(selectedTests);
   return (
     <div className="px-2">
       <h2 className="my-3 text-2xl font-extrabold">Select a Category</h2>

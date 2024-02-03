@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input';
     },
     {
         investigation:"HEMOGLOBIN",
-        upper:true
+        upper:true,
     },
     {
         investigation:"Hemoglobin(Hb)",
@@ -139,7 +139,7 @@ const CBCForm = () => {
         {cbcReportDetails.map((data,index) => (
           <TableRow key={index}>
             <TableCell className={data.upper ? "font-bold uppercase":"capitalize"} >{data.investigation}</TableCell>
-           {!data.input ? null : <Input defaultValue={data.result} className='w-[70px] text-sm p-1 h-[40px]'/>}
+           {!data.input ? null : <Input defaultValue={data.result} className='w-[100px] text-sm p-1 h-[40px]'/>}
             <TableCell>{data.ref}</TableCell>
             <TableCell className='font-bold'>{data.unit}</TableCell>
           </TableRow>
