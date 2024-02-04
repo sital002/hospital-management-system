@@ -1,4 +1,4 @@
-import { BrainCircuit, Droplets, GaugeCircle, PersonStanding, Pill, Speech, Theater } from "lucide-react";
+import { Activity, Atom, BrainCircuit, CakeSlice, Cpu, Droplets, GaugeCircle, PersonStanding, Pill, Settings2, Speech, Theater } from "lucide-react";
 import { BloodTest } from "./CBC";
 import CBCForm from "../_component/CBCForm";
 import LFTForm from "../_component/LFTForm";
@@ -11,6 +11,14 @@ import LipidForm from "../_component/LipidForm";
 import { Lipid } from "./Lipid";
 import ProteinForm from "../_component/ProteinForm";
 import { Protein } from "./Protein";
+import SugarForm from "../_component/SugarForm";
+import { SugarTest } from "./SugarTest";
+import { arthritis } from "./Arthritis";
+import ArthritisForm from "../_component/ArthritisForm";
+import { Comprehensive } from "./Comprehensive";
+import ComprehensiveForm from "../_component/ComprehensiveForm";
+import { CoagulationTest } from "./Coagulation";
+import CoagulationForm from "../_component/CoagulationForm";
 
 export interface TestCategory {
   id: number;
@@ -63,7 +71,7 @@ export const testCategory: TestCategory[] = [
     id: 5,
     name: "Lipid Profile",
     description: "MRI",
-    icon: <Pill size={60} />,
+    icon: <Atom size={60} />,
     form: <LipidForm />,
     color: "bg-info",
     tests:Lipid
@@ -76,5 +84,41 @@ export const testCategory: TestCategory[] = [
     form: <ProteinForm />,
     color: "bg-info",
     tests:Protein
+  },
+  {
+    id: 7,
+    name: "Arthritis Profile",
+    description: "MRI",
+    icon: <Activity size={60} />,
+    form: <ArthritisForm />,
+    color: "bg-info",
+    tests:arthritis
+  },
+  {
+    id: 8,
+    name: "Blood Sugar",
+    description: "MRI",
+    icon: <CakeSlice size={60} />,
+    form: <SugarForm />,
+    color: "bg-info",
+    tests:SugarTest
+  },
+  {
+    id: 9,
+    name: "Comprehensive Metabolic Panel(CMP)",
+    description: "MRI",
+    icon: <Cpu size={60} />,
+    form: <ComprehensiveForm />,
+    color: "bg-info",
+    tests:Comprehensive
+  },
+  {
+    id: 10,
+    name: "Coagulation Profile",
+    description: "MRI",
+    icon: <Settings2 size={60} />,
+    form: <CoagulationForm />,
+    color: "bg-info",
+    tests:CoagulationTest
   },
 ];
