@@ -1,7 +1,16 @@
-import { Pill } from "lucide-react";
+import { BrainCircuit, Droplets, GaugeCircle, PersonStanding, Pill, Speech, Theater } from "lucide-react";
 import { BloodTest } from "./CBC";
 import CBCForm from "../_component/CBCForm";
-import LipidProfile from "../_component/LipidProfile";
+import LFTForm from "../_component/LFTForm";
+import { LFTTest } from "./LFT";
+import { KFTTest } from "./KFT";
+import KFTForm from "../_component/KFTForm";
+import ThyroidForm from "../_component/ThyroidForm";
+import { ThyroidTest } from "./Thyroid";
+import LipidForm from "../_component/LipidForm";
+import { Lipid } from "./Lipid";
+import ProteinForm from "../_component/ProteinForm";
+import { Protein } from "./Protein";
 
 export interface TestCategory {
   id: number;
@@ -16,43 +25,56 @@ export interface TestCategory {
 export const testCategory: TestCategory[] = [
   {
     id: 1,
-    name: "CBC",
+    name: "Complete Blood Count (CBC)",
     description: "Blood Test",
-    icon: <Pill size={60} />,
+    icon: <Droplets size={60} />,
     color: "bg-primary",
     tests: BloodTest,
     form: <CBCForm />,
   },
   {
     id: 2,
-    name: "Urine Test",
+    name: "Liver Function Test (LFT)",
     description: "Urine Test",
-    icon: <Pill size={60} />,
+    icon: <GaugeCircle size={60} />,
     color: "bg-success",
-    form: <CBCForm />,
+    tests: LFTTest,
+    form: <LFTForm />,
   },
   {
     id: 3,
-    name: "X-Ray",
+    name: "Kidney Function Test (KFT)",
     description: "X-Ray",
-    icon: <Pill size={60} />,
+    icon: <BrainCircuit size={50} />,
     color: "bg-warning",
-    form: <CBCForm />,
+    tests:KFTTest,
+    form: <KFTForm />,
   },
   {
     id: 4,
-    name: "ECG",
+    name: "Thyroid Function Test (TFT)",
     description: "ECG",
-    icon: <Pill size={60} />,
+    icon: <Theater size={60} />,
     color: "bg-danger",
-    form: <CBCForm />,
+    tests:ThyroidTest,
+    form: <ThyroidForm />,
   },
   {
     id: 5,
-    name: "LIpid Profile",
+    name: "Lipid Profile",
     description: "MRI",
     icon: <Pill size={60} />,
-    form: <LipidProfile />,
+    form: <LipidForm />,
     color: "bg-info",
+    tests:Lipid
+  },
+  {
+    id: 6,
+    name: "Protein Fraction",
+    description: "MRI",
+    icon: <PersonStanding size={60} />,
+    form: <ProteinForm />,
+    color: "bg-info",
+    tests:Protein
   },
 ];

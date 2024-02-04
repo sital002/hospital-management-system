@@ -13,7 +13,7 @@ export default function Page() {
   );
   const [selectedTests, setSelectedTests] = useState<any[]>([]);
   const router = useRouter();
-  // console.log(selectedTests);
+  console.log(selectedCategory?.tests);
   const searchParams = new URLSearchParams();
   return (
     <div className="px-2">

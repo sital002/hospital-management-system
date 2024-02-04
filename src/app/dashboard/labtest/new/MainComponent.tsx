@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import LabtestForm from "../_component/LabtestForm";
-import LipidProfile from "../_component/LipidProfile";
 import { PatientType } from "@/database/modals/PatientModel";
 import { useSearchParams } from "next/navigation";
 import { testCategory } from "../_utils/testCategory";

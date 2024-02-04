@@ -166,7 +166,7 @@ const FormSchema = z.object({
     .optional(),
 });
 
-const CBCForm = () => {
+const ProteinForm = () => {
   const searchParams = useSearchParams();
   const selectedTests = searchParams.get("selectedTests");
   let selectedTestsArray: any[] = [];
@@ -209,8 +209,8 @@ const CBCForm = () => {
       <TableCell className={"font-bold uppercase"}>{data.name}</TableCell>
     </TableRow>
     {data.children && data.children.map((child:any, childIndex:any) => (
-      <TableRow  key={`${index}-${childIndex}`}>
-        <TableCell className={"uppercase"}>{child.investigation}</TableCell>
+      <TableRow key={`${index}-${childIndex}`}>
+        <TableCell className={" uppercase"}>{child.investigation}</TableCell>
         <TableCell>
           <div>
             <FormField
@@ -254,4 +254,4 @@ const CBCForm = () => {
   );
 };
 
-export default CBCForm;
+export default ProteinForm;
