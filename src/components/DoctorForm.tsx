@@ -97,10 +97,10 @@ const departmentOption = [
 ];
 
 type DoctorFormProps = {
-  update: boolean;
-  doctor: DoctorType;
-  open: boolean;
-  setOpen: (value: boolean) => void;
+  update?: boolean;
+  doctor?: DoctorType;
+  open?: boolean;
+  setOpen?: (value: boolean) => void;
 };
 
 const DoctorForm: FC<DoctorFormProps> = ({

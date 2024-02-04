@@ -52,10 +52,10 @@ const genderOptions = [
 ];
 
 type LabTechnicianFormProps = {
-  update: boolean;
-  labtechnician: LabtechnicianType;
-  open: boolean;
-  setOpen: (value: boolean) => void;
+  update?: boolean;
+  labtechnician?: LabtechnicianType;
+  open?: boolean;
+  setOpen?: (value: boolean) => void;
 };
 
 const FormSchema = z.object({

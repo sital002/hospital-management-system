@@ -52,10 +52,10 @@ const workShift = [
 ];
 
 type StaffFormProps = {
-  update: boolean;
-  staff: StaffType;
-  open: boolean;
-  setOpen: (value: boolean) => void;
+  update?: boolean;
+  staff?: StaffType;
+  open?: boolean;
+  setOpen?: (value: boolean) => void;
 };
 
 type UpdateProps = StaffFormProps["update"] extends true ? StaffFormProps : {};
