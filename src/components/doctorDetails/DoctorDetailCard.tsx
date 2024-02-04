@@ -1,27 +1,49 @@
-import React from "react"
-import { formatDate } from "@/utils/formatDate"
-import { DoctorType } from "@/database/modals/DoctorModel"
-import Image from "next/image"
+import React from "react";
+import { DoctorType } from "@/database/modals/DoctorModel";
+import Image from "next/image";
 
-const DoctorDetailCard = ({doctor}:{doctor:DoctorType}) => {
-
+const DoctorDetailCard = ({ doctor }: { doctor: DoctorType }) => {
   return (
-    <div className="bg-neutral-50 rounded-lg overflow-hidden shadow-md max-w-[570px] w-full">
-    <div className="p-4">
-      <h2 className="text-lg font-bold text-gray-800 mb-6">{doctor.name} Profile</h2>
-      <Image width={80} height={80} alt="person-image" src="" className="w-20 h-20 rounded-full mx-auto mb-4"/>
-      <div className="text-gray-700 flex flex-col gap-10 p-6">
-        <p><span className="font-bold mr-16">Full Name:</span> {doctor.name}</p>
-        <p><span className="font-bold mr-16">Mobile:</span> {doctor.phone}</p>
-        <p><span className="font-bold mr-16">Address:</span>{doctor.address}</p>
-        <p><span className="font-bold mr-16">Email:</span>{doctor.email}</p>
-        <p><span className="font-bold mr-16">Department:</span>{doctor.department}</p>
-        <p><span className="font-bold mr-16">Date Of Birth:</span>{formatDate(doctor.dob)}</p>
-        {/* <p><span className="font-bold mr-16">Data Recorded:</span>{staff.updatedAt}</p> */}
+    <div className="w-full max-w-[570px] overflow-hidden rounded-lg bg-neutral-50 shadow-md">
+      <div className="p-4">
+        <h2 className="mb-6 text-lg font-bold text-gray-800">
+          {doctor.name} Profile
+        </h2>
+        <Image
+          width={80}
+          height={80}
+          alt="person-image"
+          src=""
+          className="mx-auto mb-4 h-20 w-20 rounded-full"
+        />
+        <div className="flex flex-col gap-10 p-6 text-gray-700">
+          <p>
+            <span className="mr-16 font-bold">Full Name:</span> {doctor.name}
+          </p>
+          <p>
+            <span className="mr-16 font-bold">Mobile:</span> {doctor.phone}
+          </p>
+          <p>
+            <span className="mr-16 font-bold">Address:</span>
+            {doctor.address}
+          </p>
+          <p>
+            <span className="mr-16 font-bold">Email:</span>
+            {doctor.email}
+          </p>
+          <p>
+            <span className="mr-16 font-bold">Department:</span>
+            {doctor.department}
+          </p>
+          <p>
+            <span className="mr-16 font-bold">Date Of Birth:</span>
+            {doctor.dob}
+          </p>
+          {/* <p><span className="font-bold mr-16">Data Recorded:</span>{staff.updatedAt}</p> */}
+        </div>
       </div>
     </div>
-  </div>
-  )
-}
+  );
+};
 
-export default DoctorDetailCard
+export default DoctorDetailCard;

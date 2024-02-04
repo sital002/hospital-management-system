@@ -1,5 +1,4 @@
 import { PatientType } from "@/database/modals/PatientModel";
-import PatientDashboard from "@/components/patient/PatientDashboard";
 import Sidebar from "@/components/sidebar";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";

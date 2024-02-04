@@ -1,5 +1,3 @@
-
-import StaffDashboard from "@/components/staff/StaffDashboard";
 import Sidebar from "@/components/sidebar";
 import { type StaffType } from "@/database/modals/StaffModal";
 import { getUserDetails } from "@/utils/Auth";

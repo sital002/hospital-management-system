@@ -1,5 +1,4 @@
 import { LabTechnicaianTable } from "@/components/labtechnician-data-table";
-import LabTechnicianDashboard from "@/components/labtechnician/LabTechnicianDashboard";
 import Sidebar from "@/components/sidebar";
 import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
 import { getUserDetails } from "@/utils/Auth";
