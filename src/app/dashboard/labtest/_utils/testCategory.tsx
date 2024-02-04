@@ -1,4 +1,17 @@
-import { Activity, Atom, BrainCircuit, CakeSlice, Cpu, Droplets, GaugeCircle, PersonStanding, Pill, Settings2, Speech, Theater } from "lucide-react";
+import {
+  Activity,
+  Atom,
+  BrainCircuit,
+  CakeSlice,
+  Cpu,
+  Droplets,
+  GaugeCircle,
+  PersonStanding,
+  Pill,
+  Settings2,
+  Speech,
+  Theater,
+} from "lucide-react";
 import { BloodTest } from "./CBC";
 import CBCForm from "../_component/CBCForm";
 import LFTForm from "../_component/LFTForm";
@@ -55,7 +68,7 @@ export const testCategory: TestCategory[] = [
     description: "X-Ray",
     icon: <BrainCircuit size={50} />,
     color: "bg-warning",
-    tests:KFTTest,
+    tests: KFTTest,
     form: <KFTForm />,
   },
   {
@@ -64,7 +77,7 @@ export const testCategory: TestCategory[] = [
     description: "ECG",
     icon: <Theater size={60} />,
     color: "bg-danger",
-    tests:ThyroidTest,
+    tests: ThyroidTest,
     form: <ThyroidForm />,
   },
   {
@@ -74,7 +87,7 @@ export const testCategory: TestCategory[] = [
     icon: <Atom size={60} />,
     form: <LipidForm />,
     color: "bg-info",
-    tests:Lipid
+    tests: Lipid,
   },
   {
     id: 6,
@@ -83,7 +96,7 @@ export const testCategory: TestCategory[] = [
     icon: <PersonStanding size={60} />,
     form: <ProteinForm />,
     color: "bg-info",
-    tests:Protein
+    tests: Protein,
   },
   {
     id: 7,
@@ -92,7 +105,7 @@ export const testCategory: TestCategory[] = [
     icon: <Activity size={60} />,
     form: <ArthritisForm />,
     color: "bg-info",
-    tests:arthritis
+    tests: arthritis,
   },
   {
     id: 8,
@@ -101,7 +114,7 @@ export const testCategory: TestCategory[] = [
     icon: <CakeSlice size={60} />,
     form: <SugarForm />,
     color: "bg-info",
-    tests:SugarTest
+    tests: SugarTest,
   },
   {
     id: 9,
@@ -110,7 +123,7 @@ export const testCategory: TestCategory[] = [
     icon: <Cpu size={60} />,
     form: <ComprehensiveForm />,
     color: "bg-info",
-    tests:Comprehensive
+    tests: Comprehensive,
   },
   {
     id: 10,
@@ -119,6 +132,6 @@ export const testCategory: TestCategory[] = [
     icon: <Settings2 size={60} />,
     form: <CoagulationForm />,
     color: "bg-info",
-    tests:CoagulationTest
+    tests: CoagulationTest,
   },
 ];

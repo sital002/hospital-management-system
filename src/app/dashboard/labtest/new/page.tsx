@@ -3,7 +3,7 @@ import { getUserDetails } from "@/utils/Auth";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { PatientType } from "@/database/modals/PatientModel";
-import { MainComponent } from "./MainComponent";
+import { MainComponent } from "./_components/MainComponent";
 
 async function getAllPatients() {
   const authToken = cookies().get("auth_token")?.value;

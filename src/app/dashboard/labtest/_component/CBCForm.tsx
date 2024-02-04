@@ -22,127 +22,14 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-// const cbcReportDetails = [
-//   {
-//     investigation: "Primary Sample Test",
-//     result: "Blood",
-//   },
-//   {
-//     investigation: "HEMOGLOBIN",
-//     upper: true,
-//   },
-//   {
-//     investigation: "Hemoglobin(Hb)",
-//     result: "10.3",
-//     ref: "20-30",
-//     unit: "g/dL",
-//     input: true,
-//   },
-//   {
-//     investigation: "RBC COUNT",
-//     upper: true,
-//   },
-//   {
-//     investigation: "Total RBC Count",
-//     result: "5.2",
-//     ref: "5-10",
-//     unit: "mill/cumm",
-//     input: true,
-//   },
-//   {
-//     investigation: "blood indicces",
-//     upper: true,
-//   },
-//   {
-//     investigation: "packed cell volume(PCV)",
-//     result: "5.2",
-//     ref: "5-10",
-//     unit: "%",
-//     input: true,
-//   },
-//   {
-//     investigation: "mean corpuscular volume",
-//     result: "5.2",
-//     ref: "5-10",
-//     unit: "%",
-//     input: true,
-//   },
-//   {
-//     investigation: "RDW",
-//     result: "5.2",
-//     ref: "5-10",
-//     unit: "%",
-//     input: true,
-//   },
-//   {
-//     investigation: "wbc count",
-//     upper: true,
-//   },
-//   {
-//     investigation: "total wbc count",
-//     result: "60000",
-//     ref: "500000-100000",
-//     unit: "cumm",
-//     input: true,
-//   },
-//   {
-//     investigation: "differential wbc count",
-//     upper: true,
-//   },
-//   {
-//     investigation: "neutrophils",
-//     result: "60",
-//     ref: "50-80",
-//     unit: "cumm",
-//     input: true,
-//   },
-//   {
-//     investigation: "lymphocytes",
-//     result: "60",
-//     ref: "540-80",
-//     unit: "cumm",
-//     input: true,
-//   },
-//   {
-//     investigation: "eosinophils",
-//     result: "60",
-//     ref: "540-80",
-//     unit: "cumm",
-//     input: true,
-//   },
-//   {
-//     investigation: "monocytes",
-//     result: "60",
-//     ref: "540-80",
-//     unit: "cumm",
-//     input: true,
-//   },
-//   {
-//     investigation: "basophils",
-//     result: "60",
-//     ref: "540-80",
-//     unit: "cumm",
-//     input: true,
-//   },
-//   {
-//     investigation: "platelet count",
-//     upper: true,
-//   },
-//   {
-//     investigation: "total platelet count",
-//     result: "6000",
-//     ref: "540000-80000",
-//     unit: "cumm",
-//     input: true,
-//   },
-// ];
+import { BloodTestType } from "../_utils/CBC";
 
 const FormSchema = z.object({
-    Hemoglobin: z
+  Hemoglobin: z
     .string({
       required_error: "Name is required",
     })
+    .min(1, "Hemoglobin is required")
     .optional(),
   RBC: z
     .string({
@@ -169,7 +56,7 @@ const FormSchema = z.object({
 const CBCForm = () => {
   const searchParams = useSearchParams();
   const selectedTests = searchParams.get("selectedTests");
-  let selectedTestsArray: any[] = [];
+  let selectedTestsArray: BloodTestType[] = [];
   try {
     selectedTestsArray = JSON.parse(selectedTests || "[]");
     // console.log(selectedTestsArray);
@@ -203,51 +90,48 @@ const CBCForm = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-            {selectedTestsArray.map((data, index) => (
-  <React.Fragment key={index}>
-    <TableRow>
-      <TableCell className={"font-bold uppercase"}>{data.name}</TableCell>
-    </TableRow>
-    {data.children && data.children.map((child:any, childIndex:any) => (
-      <TableRow  key={`${index}-${childIndex}`}>
-        <TableCell className={"uppercase"}>{child.investigation}</TableCell>
-        <TableCell>
-          <div>
-            <FormField
-              control={form.control}
-              name={child.investigation}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input className="w-[80px] h-[40px]" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </TableCell>
-        <TableCell>{child.normalRange}</TableCell>
-        <TableCell className="font-bold">{child.unit}</TableCell>
-      </TableRow>
-    ))}
-  </React.Fragment>
-))}
-
+              {selectedTestsArray.map((data, index) => (
+                <React.Fragment key={index}>
+                  <TableRow>
+                    <TableCell className={"font-bold uppercase"}>
+                      {data.label}
+                    </TableCell>
+                  </TableRow>
+                  {data.children &&
+                    data.children.map((child: any, childIndex: number) => (
+                      <TableRow key={`${index}-${childIndex}`}>
+                        <TableCell className={"uppercase"}>
+                          {child.investigation}
+                        </TableCell>
+                        <TableCell>
+                          <div>
+                            <FormField
+                              control={form.control}
+                              name={child.investigation}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      className="h-[40px] w-[80px]"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        </TableCell>
+                        <TableCell>{child.normalRange}</TableCell>
+                        <TableCell className="font-bold">
+                          {child.unit}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </React.Fragment>
+              ))}
             </TableBody>
           </Table>
-          <Button className="my-2 mr-3" variant={"destructive"}>
-            DELETE
-          </Button>
-          <Button className="my-2 mr-3" variant={"default"}>
-            PRINT
-          </Button>
-          <Button className="my-2 mr-3 " variant={"outline"}>
-            Preview
-          </Button>
-          <Button className="my-2 mr-3" variant={"default"}>
-            SAVE
-          </Button>
         </form>
       </Form>
     </div>

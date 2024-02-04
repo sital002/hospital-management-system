@@ -1,19 +1,35 @@
-export const BloodTest = [
+type BloodTestChildType = {
+  investigation: string;
+  result?: string;
+  normalRange: string;
+  unit: string;
+  input: boolean;
+};
+export type BloodTestType = {
+  name: string;
+  label: string;
+  input: boolean;
+  children: BloodTestChildType[];
+};
+
+export const BloodTest: BloodTestType[] = [
   {
-    name: "Hemoglobin",
-    input:false,
+    label: "Hemoglobin",
+    name: "hemoglobin",
+    input: false,
     children: [
       {
         investigation: "Hemoglobin(Hb)",
         normalRange: "20-50",
         unit: "g/dgL",
         input: true,
-      }
-    ]
+      },
+    ],
   },
   {
-    name: "RBC Count",
-    input:false,
+    label: "RBC",
+    name: "RBC",
+    input: false,
     children: [
       {
         investigation: "Total RBC Count",
@@ -22,12 +38,12 @@ export const BloodTest = [
         unit: "mill/cumm",
         input: true,
       },
-
-    ]
+    ],
   },
   {
-    name: "Blood Indicces",
-    input:false,
+    label: "Blood Indicces",
+    name: "bloodIndicces",
+    input: false,
     children: [
       {
         investigation: "packed cell volume(PCV)",
@@ -49,12 +65,13 @@ export const BloodTest = [
         normalRange: "5-10",
         unit: "%",
         input: true,
-      }
-    ]
+      },
+    ],
   },
   {
+    label: "WBC",
     name: "WBC",
-    input:false,
+    input: false,
     children: [
       {
         investigation: "total wbc count",
@@ -62,12 +79,13 @@ export const BloodTest = [
         normalRange: "500000-100000",
         unit: "cumm",
         input: true,
-      }
-    ]
+      },
+    ],
   },
   {
-    name: "differential wbc count",
-    input:false,
+    name: "differentialWBCount",
+    label: "differential wbc count",
+    input: false,
     children: [
       {
         investigation: "neutrophils",
@@ -104,11 +122,12 @@ export const BloodTest = [
         unit: "cumm",
         input: true,
       },
-    ]
+    ],
   },
   {
-    name: "platelet count",
-    input:false,
+    name: "platletCount",
+    label: "platelet count",
+    input: false,
     children: [
       {
         investigation: "total platelet count",
@@ -117,6 +136,6 @@ export const BloodTest = [
         unit: "cumm",
         input: true,
       },
-    ]
-  }
+    ],
+  },
 ];
