@@ -88,6 +88,13 @@ export default function StaffDashboard({ users }: PatientDashboardProps) {
           ))}
         </tbody>
       </table>
+      {setShowEditModal ? (
+        <EditStaffModal
+          show={showEditModal}
+          staff={seletectedStaff}
+          setShow={setShowEditModal}
+        />
+      ) : null}
     </div>
   );
 }

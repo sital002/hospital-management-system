@@ -395,7 +395,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
               </div>
             </>
           ) : null}
-          <Button className="w-full my-6">{`${
+          <Button className="my-6 w-full">{`${
             update ? "Update" : "Add Doctor"
           }`}</Button>
         </form>

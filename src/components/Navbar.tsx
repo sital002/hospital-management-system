@@ -6,8 +6,8 @@ import { DarkModeToggle } from "./common/dark-mode-toggle";
 import { Button } from "./ui/button";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import maleImage from '@/assets/undraw_male_avatar_g98d.svg'
-import femaleImage from '@/assets/undraw_female_avatar_efig.svg'
+import maleImage from "@/assets/undraw_male_avatar_g98d.svg";
+import femaleImage from "@/assets/undraw_female_avatar_efig.svg";
 export default async function Navbar() {
   const user = await getUserDetails();
   const handleLogout = async () => {
@@ -18,9 +18,9 @@ export default async function Navbar() {
     redirect("/auth/admin");
   };
   // console.log("The user is ", user);
-  let image
-  if(user){
-    image =user.data.gender==='male' ? maleImage :femaleImage
+  let image;
+  if (user) {
+    image = user.data.gender === "male" ? maleImage : femaleImage;
   }
   return (
     <nav className=" relative w-full p-2  ">

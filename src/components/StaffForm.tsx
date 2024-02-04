@@ -58,7 +58,7 @@ type StaffFormProps = {
   setOpen: (value: boolean) => void;
 };
 
-type UpdateProps = StaffFormProps['update'] extends true ? StaffFormProps : {};
+type UpdateProps = StaffFormProps["update"] extends true ? StaffFormProps : {};
 const FormSchema = z.object({
   email: z
     .string({
@@ -68,12 +68,16 @@ const FormSchema = z.object({
   name: z.string({
     required_error: "Name is required",
   }),
-  password: z.string({
-    required_error: "Password is required",
-  }).optional(),
-  cpassword: z.string({
-    required_error: "Password is required",
-  }).optional(),
+  password: z
+    .string({
+      required_error: "Password is required",
+    })
+    .optional(),
+  cpassword: z
+    .string({
+      required_error: "Password is required",
+    })
+    .optional(),
   phone: z.string({
     required_error: "Phone is required",
   }),
@@ -124,7 +128,10 @@ const StaffForm: FC<StaffFormProps> = ({
   const router = useRouter();
   // const [showModal, setShowModal] = useState(false);
   console.log(form.watch());
-  const createNewStaff = async (data: z.infer<typeof FormSchema>,router:any) => {
+  const createNewStaff = async (
+    data: z.infer<typeof FormSchema>,
+    router: any,
+  ) => {
     console.log(data);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`, {
@@ -155,8 +162,8 @@ const StaffForm: FC<StaffFormProps> = ({
             name: data?.name,
             phone: data?.phone,
             address: data?.address,
-            shift:data?.shift,
-            email:data?.email,
+            shift: data?.shift,
+            email: data?.email,
             dob: data?.dob,
             gender: data.gender,
           }),
@@ -180,18 +187,19 @@ const StaffForm: FC<StaffFormProps> = ({
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
-    if(update){
-      updateStaffDetail(data)
+    if (update) {
+      updateStaffDetail(data);
+    } else {
+      createNewStaff(data, router);
     }
-    else{
-      createNewStaff(data,router)
-    }
-  }
+  };
 
   return (
     <div className="max-h-[600px] px-6">
       <Form {...form}>
-        <h1 className=" text-center text-4xl font-semibold">Create New Staff</h1>
+        <h1 className=" text-center text-4xl font-semibold">
+          Create New Staff
+        </h1>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="my-4 flex gap-4 ">
             <div className="grow">
@@ -225,21 +233,21 @@ const StaffForm: FC<StaffFormProps> = ({
               />
             </div>
           </div>
-            <div className="grow">
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ratnangar-3" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+          <div className="grow">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ratnangar-3" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <div className="my-10 flex gap-4 ">
             <div className="grow">
               <FormField
@@ -255,121 +263,119 @@ const StaffForm: FC<StaffFormProps> = ({
                   </FormItem>
                 )}
               />
-                </div>
-              <div className="grow">
-                <FormField
-                  control={form.control}
-                  name="dob"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>DOB</FormLabel>
-                      <FormControl>
-                        <Input placeholder="2002-09-22" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>DOB</FormLabel>
+                    <FormControl>
+                      <Input placeholder="2002-09-22" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
-         <div className="flex gap-4">
+          <div className="flex gap-4">
             <div className="grow">
-            <FormField
-              control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Gender</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {genderOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gender</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {genderOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <div className="grow">
-            <FormField
-              control={form.control}
-              name="shift"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Shift</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {workShift.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="shift"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Shift</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {workShift.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-         </div>
-          {
-            !update ?(
-              <>
+          </div>
+          {!update ? (
+            <>
               <div className="my-10 flex gap-4 ">
-            <div className="grow">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="*********" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="grow">
-              <FormField
-                control={form.control}
-                name="cpassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="*********" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-              </>
-            ):null
-          }
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="cpassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            </>
+          ) : null}
           <Button type="submit" className="w-full">
             Submit
           </Button>

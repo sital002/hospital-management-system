@@ -244,7 +244,7 @@ const PatientForm = ({
             </div>
           </div>
 
-          <div className="grow my-6">
+          <div className="my-6 grow">
             <FormField
               control={form.control}
               name="address"
@@ -260,7 +260,7 @@ const PatientForm = ({
             />
           </div>
 
-          <div className="grow my-6">
+          <div className="my-6 grow">
             <FormField
               control={form.control}
               name="dob"
