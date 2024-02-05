@@ -6,7 +6,9 @@ import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
+    console.log("Request", req);
     const { email, password } = await req.json();
+    console.log(email);
     if (!email || !password)
       return new Response(
         JSON.stringify({
@@ -17,9 +19,7 @@ export async function POST(req: NextRequest) {
       );
     await connectToDB();
 
-    const user = (await Staff.findOne({ email })).select(
-      "+password",
-    ) as StaffType;
+    const user = (await Staff.findOne({ email })) as StaffType;
     if (!user)
       return new Response(
         JSON.stringify({

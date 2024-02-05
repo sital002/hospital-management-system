@@ -118,7 +118,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
           phone: doctor?.phone || "",
           address: doctor?.address || "",
           gender: doctor?.gender || "",
-          department: doctor?.department || "",
+          department: doctor?.department ?? departmentOption[0].value,
           dob: doctor?.dob.toString() || "",
         }
       : {
@@ -127,7 +127,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
           phone: "9860098600",
           address: "Ratnapark, Kathmandu",
           gender: "male",
-          department: "Cardiology",
+          department: "dentiest",
           dob: "2002",
           password: "Password@123",
           cpassword: "Password@123",
@@ -179,6 +179,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
             address: data?.address,
             dob: data?.dob,
             gender: data.gender,
+            department: data.department,
           }),
         },
       );
