@@ -1,19 +1,36 @@
 "use client";
 
 import React, { FC, useState } from "react";
-import Label from "./common/Label";
-import Select from "./common/Select";
-import Input from "./common/Input";
-import Button from "./common/Button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { X } from "lucide-react";
 import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 type FormInputs = {
   name: string;
-  id?:string;
+  id?: string;
   email: string;
   password: string;
   cpassword: string;
@@ -34,31 +51,61 @@ const genderOptions = [
   },
 ];
 
-interface LabTechnicianFormProps {
-  show?: boolean;
-  setShow?: (e: boolean) => void;
-  labtechnician?: LabtechnicianType;
+type LabTechnicianFormProps = {
   update?: boolean;
-}
+  labtechnician?: LabtechnicianType;
+  open?: boolean;
+  setOpen?: (value: boolean) => void;
+};
+
+const FormSchema = z.object({
+  email: z
+    .string({
+      required_error: "Please select an email to display.",
+    })
+    .email(),
+  name: z.string({
+    required_error: "Name is required",
+  }),
+  password: z
+    .string({
+      required_error: "Password is required",
+    })
+    .optional(),
+  cpassword: z
+    .string({
+      required_error: "Password is required",
+    })
+    .optional(),
+  phone: z.string({
+    required_error: "Phone is required",
+  }),
+  address: z.string({
+    required_error: "Address is required",
+  }),
+  dob: z.string({
+    required_error: "date is requireds",
+  }),
+  gender: z.string({
+    required_error: "Gender is required",
+  }),
+});
 
 const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
-  show,
-  setShow,
+  open,
+  setOpen,
   labtechnician,
   update = false,
 }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormInputs>({
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
     defaultValues: update
       ? {
-          name: labtechnician?.name,
-          email: labtechnician?.email,
-          address: labtechnician?.address,
-          phone: labtechnician?.phone,
-          dob: labtechnician?.dob,
+          name: labtechnician?.name || "",
+          email: labtechnician?.email || "",
+          address: labtechnician?.address || "",
+          phone: labtechnician?.phone || "",
+          dob: labtechnician?.dob.toString() || "",
         }
       : {
           name: "John Doe",
@@ -66,7 +113,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
           phone: "9860098600",
           address: "Ratnapark, Kathmandu",
           gender: "male",
-          dob: null,
+          dob: "2002-03-23",
           password: "Password@123",
           cpassword: "Password@123",
         },
@@ -75,8 +122,13 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
   const router = useRouter();
   // const [showModal, setShowModal] = useState(false);
 
-  const addNewLabTechnician: SubmitHandler<FormInputs> = async (data:FormInputs) => {
-    
+  const addNewLabTechnician = async ({
+    data,
+    router,
+  }: {
+    data: z.infer<typeof FormSchema>;
+    router: any;
+  }) => {
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician`,
@@ -99,26 +151,30 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
     }
   };
 
-  const updateLabTechnicianDetails = async ({ data,router }: { data: FormInputs,router:any }) => {
+  const updateLabTechnicianDetails = async ({
+    data,
+  }: {
+    data: z.infer<typeof FormSchema>;
+  }) => {
     try {
-      console.log('labdata: ',data);
+      // console.log('labdata: ',data);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician/${data?.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician/${labtechnician?._id}`,
         {
           method: "PUT",
           body: JSON.stringify({
-            name: data?.name,
-            email: data?.email,
-            address: data?.address,
-            phone: data?.phone,
-            dob: data?.dob,
+            name: data.name,
+            email: data.email,
+            address: data.address,
+            phone: data.phone,
+            dob: data.dob,
           }),
         },
       );
       const json = await res.json();
       if (json) {
-        if (setShow) {
-          setShow(false);
+        if (setOpen) {
+          setOpen(false);
         }
         toast.success("Detail updated successfully");
         router.refresh();
@@ -131,145 +187,177 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
     }
   };
 
-  const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    console.log('edit data',data);
+  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+    console.log("edit data", data);
     if (update) {
-      updateLabTechnicianDetails({ data,router });
+      updateLabTechnicianDetails({ data });
     } else {
-      addNewLabTechnician(data);
+      addNewLabTechnician({ data, router });
     }
   };
 
   return (
     <div className="w-full">
-      {" "}
-      <form className="mx-auto rounded-lg  px-4 py-8 mt-4 max-w-[600px] bg-neutral-200" onSubmit={handleSubmit(onSubmit)}>
-        <div className="ml-auto w-fit cursor-pointer "></div>
+      <Form {...form}>
         <h1 className="text-center text-3xl font-medium">
           {update ? "Update LabTechnician" : "Create New LabTechnician"}
         </h1>
-        <Label>Name</Label>
-        <Input
-          {...register("name", {
-            required: {
-              value: true,
-              message: "Name is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Name must be less than 64 characters long",
-            },
-          })}
-          placeholder="John Doe"
-        />
-        <p className="text-red-800">{errors.name?.message}</p>
-        <Label>Email</Label>
-        <Input
-          {...register("email", {
-            required: {
-              value: true,
-              message: "Email is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Email must be less than 64 characters long",
-            },
-          })}
-          placeholder="johndoe@gmail.com"
-        />
-        <p className="text-red-800">{errors.email?.message}</p>
-        <Label>Phone</Label>
-        <Input
-          {...register("phone", {
-            required: {
-              value: true,
-              message: "Phone is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Phone must be less than 64 characters long",
-            },
-          })}
-          placeholder="+97700000000"
-        />
-        <p className="text-red-800">{errors.phone?.message}</p>
-        <Label>DOB</Label>
-        <Input
-          {...register("dob", {
-            required: {
-              value: true,
-              message: "DOB is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "DOb must be less than 64 characters long",
-            },
-          })}
-          placeholder="2002/01/01"
-          type="date"
-        />
-        <Label>Address</Label>
-        <Input
-          {...register("address", {
-            required: {
-              value: true,
-              message: "Address is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Address must be less than 64 characters long",
-            },
-          })}
-          placeholder="Ratnapark, Kathmandu"
-        />
-        <p className="text-red-800">{errors.address?.message}</p>
-        <Label>Gender</Label>
-        <Select
-          options={genderOptions}
-          {...register("gender", {
-            required: {
-              value: true,
-              message: "Gender is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.gender?.message}</p>
-        {!update ?
-        <>
-        <Label>Password</Label>
-        <Input
-          {...register("password", {
-            required: {
-              value: true,
-              message: "Password is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Password must be less than 64 characters long",
-            },
-          })}
-          placeholder="xxxxxxxxx"
-        />
-        <p className="text-red-800">{errors.password?.message}</p>
-        <Label>Confirm password</Label>
-        <Input
-          {...register("cpassword", {
-            required: {
-              value: true,
-              message: "Confirm password is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Confirm password must be less than 64 characters long",
-            },
-          })}
-          placeholder="xxxxxxxxx"
-        />
-        <p className="text-red-800">{errors.cpassword?.message}</p>
-        </>
-        :""}
-        <Button>{update ? "Update" : "Add LabTechnician"}</Button>
-      </form>
+        <form
+          className="mx-auto   rounded-lg px-6 py-8 "
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <div className="my-6 flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="johndoe@gmail.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="my-6 flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="97++++++++" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>DOB</FormLabel>
+                    <FormControl>
+                      <Input placeholder="2002-09-22" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="grow">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ratnangar-3" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="my-6">
+            <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Gender</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {genderOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {!update ? (
+            <>
+              <div className="my-6 flex gap-4">
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="cpassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            </>
+          ) : null}
+
+          <Button className="my-2 w-full">
+            {update ? "Update" : "Add LabTechnician"}
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };

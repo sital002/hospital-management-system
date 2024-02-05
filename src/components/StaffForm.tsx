@@ -51,12 +51,14 @@ const workShift = [
   },
 ];
 
-interface StaffFormProps {
-  show?: boolean;
-  setShow?: (e: boolean) => void;
-  staff?: StaffType;
+type StaffFormProps = {
   update?: boolean;
-}
+  staff?: StaffType;
+  open?: boolean;
+  setOpen?: (value: boolean) => void;
+};
+
+type UpdateProps = StaffFormProps["update"] extends true ? StaffFormProps : {};
 const FormSchema = z.object({
   email: z
     .string({
@@ -66,12 +68,16 @@ const FormSchema = z.object({
   name: z.string({
     required_error: "Name is required",
   }),
-  password: z.string({
-    required_error: "Password is required",
-  }),
-  cpassword: z.string({
-    required_error: "Password is required",
-  }),
+  password: z
+    .string({
+      required_error: "Password is required",
+    })
+    .optional(),
+  cpassword: z
+    .string({
+      required_error: "Password is required",
+    })
+    .optional(),
   phone: z.string({
     required_error: "Phone is required",
   }),
@@ -89,8 +95,8 @@ const FormSchema = z.object({
   }),
 });
 const StaffForm: FC<StaffFormProps> = ({
-  show,
-  setShow,
+  open,
+  setOpen,
   staff,
   update = false,
 }) => {
@@ -122,7 +128,10 @@ const StaffForm: FC<StaffFormProps> = ({
   const router = useRouter();
   // const [showModal, setShowModal] = useState(false);
   console.log(form.watch());
-  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+  const createNewStaff = async (
+    data: z.infer<typeof FormSchema>,
+    router: any,
+  ) => {
     console.log(data);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`, {
@@ -142,155 +151,231 @@ const StaffForm: FC<StaffFormProps> = ({
     }
   };
 
+  const updateStaffDetail = async (data: z.infer<typeof FormSchema>) => {
+    try {
+      console.log(data);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${staff?._id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            name: data?.name,
+            phone: data?.phone,
+            address: data?.address,
+            shift: data?.shift,
+            email: data?.email,
+            dob: data?.dob,
+            gender: data.gender,
+          }),
+        },
+      );
+      const json = await res.json();
+      if (json) {
+        toast.success("Detail updated successfully");
+        router.refresh();
+        if (setOpen) {
+          setOpen(false);
+        }
+
+        return;
+      }
+      return toast.error(json.message);
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+  };
+
+  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+    if (update) {
+      updateStaffDetail(data);
+    } else {
+      createNewStaff(data, router);
+    }
+  };
+
   return (
-    <div className="px-3">
+    <div className="max-h-[600px] px-6">
       <Form {...form}>
+        <h1 className=" text-center text-4xl font-semibold">
+          Create New Staff
+        </h1>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="John Doe" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="johndoe@gmail.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Address</FormLabel>
-                <FormControl>
-                  <Input placeholder="Ratnangar-3" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input placeholder="97++++++++" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Gender</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {genderOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="shift"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Shift</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {workShift.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="dob"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>DOB</FormLabel>
-                <FormControl>
-                  <Input placeholder="2002-09-22" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input placeholder="*********" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="cpassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input placeholder="*********" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="my-4 flex gap-4 ">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="johndoe@gmail.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="grow">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ratnangar-3" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="my-10 flex gap-4 ">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="97++++++++" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>DOB</FormLabel>
+                    <FormControl>
+                      <Input placeholder="2002-09-22" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gender</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {genderOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="shift"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Shift</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {workShift.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          {!update ? (
+            <>
+              <div className="my-10 flex gap-4 ">
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="cpassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            </>
+          ) : null}
           <Button type="submit" className="w-full">
             Submit
           </Button>

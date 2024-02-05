@@ -98,6 +98,11 @@ export function PatientTable({ users }: PatientTableProps) {
       enableHiding: false,
     },
     {
+      accessorKey: "_id",
+      header: "ID",
+      cell: ({ row }) => <div className="uppercase">{row.getValue("_id")}</div>,
+    },
+    {
       accessorKey: "name",
       header: "Name",
       cell: ({ row }) => (
@@ -148,7 +153,6 @@ export function PatientTable({ users }: PatientTableProps) {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
-            <Button variant="outline">View</Button>
             <EditPatientModal patient={row.original} />
             <Button
               variant="destructive"

@@ -26,7 +26,7 @@ const PatientSchema = new Schema({
     required: [true, "Please provide a  Patient type"],
   },
   phone: {
-    type: Number,
+    type: String,
     required: [true, "Please provide a contact"],
   },
   address: {

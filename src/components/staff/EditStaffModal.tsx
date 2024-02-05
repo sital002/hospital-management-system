@@ -1,29 +1,32 @@
-import { FC } from "react";
-import Modal from "../common/Modal";
+import { FC, useState } from "react";
 import StaffForm from "../StaffForm";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Button } from "../ui/button";
 import { StaffType } from "@/database/modals/StaffModal";
 
 interface EditLabtestModalProps {
-  setShow: (e: boolean) => void;
-  show: boolean;
-  staff?: StaffType;
+  staff: StaffType;
 }
-const EditStaffModal: FC<EditLabtestModalProps> = ({
-  setShow,
-  staff,
-  show,
-}) => {
+const EditStaffModal: FC<EditLabtestModalProps> = ({ staff }) => {
   console.log(staff);
+  const [open, setOpen] = useState(false);
   return (
     <div>
-      <Modal showModal={show} setShowModal={setShow}>
-        <StaffForm
-          show={show}
-          setShow={setShow}
-          update={true}
-          staff={staff}
-        />
-      </Modal>
+      <Dialog onOpenChange={setOpen} open={open}>
+        <DialogTrigger asChild>
+          <Button variant="default">Edit</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <div className="w-full">
+            <StaffForm
+              update={true}
+              staff={staff}
+              open={open}
+              setOpen={setOpen}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

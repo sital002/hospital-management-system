@@ -19,7 +19,7 @@ const AdminSchema = new Schema({
     required: [true, "Please provide a address"],
   },
   dob: {
-    type: Date,
+    type: String,
     required: [true, "Please provide a dob"],
   },
   gender: {
