@@ -1,6 +1,10 @@
 import mongoose, { InferSchemaType, Schema, Types } from "mongoose";
 
 const LabtestSchema = new Schema({
+  category: {
+    type: String,
+    required: [true, "Please provide a category"],
+  },
   patient: {
     type: Types.ObjectId,
     ref: "Patient",

@@ -41,11 +41,6 @@ const sideBarOptions = [
         icon: <PlusSquare />,
       },
       {
-        name: "View Patient",
-        url: "/dashboard/patient",
-        icon: <Eye />,
-      },
-      {
         name: "Manage Patient",
         url: "/dashboard/patient",
         icon: <FolderKanban />,

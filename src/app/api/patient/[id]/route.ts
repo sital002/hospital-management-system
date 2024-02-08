@@ -5,17 +5,7 @@ import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    const user = await getUserDetails();
-    if (!user)
-      return new Response(
-        JSON.stringify({
-          success: false,
-          message: "You are not logged in",
-        }),
-        { status: 401 },
-      );
     const id = req.nextUrl.pathname.split("/")[3];
-
     if (!id)
       return new Response(
         JSON.stringify({

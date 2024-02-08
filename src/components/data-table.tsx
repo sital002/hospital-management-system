@@ -36,6 +36,7 @@ import { PatientType } from "@/database/modals/PatientModel";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import EditPatientModal from "./patient/EditPatientModal";
+import Link from "next/link";
 
 const handleDelete = async (id: string, router: any) => {
   try {
@@ -153,6 +154,14 @@ export function PatientTable({ users }: PatientTableProps) {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
+            <Button
+              onClick={() => {
+                router.push(`/dashboard/patient/${row.original._id}`);
+              }}
+              variant={"link"}
+            >
+              View
+            </Button>
             <EditPatientModal patient={row.original} />
             <Button
               variant="destructive"
