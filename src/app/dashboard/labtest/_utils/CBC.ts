@@ -1,18 +1,32 @@
-type BloodTestChildType = {
+// type Test =
+//   | "Hemoglobin(Hb)"
+//   | "Total RBC Count"
+//   | "packed cell volume(PCV)"
+//   | "mean corpuscular volume"
+//   | "ESR"
+//   | "total wbc count"
+//   | "neutrophils"
+//   | "lymphocytes"
+//   | "eosinophils"
+//   | "monocytes"
+//   | "basophils"
+//   | "total platelet count"
+//   | "RDW";
+type LabtestChildType = {
   investigation: string;
   result?: string;
   normalRange: string;
   unit: string;
   input: boolean;
 };
-export type BloodTestType = {
+export type LabtestFormType = {
   name: string;
   label: string;
   input: boolean;
-  children: BloodTestChildType[];
+  children: LabtestChildType[];
 };
 
-export const BloodTest: BloodTestType[] = [
+export const CBCTest: LabtestFormType[] = [
   {
     label: "Hemoglobin",
     name: "hemoglobin",

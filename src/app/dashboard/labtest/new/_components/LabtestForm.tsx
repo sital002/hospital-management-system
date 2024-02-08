@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -9,28 +10,21 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
 
 import { PatientType } from "@/database/modals/PatientModel";
-import { LabtestFormType } from "../_utils/CBC";
+import { LabtestFormType } from "../../_utils/CBC";
 
-interface CBCFormProps {
+interface LabtestFormProps {
   selectedPatient: PatientType | null;
-  handleSubmit: any;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   tests: LabtestFormType[];
   setTests: React.Dispatch<React.SetStateAction<LabtestFormType[]>>;
 }
-const CBCForm = ({ handleSubmit, setTests, tests }: CBCFormProps) => {
-  const searchParams = useSearchParams();
-  const selectedTests = searchParams.get("selectedTests");
-  let selectedTestsArray: LabtestFormType[] = [];
-  try {
-    selectedTestsArray = JSON.parse(selectedTests || "[]");
-    // console.log(selectedTestsArray);
-  } catch (e) {
-    console.log(e);
-  }
-
+export const LabtestForm = ({
+  handleSubmit,
+  setTests,
+  tests,
+}: LabtestFormProps) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -48,7 +42,7 @@ const CBCForm = ({ handleSubmit, setTests, tests }: CBCFormProps) => {
               <React.Fragment key={index}>
                 <TableRow>
                   <TableCell className={"font-bold uppercase"}>
-                    {test.label}
+                    {test.name}
                   </TableCell>
                 </TableRow>
                 {test.children &&
@@ -89,5 +83,3 @@ const CBCForm = ({ handleSubmit, setTests, tests }: CBCFormProps) => {
     </div>
   );
 };
-
-export default CBCForm;
