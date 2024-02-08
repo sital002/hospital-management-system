@@ -12,7 +12,7 @@ import {
   Speech,
   Theater,
 } from "lucide-react";
-import { BloodTest } from "./CBC";
+import { CBCTest } from "./CBC";
 import CBCForm from "../_component/CBCForm";
 import LFTForm from "../_component/LFTForm";
 import { LFTTest } from "./LFT";
@@ -33,6 +33,8 @@ import ComprehensiveForm from "../_component/ComprehensiveForm";
 import { CoagulationTest } from "./Coagulation";
 import CoagulationForm from "../_component/CoagulationForm";
 
+import React from "react";
+
 export interface TestCategory {
   id: number;
   name: string;
@@ -40,7 +42,7 @@ export interface TestCategory {
   icon: React.ReactNode;
   color: string;
   tests?: any;
-  form: React.ReactNode;
+  form: any;
 }
 
 export const testCategory: TestCategory[] = [
@@ -50,8 +52,8 @@ export const testCategory: TestCategory[] = [
     description: "Blood Test",
     icon: <Droplets size={60} />,
     color: "bg-primary",
-    tests: BloodTest,
-    form: <CBCForm />,
+    tests: CBCTest,
+    form: CBCForm,
   },
   {
     id: 2,
@@ -60,7 +62,7 @@ export const testCategory: TestCategory[] = [
     icon: <GaugeCircle size={60} />,
     color: "bg-success",
     tests: LFTTest,
-    form: <LFTForm />,
+    form: LFTForm,
   },
   {
     id: 3,
@@ -69,7 +71,7 @@ export const testCategory: TestCategory[] = [
     icon: <BrainCircuit size={50} />,
     color: "bg-warning",
     tests: KFTTest,
-    form: <KFTForm />,
+    form: KFTForm,
   },
   {
     id: 4,
@@ -78,14 +80,14 @@ export const testCategory: TestCategory[] = [
     icon: <Theater size={60} />,
     color: "bg-danger",
     tests: ThyroidTest,
-    form: <ThyroidForm />,
+    form: ThyroidForm,
   },
   {
     id: 5,
     name: "Lipid Profile",
     description: "MRI",
     icon: <Atom size={60} />,
-    form: <LipidForm />,
+    form: LipidForm,
     color: "bg-info",
     tests: Lipid,
   },
@@ -94,7 +96,7 @@ export const testCategory: TestCategory[] = [
     name: "Protein Fraction",
     description: "MRI",
     icon: <PersonStanding size={60} />,
-    form: <ProteinForm />,
+    form: ProteinForm,
     color: "bg-info",
     tests: Protein,
   },
@@ -103,7 +105,7 @@ export const testCategory: TestCategory[] = [
     name: "Arthritis Profile",
     description: "MRI",
     icon: <Activity size={60} />,
-    form: <ArthritisForm />,
+    form: ArthritisForm,
     color: "bg-info",
     tests: arthritis,
   },
@@ -112,7 +114,7 @@ export const testCategory: TestCategory[] = [
     name: "Blood Sugar",
     description: "MRI",
     icon: <CakeSlice size={60} />,
-    form: <SugarForm />,
+    form: SugarForm,
     color: "bg-info",
     tests: SugarTest,
   },
@@ -121,7 +123,7 @@ export const testCategory: TestCategory[] = [
     name: "Comprehensive Metabolic Panel(CMP)",
     description: "MRI",
     icon: <Cpu size={60} />,
-    form: <ComprehensiveForm />,
+    form: ComprehensiveForm,
     color: "bg-info",
     tests: Comprehensive,
   },
@@ -130,7 +132,7 @@ export const testCategory: TestCategory[] = [
     name: "Coagulation Profile",
     description: "MRI",
     icon: <Settings2 size={60} />,
-    form: <CoagulationForm />,
+    form: CoagulationForm,
     color: "bg-info",
     tests: CoagulationTest,
   },

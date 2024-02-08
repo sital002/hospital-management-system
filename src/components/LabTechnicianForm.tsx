@@ -106,6 +106,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
           address: labtechnician?.address || "",
           phone: labtechnician?.phone || "",
           dob: labtechnician?.dob.toString() || "",
+          gender: labtechnician?.gender ?? "male",
         }
       : {
           name: "John Doe",
@@ -168,6 +169,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
             address: data.address,
             phone: data.phone,
             dob: data.dob,
+            gender: data.gender,
           }),
         },
       );

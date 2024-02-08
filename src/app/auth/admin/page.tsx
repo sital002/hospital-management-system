@@ -32,7 +32,7 @@ export default function SignIn() {
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
-      console.log(select);
+      console.log(select, data);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/${select}/signin`,
         {
