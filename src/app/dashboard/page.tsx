@@ -1,11 +1,10 @@
 import Maindashboard from "@/components/MainDashboard";
 import { PatientType } from "@/database/modals/PatientModel";
 import { getUserDetails, isAuthenticated } from "@/utils/Auth";
+import  Stats  from "@/components/stats";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { TableDemo } from "@/components/common/Demo";
-import { DialogDemo } from "@/components/common/Dialog";
+import {getAllUsers as getDoctors} from '@/app/dashboard/doctor/page'
 const getAllUsers = async () => {
   const authToken = cookies().get("auth_token")?.value;
   try {
@@ -27,11 +26,13 @@ export default async function Dashboard() {
   const user = await getUserDetails();
   if (!user) return redirect("/auth/admin");
   const data = await getAllUsers();
+  const doctor=await getDoctors()
+
+  const totalPatient=data.length
+  const inPatient=data.filter((item,index)=>item.patientType==='inpatient')
   return (
     <>
-      <Button>Click me</Button>
-      <DialogDemo />
-      <TableDemo />
+    <Stats totalPatient={totalPatient} inPatient={inPatient.length} doctor={doctor.length} />
       <Maindashboard users={data} />
     </>
   );

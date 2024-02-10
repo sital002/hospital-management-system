@@ -1,6 +1,12 @@
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
 
-export default function Component() {
+type statsProps={
+  totalPatient?:number;
+  inPatient?:number;
+  doctor?:number;
+}
+
+export default function Component({totalPatient,inPatient,doctor}:statsProps) {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
       <Card className="w-full max-w-md">
@@ -11,9 +17,9 @@ export default function Component() {
           <div className="flex items-center gap-4">
             <HotelIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
             <div>
-              <h3 className="text-2xl font-semibold">Inpatients</h3>
+              <h3 className="text-2xl font-semibold">Total Inpatients</h3>
               <p className="text-4xl font-bold text-gray-900 dark:text-gray-50">
-                1,234
+                {inPatient}
               </p>
             </div>
           </div>
@@ -29,7 +35,7 @@ export default function Component() {
             <div>
               <h3 className="text-2xl font-semibold">Total Patients</h3>
               <p className="text-4xl font-bold text-gray-900 dark:text-gray-50">
-                5,678
+               {totalPatient}
               </p>
             </div>
           </div>
@@ -43,9 +49,9 @@ export default function Component() {
           <div className="flex items-center gap-4">
             <HeartIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
             <div>
-              <h3 className="text-2xl font-semibold">Heart Surgeries</h3>
+              <h3 className="text-2xl font-semibold">Total Doctors</h3>
               <p className="text-4xl font-bold text-gray-900 dark:text-gray-50">
-                789
+                {doctor}
               </p>
             </div>
           </div>

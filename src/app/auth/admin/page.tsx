@@ -16,6 +16,7 @@ type FormInputs = {
 
 export default function SignIn() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [select, setSelect] = useState<"admin" | "staff" | "doctor">("admin");
 
   const {
@@ -33,6 +34,7 @@ export default function SignIn() {
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
       console.log(select, data);
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/${select}/signin`,
         {
@@ -51,6 +53,8 @@ export default function SignIn() {
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   };
   watch();
@@ -59,7 +63,7 @@ export default function SignIn() {
     setSelect(value);
   };
   return (
-    <div className="mx-2 w-full  rounded-lg p-5 ">
+    <div className="mx-2 w-full  overflow-y-hidden rounded-lg p-5 ">
       <div className="mx-auto mt-10 max-w-[500px] rounded-md border-2 p-4 shadow-md">
         <div className="my-5 flex items-center gap-1">
           <Button
@@ -130,16 +134,10 @@ export default function SignIn() {
               <p className="text-red-500">{errors.password.message}</p>
             )}
           </div>
-          <Button className="w-full text-xl" type="submit">
-            Submit
+          <Button className="w-full text-xl" type="submit" disabled={loading}>
+            {loading ? "Loading..." : "Sign In"}
           </Button>
         </form>
-        <p className="mt-6">
-          Don&apos;t have an account?{" "}
-          <span className="cursor-pointer font-medium underline underline-offset-4">
-            <Link href="/signup">Signup here</Link>
-          </span>
-        </p>
       </div>
     </div>
   );

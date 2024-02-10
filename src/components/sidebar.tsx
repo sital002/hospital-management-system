@@ -38,17 +38,12 @@ const sideBarOptions = [
       {
         name: "Register Patient",
         url: "/dashboard/patient/new",
-        icon: <PlusSquare />,
-      },
-      {
-        name: "View Patient",
-        url: "/dashboard/patient",
-        icon: <Eye />,
+        icon: <PlusSquare size={20}  />,
       },
       {
         name: "Manage Patient",
         url: "/dashboard/patient",
-        icon: <FolderKanban />,
+        icon: <FolderKanban size={20} />,
       },
     ],
   },
@@ -60,12 +55,12 @@ const sideBarOptions = [
       {
         name: "Register Staff",
         url: "/dashboard/staff/new",
-        icon: <PlusSquare />,
+        icon: <PlusSquare size={20} />,
       },
       {
         name: "Manage Staff",
         url: "/dashboard/staff",
-        icon: <FolderKanban />,
+        icon: <FolderKanban size={20} />,
       },
     ],
   },
@@ -77,12 +72,12 @@ const sideBarOptions = [
       {
         name: "Register Doctor",
         url: "/dashboard/doctor/new",
-        icon: <PlusSquare />,
+        icon: <PlusSquare size={20} />,
       },
       {
         name: "Manage Doctor",
         url: "/dashboard/doctor",
-        icon: <FolderKanban />,
+        icon: <FolderKanban size={20} />,
       },
     ],
   },
@@ -93,12 +88,12 @@ const sideBarOptions = [
       {
         name: "Register Lab Technician",
         url: "/dashboard/labtechnician/new",
-        icon: <PlusSquare />,
+        icon: <PlusSquare size={20} />,
       },
       {
         name: "Manage Lab Technicaian",
         url: "/dashboard/labtechnician",
-        icon: <FolderKanban />,
+        icon: <FolderKanban size={20} />,
       },
     ],
   },
@@ -106,12 +101,6 @@ const sideBarOptions = [
     name: "Labtest",
     url: "/dashboard/labtest",
     icon: <Pill />,
-  },
-  {
-    name: "Medical Report",
-    url: "/dashboard/medicalreport",
-    icon: <BookOpenCheck />,
-    roles: ["admin", "labtechnician", "doctor"],
   },
 ];
 export default function Sidebar({ role }: { role: string | undefined }) {
@@ -156,7 +145,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
   console.log(router);
 
   return (
-    <div className="stick scrollbar-width-2 left-0 top-0 max-h-[88vh] w-[20vw]  overflow-y-scroll">
+    <div className="sticky scrollbar-width-2 left-0 top-0 max-h-[88vh] w-[23vw]  overflow-y-scroll">
       <ul className="my-5  border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
@@ -196,25 +185,25 @@ export default function Sidebar({ role }: { role: string | undefined }) {
               )}
               {option.dropdown && (
                 <ul
-                  className={`h-0 w-full overflow-scroll text-center transition-all duration-300 ${
-                    dropdown[name as keyof DropdownState] ? "h-[180px] " : ""
+                  className={`h-0  overflow-scroll  text-center transition-all pl-5  ${
+                    dropdown[name as keyof DropdownState] ? "h-fit  " : ""
                   }`}
                 >
                   {option.dropdown.map((element, index) => {
                     return (
                       <Link
-                        className={`flex w-full  gap-3  ${
+                        className={`flex gap-3  ${
                           router === element.url ? "text-primary" : ""
                         } `}
                         href={element.url}
                         key={element.name + index}
                       >
                         <li
-                          className={`rounded-none hover:text-primary  w-full${
+                          className={`rounded-none w-full hover:text-primary ${
                             router === element.url ? "text-primary" : ""
                           }`}
                         >
-                          {element.icon}
+                          <span>{element.icon}</span>
                           <span>{element.name}</span>
                           <hr />
                         </li>

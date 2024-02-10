@@ -14,7 +14,7 @@
 //   | "RDW";
 type LabtestChildType = {
   investigation: string;
-  result?: string;
+  result: string;
   normalRange: string;
   unit: string;
   input: boolean;
@@ -37,6 +37,7 @@ export const CBCTest: LabtestFormType[] = [
         normalRange: "20-50",
         unit: "g/dgL",
         input: true,
+        result: "",
       },
     ],
   },

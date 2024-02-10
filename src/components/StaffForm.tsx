@@ -1,5 +1,5 @@
 "use client";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -100,6 +100,8 @@ const StaffForm: FC<StaffFormProps> = ({
   staff,
   update = false,
 }) => {
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: update
@@ -134,6 +136,7 @@ const StaffForm: FC<StaffFormProps> = ({
   ) => {
     console.log(data);
     try {
+      setLoading(true);
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`, {
         method: "POST",
         body: JSON.stringify(data),
@@ -148,12 +151,15 @@ const StaffForm: FC<StaffFormProps> = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);
+    } finally{
+      setLoading(false);
     }
   };
 
   const updateStaffDetail = async (data: z.infer<typeof FormSchema>) => {
     try {
       console.log(data);
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${staff?._id}`,
         {
@@ -183,6 +189,8 @@ const StaffForm: FC<StaffFormProps> = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err?.message);
+    } finally{
+      setLoading(false);
     }
   };
 
@@ -376,8 +384,8 @@ const StaffForm: FC<StaffFormProps> = ({
               </div>
             </>
           ) : null}
-          <Button type="submit" className="w-full">
-            Submit
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ?'Loading...' :'Submit'}
           </Button>
         </form>
       </Form>

@@ -43,7 +43,6 @@ export default async function Navbar() {
                 <p className="text-lg">{user.data?.name}</p>
                 <p className="text-sm capitalize">{user?.role}</p>
               </div>
-              <DarkModeToggle />
               <form action={handleLogout}>
                 <Button type="submit">Logout</Button>
               </form>

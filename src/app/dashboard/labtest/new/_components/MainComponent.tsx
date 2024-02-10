@@ -11,6 +11,7 @@ import { LabtestFormType } from "../../_utils/CBC";
 import { PrintPreview } from "./PrintPreview";
 import { SelectPatient } from "../../_component/SelectPatient";
 import { LabtestForm } from "./LabtestForm";
+import { toast } from "react-toastify";
 
 interface MainComponentProps {
   data: PatientType[];
@@ -63,31 +64,64 @@ export function MainComponent({ data }: MainComponentProps) {
 
   const [tests, setTests] = useState<LabtestFormType[]>(selectedTestsArray);
   const [showPreview, setShowPreview] = useState(false);
-
+  const [selectedPatient, setSelectedPatient] =
+    React.useState<PatientType | null>(null);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("submit");
     // console.log(tests);
+    if (!selectedCategory) return;
+    if (!selectedPatient) {
+      toast.error("Please select a patient");
+      return;
+    }
+    console.log(tests);
+    // function validate(cbc: LabtestFormType[]): boolean {}
+    function validateLabtestForms(labtestForms: LabtestFormType[]): boolean {
+      for (let i = 0; i < labtestForms.length; i++) {
+        for (let j = 0; j < labtestForms[i].children.length; j++) {
+          if (!labtestForms[i].children[j].result) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    if (!validateLabtestForms(tests))
+      return toast.error("Please fill all the fields");
     try {
-      const res = await fetch("/api/labtest/new", {
-        method: "POST",
-        body: JSON.stringify({
-          tests,
-          patient: selectedPatient?._id,
-        }),
-        headers: {
-          "Content-Type": "application/json",
+      // console.log(selectedCategory);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtest`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            tests,
+            category: selectedCategory?.name,
+            patient: selectedPatient?._id,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
+      if (!res.ok) {
+        toast.error("Failed to add test");
+        setShowPreview(false);
+        return;
+      }
       const newTest = await res.json();
       console.log(newTest);
+      toast.success("Test added successfully");
       setShowPreview(true);
     } catch (e) {
       console.log(e);
+      setShowPreview(false);
+      toast.error("Failed to add test");
     }
   };
-  const [selectedPatient, setSelectedPatient] =
-    React.useState<PatientType | null>(null);
+
   return (
     <div>
       <div className="px-4" ref={componentRef}>

@@ -97,6 +97,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
   labtechnician,
   update = false,
 }) => {
+  const[loading,setLoading]=useState(false)
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: update
@@ -131,6 +132,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
     router: any;
   }) => {
     try {
+      setLoading(true)
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician`,
         {
@@ -149,6 +151,8 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -159,6 +163,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
   }) => {
     try {
       // console.log('labdata: ',data);
+      setLoading(true)
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician/${labtechnician?._id}`,
         {
@@ -186,6 +191,8 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err?.message);
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -355,8 +362,8 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
             </>
           ) : null}
 
-          <Button className="my-2 w-full">
-            {update ? "Update" : "Add LabTechnician"}
+          <Button className="my-2 w-full" disabled={loading}>
+            {loading ? 'Loading...':update ? "Update" : "Add LabTechnician"}
           </Button>
         </form>
       </Form>

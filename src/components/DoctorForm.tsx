@@ -109,6 +109,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
   doctor,
   update = false,
 }) => {
+  const[loading,setLoading]=useState(false)
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: update
@@ -142,6 +143,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
   ) => {
     console.log(data);
     try {
+      setLoading(true)
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor`,
         {
@@ -159,6 +161,8 @@ const DoctorForm: FC<DoctorFormProps> = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -396,8 +400,8 @@ const DoctorForm: FC<DoctorFormProps> = ({
               </div>
             </>
           ) : null}
-          <Button className="my-6 w-full">{`${
-            update ? "Update" : "Add Doctor"
+          <Button className="my-6 w-full" disabled={loading}>{`${
+           loading? 'Loading...': update ? "Update" : "Add Doctor"
           }`}</Button>
         </form>
       </Form>
