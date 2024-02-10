@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <PatientDetailCard patient={patient} />
         <div className="w-full">
           <h3 className="mb-3 text-xl font-medium">Recent Tests</h3>
-          <div className="h-[600px] w-full max-w-[750px] overflow-y-scroll p-5 shadow-md">
+          <div className="h-[400px] w-full  overflow-y-scroll p-5 shadow-md">
             {labtests.map((labtest) => {
               return <LabtestCard key={labtest._id} labtest={labtest} />;
             })}

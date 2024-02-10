@@ -75,8 +75,23 @@ export function MainComponent({ data }: MainComponentProps) {
       toast.error("Please select a patient");
       return;
     }
+    console.log(tests);
+    // function validate(cbc: LabtestFormType[]): boolean {}
+    function validateLabtestForms(labtestForms: LabtestFormType[]): boolean {
+      for (let i = 0; i < labtestForms.length; i++) {
+        for (let j = 0; j < labtestForms[i].children.length; j++) {
+          if (!labtestForms[i].children[j].result) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    if (!validateLabtestForms(tests))
+      return toast.error("Please fill all the fields");
     try {
-      console.log(selectedCategory);
+      // console.log(selectedCategory);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtest`,
         {

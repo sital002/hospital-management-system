@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider>
+        <ThemeProvider themes={["light"]}>
           <Toastify />
           <Navbar />
           <main className="w-full">{children}</main>
