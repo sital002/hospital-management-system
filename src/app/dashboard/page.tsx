@@ -26,7 +26,7 @@ const getAllUsers = async () => {
 };
 export default async function page() {
   const user = await getUserDetails();
-  if (!user) return redirect("/auth/admin");
+  if (!user) return redirect("/signin");
 
   const data = await getAllUsers();
   const totalPatient = data.length;

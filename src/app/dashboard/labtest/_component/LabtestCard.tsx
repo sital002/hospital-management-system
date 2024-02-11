@@ -14,20 +14,22 @@ export default function LabtestCard({
   ref,
   ...rest
 }: LabtestCardProps) {
-  const selecteed = selectedTests?.some(
+  const selected = selectedTests?.some(
     (selectedTest: any) => selectedTest.name === test.name,
   );
   return (
     <Card
-      className={`${selecteed ? "bg-primary text-white":""}transition-scale relative flex max-w-[300px] cursor-pointer flex-col items-center justify-center px-2 py-3 duration-200 hover:scale-105`}
+      className={`${
+        selected ? "bg-primary text-white" : "text-black"
+      } transition-scale relative flex max-w-[300px] cursor-pointer flex-col items-center justify-center px-2 py-3  duration-200 hover:scale-105`}
       {...rest}
     >
       {/* <CheckCircle color="green" className="absolute right-2 top-1" /> */}
-      {selecteed ? (
-        <CheckCircle color="green" className="absolute right-2 top-1" />
+      {selected ? (
+        <CheckCircle color="white" className="absolute right-2 top-1" />
       ) : null}
       <div>{test.icon}</div>
-      <h3 className={`text-white text-xl font-medium`}>{test.name}</h3>
+      <h3 className={`text-xl font-medium `}>{test.name}</h3>
     </Card>
   );
 }

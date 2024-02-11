@@ -17,8 +17,8 @@ export default function Page() {
   const searchParams = new URLSearchParams();
   return (
     <div className="px-2">
-      <h2 className="my-3 text-xl font-bold">Select a Category</h2>
-      <div className="grid grid-cols-4 gap-2">
+      <h2 className="my-3 text-2xl font-bold">Select a Category</h2>
+      <div className="grid grid-cols-4 gap-5">
         {testCategory.map((test, i) => (
           <TestCategoryCard
             key={i}
@@ -33,14 +33,14 @@ export default function Page() {
       </div>
       {selectedCategory && (
         <div>
-          <h2 className="my-3 text-2xl ">
+          <h2 className="my-3 text-xl font-medium ">
             {selectedCategory.name}
             <span className="ml-4 text-lg font-normal">
               ({selectedTests.length} out of{" "}
               {selectedCategory?.tests?.length ?? 0}) selected
             </span>
           </h2>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-5">
             {selectedCategory.tests?.map((item: any, index: number) => {
               return (
                 <LabtestCard

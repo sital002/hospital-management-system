@@ -8,7 +8,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const user = await getUserDetails();
-  if (!user) redirect("/auth/admin");
+  if (!user) redirect("/signin");
   return (
     <div className="flex gap-3 ">
       <Sidebar role={user?.role} />

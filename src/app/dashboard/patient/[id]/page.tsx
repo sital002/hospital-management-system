@@ -36,7 +36,7 @@ async function getPatientDetail(id: string) {
 
 export default async function Page({ params }: { params: { id: string } }) {
   const user = await getUserDetails();
-  if (!user) redirect("/auth/admin");
+  if (!user) redirect("/signin");
   const patient = await getPatientDetail(params.id);
   if (!patient) return null;
   const labtests = await getLabtests(params.id);

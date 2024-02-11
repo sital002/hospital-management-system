@@ -3,16 +3,11 @@ import React, { useState } from "react";
 import { PatientType } from "@/database/modals/PatientModel";
 import { useRouter, useSearchParams } from "next/navigation";
 import { testCategory } from "../../_utils/testCategory";
-import { Button } from "@/components/ui/button";
-import ReactToPrint from "react-to-print";
-import { formatDate } from "@/utils/formatDate";
 import { PatientCard } from "./PatientCard";
 import { LabtestFormType } from "../../_utils/CBC";
-import { PrintPreview } from "./PrintPreview";
 import { SelectPatient } from "../../_component/SelectPatient";
 import { LabtestForm } from "./LabtestForm";
 import { toast } from "react-toastify";
-import { HospitalDetail } from "@/components/Labtests/HospitalDetail";
 
 interface MainComponentProps {
   data: PatientType[];
@@ -21,7 +16,6 @@ export function MainComponent({ data }: MainComponentProps) {
   const searchParams = useSearchParams();
   const category = searchParams.get("selectedCategory");
   // console.log(category);
-  const [printForm, setPrintForm] = React.useState(false);
   const selectedCategory = testCategory.find((item) => item.name === category);
   // console.log(selectedCategory);
   const selectedTests = searchParams.get("selectedTests");
