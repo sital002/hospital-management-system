@@ -15,7 +15,7 @@ interface PreviewProps {
 }
 export const PrintPreview = ({ tests }: PreviewProps) => {
   return (
-    <div>
+    <div className="px-2">
       <Table>
         <TableHeader>
           <TableRow>

@@ -4,6 +4,6 @@ import React from "react";
 
 export default async function Home() {
   const user = await getUserDetails();
-  if (!user) redirect("/auth/admin");
+  if (!user) redirect("/signin");
   redirect("/dashboard");
 }

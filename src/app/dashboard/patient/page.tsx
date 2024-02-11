@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { PatientTable } from "@/components/data-table";
 import Stats from "@/components/stats";
-import {getAllUsers as getDoctors} from '@/app/dashboard/doctor/page'
+import { getAllUsers as getDoctors } from "@/app/dashboard/doctor/page";
 
 export const getAllUsers = async () => {
   const authToken = cookies().get("auth_token")?.value;
@@ -26,16 +26,22 @@ export const getAllUsers = async () => {
 };
 export default async function Dashboard() {
   const user = await getUserDetails();
-  if (!user) return redirect("/auth/admin");
+  if (!user) return redirect("/signin");
 
   const data = await getAllUsers();
-  const totalPatient=data.length
-  const inPatient=data.filter((item,index)=>item.patientType==='inpatient')
-  const doctor=await getDoctors()
+  const totalPatient = data.length;
+  const inPatient = data.filter(
+    (item, index) => item.patientType === "inpatient",
+  );
+  const doctor = await getDoctors();
   // console.log(data);
   return (
     <div className="px-2">
-      <Stats totalPatient={totalPatient} inPatient={inPatient.length} doctor={doctor.length} />
+      <Stats
+        totalPatient={totalPatient}
+        inPatient={inPatient.length}
+        doctor={doctor.length}
+      />
       <PatientTable users={data} />
     </div>
   );

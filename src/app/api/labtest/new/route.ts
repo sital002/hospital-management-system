@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       patient: data.patient,
     });
     console.log(newTest);
-    revalidatePath("/api/labtest");
+    revalidatePath("/dashboard/labtest/manage");
     return new Response(JSON.stringify(newTest), {
       status: 201,
     });

@@ -115,7 +115,7 @@ export function LabtestTable({ labtests }: PatientTableProps) {
       accessorKey: "PatientName",
       header: "Patient Name",
       cell: ({ row }) => (
-        <div className="uppercase">{row.original.patient.name}</div>
+        <div className="uppercase">{row.original.patient?.name}</div>
       ),
     },
 
@@ -136,7 +136,9 @@ export function LabtestTable({ labtests }: PatientTableProps) {
           <div className="flex gap-2">
             <Button
               onClick={() => {
-                router.push(`/dashboard/labtest/${row.original._id}`);
+                router.push(
+                  `/dashboard/labtest/${row.original._id.toString()}`,
+                );
               }}
               variant={"default"}
             >

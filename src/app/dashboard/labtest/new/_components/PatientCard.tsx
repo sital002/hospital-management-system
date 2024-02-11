@@ -3,7 +3,7 @@ import { PatientType } from "@/database/modals/PatientModel";
 export function PatientCard({ patient }: { patient: PatientType }) {
   return (
     <div className="my-3 px-3 py-4 ">
-      <div className="grid grid-cols-3 justify-center gap-y-4">
+      <div className="mx-auto grid w-fit grid-cols-3 gap-y-4 ">
         <h2>
           <span className="font-bold">Patient Name :</span> {patient.name}
         </h2>

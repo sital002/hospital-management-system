@@ -36,7 +36,7 @@ async function getPatientDetail(id: string) {
 
 export default async function Page({ params }: { params: { id: string } }) {
   const user = await getUserDetails();
-  if (!user) redirect("/auth/admin");
+  if (!user) redirect("/signin");
   const patient = await getPatientDetail(params.id);
   if (!patient) return null;
   const labtests = await getLabtests(params.id);
@@ -47,10 +47,14 @@ export default async function Page({ params }: { params: { id: string } }) {
         <PatientDetailCard patient={patient} />
         <div className="w-full">
           <h3 className="mb-3 text-xl font-medium">Recent Tests</h3>
-          <div className="h-[400px] w-full  overflow-y-scroll p-5 shadow-md">
-            {labtests.map((labtest) => {
-              return <LabtestCard key={labtest._id} labtest={labtest} />;
-            })}
+          <div className="h-full w-full  overflow-y-scroll p-5 shadow-md">
+            {labtests.length > 0 ? (
+              labtests.map((labtest) => {
+                return <LabtestCard key={labtest._id} labtest={labtest} />;
+              })
+            ) : (
+              <h1>No labtest found</h1>
+            )}
           </div>
         </div>
       </div>

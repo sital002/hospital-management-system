@@ -158,7 +158,7 @@ export function PatientTable({ users }: PatientTableProps) {
               onClick={() => {
                 router.push(`/dashboard/patient/${row.original._id}`);
               }}
-              variant={"link"}
+              variant={"outline"}
             >
               View
             </Button>

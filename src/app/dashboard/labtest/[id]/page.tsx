@@ -22,7 +22,7 @@ async function getLabtest(labtestId: string) {
 }
 export default async function page({ params }: { params: { id: string } }) {
   const user = await getUserDetails();
-  if (!user) redirect("/auth/admin");
+  if (!user) redirect("/signin");
   const labtest = (await getLabtest(params.id)) as LabtestType;
   // console.log("this is the labtest", labtest);
   if (!labtest) return <h1>NO test to display </h1>;

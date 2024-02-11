@@ -54,10 +54,11 @@ export const LabtestForm = ({
                       <TableCell>
                         <div>
                           <Input
-                            className="h-[40px] w-[80px]"
+                            className="h-[40px] w-[200px]"
                             name={child.investigation}
                             value={child.result}
                             onChange={(e) => {
+                              if (isNaN(Number(e.target.value))) return;
                               setTests((prev) => {
                                 const newTests = [...prev];
                                 newTests[index].children[childIndex].result =

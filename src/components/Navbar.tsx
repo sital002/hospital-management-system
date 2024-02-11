@@ -14,7 +14,7 @@ export default async function Navbar() {
     cookies().set("auth_token", "", {
       expires: new Date(0),
     });
-    redirect("/auth/admin");
+    redirect("/signin");
   };
   // console.log("The user is ", user);
   let image;
@@ -49,7 +49,7 @@ export default async function Navbar() {
           ) : (
             <div>
               <Link
-                href="/auth/admin"
+                href="/signin"
                 className="rounded-lg bg-primary px-4 py-2 text-white "
               >
                 Sign In
