@@ -84,7 +84,7 @@ export default function SignIn() {
             },
           })}
           placeholder="Password@123"
-          type="text"
+          type="password"
         />
         {errors.password && (
           <p className="text-red-500">{errors.password.message}</p>
