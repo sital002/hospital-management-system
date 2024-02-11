@@ -41,7 +41,7 @@ export default function SignIn() {
       const json = await res.json();
       if (json.success) {
         toast.success("Logged in successfully");
-        router.push(json.redirect);
+        router.replace("/dashboard");
         router.refresh();
         return;
       }
