@@ -44,12 +44,15 @@ export function SelectPatient({
           className="w-full justify-between"
         >
           {selectedPatient
-            ? data.find((item) => item._id === selectedPatient._id)?.name
+            ? data.find((item) => item._id === selectedPatient._id)?.name +
+              " (ID: " +
+              selectedPatient._id +
+              ")"
             : "Search Patient by ID"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[700px] p-0">
+      <PopoverContent className="w-[1220px] p-0">
         <Command>
           <CommandInput placeholder="Search Patient by Id" />
           <CommandEmpty>No Patient found.</CommandEmpty>

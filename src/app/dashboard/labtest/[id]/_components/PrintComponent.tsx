@@ -25,7 +25,7 @@ export const PrintComponent = ({ labtest }: PrintComponentProps) => {
   }, []);
   return (
     <div className="px-2">
-      <div ref={componentRef}>
+      <div ref={componentRef} className="my-3">
         <HospitalDetail />
         <PatientCard patient={labtest.patient} />
         <PrintPreview tests={labtest.test} />
