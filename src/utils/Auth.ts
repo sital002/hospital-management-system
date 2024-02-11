@@ -50,6 +50,7 @@ export async function isAuthorized(role: RoleType) {
 export async function getUserDetails() {
   try {
     const authToken = cookies().get("auth_token");
+    // console.log("The auth token is ", authToken);
     if (!authToken) return null;
     const decoded = jwt.verify(
       authToken.value,

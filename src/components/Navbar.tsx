@@ -2,7 +2,6 @@ import { getUserDetails } from "@/utils/Auth";
 import Image from "next/image";
 import Link from "next/link";
 import { MdDashboard } from "react-icons/md";
-import { DarkModeToggle } from "./common/dark-mode-toggle";
 import { Button } from "./ui/button";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -43,7 +42,6 @@ export default async function Navbar() {
                 <p className="text-lg">{user.data?.name}</p>
                 <p className="text-sm capitalize">{user?.role}</p>
               </div>
-              <DarkModeToggle />
               <form action={handleLogout}>
                 <Button type="submit">Logout</Button>
               </form>
@@ -56,7 +54,6 @@ export default async function Navbar() {
               >
                 Sign In
               </Link>
-              <DarkModeToggle />
             </div>
           )}
         </div>

@@ -19,9 +19,6 @@ export default function MainDashboard({ users }: AdminDashboardProps) {
       {showModal && (
         <AddProfileModal showModal={showModal} setShowModal={setShowModal} />
       )}
-      <Button onClick={clickBtn} className="ml-[86%] w-fit">
-        + Add New
-      </Button>
       <table className="mt-3 w-[77vw] border-collapse border-2 border-gray-200 text-center  ">
         <tbody>
           <tr className="py-2">

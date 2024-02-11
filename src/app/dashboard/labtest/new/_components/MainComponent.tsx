@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { PatientType } from "@/database/modals/PatientModel";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { testCategory } from "../../_utils/testCategory";
 import { Button } from "@/components/ui/button";
 import ReactToPrint from "react-to-print";
@@ -11,6 +11,8 @@ import { LabtestFormType } from "../../_utils/CBC";
 import { PrintPreview } from "./PrintPreview";
 import { SelectPatient } from "../../_component/SelectPatient";
 import { LabtestForm } from "./LabtestForm";
+import { toast } from "react-toastify";
+import { HospitalDetail } from "@/components/Labtests/HospitalDetail";
 
 interface MainComponentProps {
   data: PatientType[];
@@ -30,88 +32,74 @@ export function MainComponent({ data }: MainComponentProps) {
   } catch (e) {
     console.log(e);
   }
-  const componentRef = React.useRef(null);
-
-  const [loading, setLoading] = React.useState(false);
-  const [text, setText] = React.useState("old boring text");
-
-  const handleAfterPrint = React.useCallback(() => {
-    console.log("`onAfterPrint` called");
-  }, []);
-
-  const handleBeforePrint = React.useCallback(() => {
-    console.log("`onBeforePrint` called");
-  }, []);
-
-  const handleOnBeforeGetContent = React.useCallback(() => {
-    console.log("`onBeforeGetContent` called");
-    setLoading(true);
-    setText("Loading new text...");
-  }, [setLoading, setText]);
-
-  const reactToPrintContent = React.useCallback(() => {
-    return componentRef.current;
-  }, []);
-
-  const reactToPrintTrigger = React.useCallback(() => {
-    return (
-      <Button variant={"default"} onClick={() => setPrintForm(true)}>
-        Print
-      </Button>
-    );
-  }, []);
 
   const [tests, setTests] = useState<LabtestFormType[]>(selectedTestsArray);
-  const [showPreview, setShowPreview] = useState(false);
-
+  const router = useRouter();
+  const [selectedPatient, setSelectedPatient] =
+    React.useState<PatientType | null>(null);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("submit");
-    // console.log(tests);
+    if (!selectedCategory) return;
+    if (!selectedPatient) {
+      toast.error("Please select a patient");
+      return;
+    }
+    console.log(tests);
+    // function validate(cbc: LabtestFormType[]): boolean {}
+    function validateLabtestForms(labtestForms: LabtestFormType[]): boolean {
+      for (let i = 0; i < labtestForms.length; i++) {
+        for (let j = 0; j < labtestForms[i].children.length; j++) {
+          if (!labtestForms[i].children[j].result) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    if (!validateLabtestForms(tests))
+      return toast.error("Please fill all the fields");
     try {
-      const res = await fetch("/api/labtest/new", {
-        method: "POST",
-        body: JSON.stringify({
-          tests,
-          patient: selectedPatient?._id,
-        }),
-        headers: {
-          "Content-Type": "application/json",
+      // console.log(selectedCategory);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtest`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            tests,
+            category: selectedCategory?.name,
+            patient: selectedPatient?._id,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
+      if (!res.ok) {
+        toast.error("Failed to add test");
+        return;
+      }
       const newTest = await res.json();
       console.log(newTest);
-      setShowPreview(true);
+      router.push(`/dashboard/labtest/${newTest._id}`);
+      toast.success("Test added successfully");
     } catch (e) {
       console.log(e);
+      toast.error("Failed to add test");
     }
   };
-  const [selectedPatient, setSelectedPatient] =
-    React.useState<PatientType | null>(null);
+
   return (
-    <div>
-      <div className="px-4" ref={componentRef}>
-        {showPreview && <HospitalDetail />}
-        {selectedPatient && <PatientCard patient={selectedPatient} />}
-        {showPreview && <PrintPreview tests={tests} />}
-      </div>
-      {!showPreview && (
-        <SelectPatient
-          data={data}
-          selectedPatient={selectedPatient}
-          setSelectedPatient={setSelectedPatient}
-        />
-      )}
-      {/* temp  */}
-      {/* {selectedCategory && !showPreview && (
-        <selectedCategory.form
-          handleSubmit={handleSubmit}
-          setTests={setTests}
-          tests={tests}
-          selectedPatient={selectedPatient}
-        />
-      )} */}
-      {selectedCategory && !showPreview && (
+    <div className="px-2">
+      <SelectPatient
+        data={data}
+        selectedPatient={selectedPatient}
+        setSelectedPatient={setSelectedPatient}
+      />
+      {selectedPatient && <PatientCard patient={selectedPatient} />}
+
+      {selectedCategory && (
         <LabtestForm
           handleSubmit={handleSubmit}
           setTests={setTests}
@@ -119,29 +107,6 @@ export function MainComponent({ data }: MainComponentProps) {
           selectedPatient={selectedPatient}
         />
       )}
-      {showPreview && (
-        <ReactToPrint
-          content={reactToPrintContent}
-          documentTitle="Hospital Management System"
-          onAfterPrint={handleAfterPrint}
-          onBeforeGetContent={handleOnBeforeGetContent}
-          onBeforePrint={handleBeforePrint}
-          removeAfterPrint
-          trigger={reactToPrintTrigger}
-        />
-      )}
-    </div>
-  );
-}
-
-function HospitalDetail() {
-  return (
-    <div className="my-5">
-      <h1 className="text-center text-xl font-bold">Chitwan Medical College</h1>
-      <p className="my-2 text-center font-medium">Ratnangar-3,Tandi,Chitwan</p>
-      <p className="my-2 mr-4 text-end font-semibold">
-        Date: {formatDate(new Date())}
-      </p>
     </div>
   );
 }

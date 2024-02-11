@@ -1,4 +1,6 @@
-export const ThyroidTest = [
+import { LabtestFormType } from "./CBC";
+
+export const ThyroidTest:LabtestFormType[] = [
     {
       name: "T3,Total,serum",
       input:false,
@@ -8,6 +10,7 @@ export const ThyroidTest = [
           normalRange: "20-50",
           unit: "U/LL",
           input: true,
+          result:""
         }
       ]
     },

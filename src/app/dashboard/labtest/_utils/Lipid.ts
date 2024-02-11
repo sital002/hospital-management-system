@@ -1,4 +1,6 @@
-export const Lipid = [
+import { LabtestFormType } from "./CBC";
+
+export const Lipid:LabtestFormType[] = [
     {
       name: "Cholesterol Total",
       input:false,
@@ -8,6 +10,7 @@ export const Lipid = [
           normalRange: "20-50",
           unit: "mg/dL",
           input: true,
+          result:""
         }
       ]
     },

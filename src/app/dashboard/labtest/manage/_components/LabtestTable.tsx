@@ -32,16 +32,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PatientType } from "@/database/modals/PatientModel";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import EditPatientModal from "./patient/EditPatientModal";
-import Link from "next/link";
+import { LabtestType } from "@/database/modals/Labtest";
 
 const handleDelete = async (id: string, router: any) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${id}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtest/${id}`,
       {
         method: "DELETE",
         cache: "no-store",
@@ -62,9 +60,9 @@ const handleDelete = async (id: string, router: any) => {
 };
 
 interface PatientTableProps {
-  users: PatientType[];
+  labtests: LabtestType[];
 }
-export function PatientTable({ users }: PatientTableProps) {
+export function LabtestTable({ labtests }: PatientTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -75,7 +73,7 @@ export function PatientTable({ users }: PatientTableProps) {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const columns: ColumnDef<PatientType>[] = [
+  const columns: ColumnDef<LabtestType>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -156,13 +154,12 @@ export function PatientTable({ users }: PatientTableProps) {
           <div className="flex gap-2">
             <Button
               onClick={() => {
-                router.push(`/dashboard/patient/${row.original._id}`);
+                router.push(`/dashboard/labtest/${row.original._id}`);
               }}
               variant={"link"}
             >
               View
             </Button>
-            <EditPatientModal patient={row.original} />
             <Button
               variant="destructive"
               onClick={() => {
@@ -177,7 +174,7 @@ export function PatientTable({ users }: PatientTableProps) {
     },
   ];
   const table = useReactTable({
-    data: users,
+    data: labtests,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
