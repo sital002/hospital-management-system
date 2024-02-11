@@ -1,5 +1,6 @@
 import Sidebar from "@/components/sidebar";
 import { getUserDetails } from "@/utils/Auth";
+import { redirect } from "next/navigation";
 
 export default async function RootLayout({
   children,
@@ -7,6 +8,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const user = await getUserDetails();
+  if (!user) redirect("/auth/admin");
   return (
     <div className="flex gap-3 ">
       <Sidebar role={user?.role} />
