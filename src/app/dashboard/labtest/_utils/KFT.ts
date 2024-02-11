@@ -8,6 +8,7 @@ export const KFTTest = [
           normalRange: "20-50",
           unit: "mg/dL",
           input: true,
+          result:""
         }
       ]
     },

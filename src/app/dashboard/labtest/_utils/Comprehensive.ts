@@ -8,6 +8,7 @@ export const Comprehensive = [
           normalRange: "70-99",
           unit: "mg/dL",
           input: true,
+          result:""
         }
       ]
     },

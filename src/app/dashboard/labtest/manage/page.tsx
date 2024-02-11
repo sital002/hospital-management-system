@@ -6,18 +6,20 @@ import { redirect } from "next/navigation";
 import { PatientTable } from "@/components/data-table";
 import Stats from "@/components/stats";
 import {getAllUsers as getDoctors} from '@/app/dashboard/doctor/page'
+import { LabtestTable } from "./_components/LabtestTable";
+import { LabtestType } from "@/database/modals/Labtest";
 
 export const getAllUsers = async () => {
   const authToken = cookies().get("auth_token")?.value;
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/patient`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/labtest`, {
       // cache: "no-store",
       credentials: "include",
       headers: {
         Cookie: `auth_token=${authToken};`,
       },
     });
-    const data = (await res.json()) as PatientType[];
+    const data = (await res.json()) as LabtestType[];
     return data;
   } catch (err: any) {
     console.log(err?.message);
@@ -29,14 +31,9 @@ export default async function Dashboard() {
   if (!user) return redirect("/auth/admin");
 
   const data = await getAllUsers();
-  const totalPatient=data.length
-  const inPatient=data.filter((item,index)=>item.patientType==='inpatient')
-  const doctor=await getDoctors()
-  // console.log(data);
   return (
     <div className="px-2">
-      <Stats totalPatient={totalPatient} inPatient={inPatient.length} doctor={doctor.length} />
-      <PatientTable users={data} />
+      <LabtestTable labtests={data} />
     </div>
   );
 }

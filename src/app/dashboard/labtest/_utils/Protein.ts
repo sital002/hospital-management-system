@@ -1,4 +1,6 @@
-export const Protein = [
+import { LabtestFormType } from "./CBC";
+
+export const Protein:LabtestFormType[] = [
     {
       name: "Serum Protein",
       input:false,
@@ -8,6 +10,7 @@ export const Protein = [
           normalRange: "20-50",
           unit: "g/dL",
           input: true,
+          result:""
         }
       ]
     },

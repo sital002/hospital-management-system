@@ -1,4 +1,6 @@
-export const SugarTest = [
+import { LabtestFormType } from "./CBC";
+
+export const SugarTest:LabtestFormType[] = [
     {
       name: "Fasting Blood Sugar(FBS)",
       input:false,
@@ -8,6 +10,7 @@ export const SugarTest = [
           normalRange: "70-100",
           unit: "mg/dL",
           input: true,
+          result:""
         }
       ]
     },

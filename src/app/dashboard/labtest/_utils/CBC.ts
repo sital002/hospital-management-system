@@ -21,7 +21,7 @@ type LabtestChildType = {
 };
 export type LabtestFormType = {
   name: string;
-  label: string;
+  label?: string;
   input: boolean;
   children: LabtestChildType[];
 };

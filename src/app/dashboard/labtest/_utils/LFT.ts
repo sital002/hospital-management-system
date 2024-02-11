@@ -1,4 +1,6 @@
-export const LFTTest = [
+import { LabtestFormType } from "./CBC";
+
+export const LFTTest:LabtestFormType[] = [
     {
       name: "AST(SGOT)",
       input:false,
@@ -8,6 +10,7 @@ export const LFTTest = [
           normalRange: "20-50",
           unit: "U/LL",
           input: true,
+          result:""
         }
       ]
     },

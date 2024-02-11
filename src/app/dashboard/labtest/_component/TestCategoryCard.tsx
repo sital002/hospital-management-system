@@ -16,7 +16,7 @@ export default function TestCategoryCard({
   return (
     <Card
       className={`transition-scale flex max-w-[300px] cursor-pointer flex-col items-center justify-center px-2 py-3 duration-200 hover:scale-105 ${
-        selectedCategory?.name === test.name ? "border-2 border-primary" : ""
+        selectedCategory?.name === test.name ? " bg-primary text-white" : ""
       }`}
       {...rest}
     >
