@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { LabtestTable } from "./_components/LabtestTable";
 import { LabtestType } from "@/database/modals/Labtest";
 
-export const getAllLabtest = async () => {
+const getAllLabtest = async () => {
   const authToken = cookies().get("auth_token")?.value;
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/labtest`, {
