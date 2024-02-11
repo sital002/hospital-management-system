@@ -62,6 +62,7 @@ const handleDelete = async (id: string, router: any) => {
 interface PatientTableProps {
   labtests: LabtestType[];
 }
+
 export function LabtestTable({ labtests }: PatientTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
