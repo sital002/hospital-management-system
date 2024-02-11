@@ -16,6 +16,10 @@ const LabtestSchema = new Schema({
     type: Array,
     required: [true, "Please provide a test"],
   },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 export const Labtest =
@@ -26,4 +30,5 @@ export type LabtestType = {
   patient: PatientType;
   category: string;
   test: LabtestFormType[];
+  createdAt: Date;
 };

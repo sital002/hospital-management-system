@@ -35,6 +35,7 @@ import {
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { LabtestType } from "@/database/modals/Labtest";
+import { formatDate } from "@/utils/formatDate";
 
 const handleDelete = async (id: string, router: any) => {
   try {
@@ -65,6 +66,7 @@ interface PatientTableProps {
 
 export function LabtestTable({ labtests }: PatientTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  console.log(labtests);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
@@ -103,46 +105,25 @@ export function LabtestTable({ labtests }: PatientTableProps) {
       cell: ({ row }) => <div className="uppercase">{row.getValue("_id")}</div>,
     },
     {
-      accessorKey: "name",
-      header: "Name",
+      accessorKey: "category",
+      header: "Category",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("name")}</div>
+        <div className="uppercase">{row.getValue("category")}</div>
       ),
     },
     {
-      accessorKey: "patientType",
-      header: "Patient Type",
+      accessorKey: "PatientName",
+      header: "Patient Name",
       cell: ({ row }) => (
-        <div className="uppercase">{row.getValue("patientType")}</div>
+        <div className="uppercase">{row.original.patient.name}</div>
       ),
     },
+
     {
-      accessorKey: "dob",
-      header: "DOB",
-      cell: ({ row }) => <div className="uppercase">{row.getValue("dob")}</div>,
-    },
-    {
-      accessorKey: "address",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Address
-            <CaretSortIcon className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      accessorKey: "createdAt",
+      header: "Created At",
       cell: ({ row }) => (
-        <div className="uppercase">{row.getValue("address")}</div>
-      ),
-    },
-    {
-      accessorKey: "gender",
-      header: "Gender",
-      cell: ({ row }) => (
-        <div className="uppercase">{row.getValue("gender")}</div>
+        <div className="uppercase">{formatDate(row.getValue("createdAt"))}</div>
       ),
     },
     {
@@ -157,7 +138,7 @@ export function LabtestTable({ labtests }: PatientTableProps) {
               onClick={() => {
                 router.push(`/dashboard/labtest/${row.original._id}`);
               }}
-              variant={"link"}
+              variant={"default"}
             >
               View
             </Button>
@@ -198,9 +179,11 @@ export function LabtestTable({ labtests }: PatientTableProps) {
       <div className="flex items-center py-4">
         <Input
           placeholder="Search by name"
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("PatientName")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("PatientName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

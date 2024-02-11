@@ -1,5 +1,6 @@
 import connectToDB from "@/database/connectToDB";
 import { Labtest } from "@/database/modals/Labtest";
+import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
 
 export async function POST(req: Request) {
@@ -20,6 +21,7 @@ export async function POST(req: Request) {
       patient: data.patient,
     });
     console.log(newTest);
+    revalidatePath("/api/labtest");
     return new Response(JSON.stringify(newTest), {
       status: 201,
     });
@@ -35,6 +37,7 @@ export async function GET(req: NextRequest) {
     await connectToDB();
     // const patientId = req.query.get("patientId");
     const tests = await Labtest.find().populate("patient");
+
     return new Response(JSON.stringify(tests), {
       status: 200,
     });
