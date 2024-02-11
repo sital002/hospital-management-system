@@ -1,8 +1,8 @@
 // "use client";
 import { LabtestType } from "@/database/modals/Labtest";
-import { HospitalDetail } from "../new/_components/MainComponent";
 import { PatientCard } from "../new/_components/PatientCard";
 import { PrintPreview } from "../new/_components/PrintPreview";
+import { HospitalDetail } from "@/components/Labtests/HospitalDetail";
 
 interface PrintComponentProps {
   labtest: LabtestType;
