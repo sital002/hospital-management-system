@@ -41,7 +41,7 @@ export function SelectPatient({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[700px] justify-between"
+          className="w-full justify-between"
         >
           {selectedPatient
             ? data.find((item) => item._id === selectedPatient._id)?.name

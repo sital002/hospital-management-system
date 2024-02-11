@@ -1,17 +1,17 @@
 import PatientDetailCard from "@/components/patientDetails/PatientDetailCard";
 import { Card } from "@/components/ui/card";
+import connectToDB from "@/database/connectToDB";
+import { Labtest } from "@/database/modals/Labtest";
 import { PatientType } from "@/database/modals/PatientModel";
 import { getUserDetails } from "@/utils/Auth";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
-async function getLabtests() {
+async function getLabtests(patientId: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/labtest`, {
-      credentials: "include",
-    });
-    const data = (await res.json()) as any[];
-    console.log(data);
-    return data;
+    await connectToDB();
+    const data = await Labtest.find({ patient: patientId }).populate("patient");
+    return data ?? [];
   } catch (err: any) {
     console.log(err.message);
     return [];
@@ -27,7 +27,6 @@ async function getPatientDetail(id: string) {
       },
     );
     const data = (await res.json()) as PatientType;
-    // console.log("The data is: ", data);
     return data;
   } catch (err: any) {
     console.log(err.message);
@@ -40,7 +39,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   if (!user) redirect("/auth/admin");
   const patient = await getPatientDetail(params.id);
   if (!patient) return null;
-  const labtests = await getLabtests();
+  const labtests = await getLabtests(params.id);
 
   return (
     <>
@@ -62,9 +61,12 @@ export default async function Page({ params }: { params: { id: string } }) {
 function LabtestCard({ labtest }: { labtest: any }) {
   console.log(labtest);
   return (
-    <Card className="my-3 cursor-pointer px-2 py-3">
-      <p>{labtest?.category ?? "Not available"}</p>
-      <p>labtest:{labtest._id}</p>
-    </Card>
+    <Link href={`/dashboard/labtest/${labtest._id.toString()}`}>
+      <Card className="my-3 cursor-pointer px-2 py-3">
+        <p>{labtest?.category ?? "Not available"}</p>
+        <p>labtest:{labtest._id.toString()}</p>
+        <hr />
+      </Card>
+    </Link>
   );
 }

@@ -33,6 +33,7 @@ export async function POST(req: Request) {
 export async function GET(req: NextRequest) {
   try {
     await connectToDB();
+    // const patientId = req.query.get("patientId");
     const tests = await Labtest.find();
     return new Response(JSON.stringify(tests), {
       status: 200,
