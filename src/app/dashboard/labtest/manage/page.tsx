@@ -1,11 +1,6 @@
-import { PatientType } from "@/database/modals/PatientModel";
-import Sidebar from "@/components/sidebar";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { PatientTable } from "@/components/data-table";
-import Stats from "@/components/stats";
-import {getAllUsers as getDoctors} from '@/app/dashboard/doctor/page'
 import { LabtestTable } from "./_components/LabtestTable";
 import { LabtestType } from "@/database/modals/Labtest";
 
@@ -26,7 +21,7 @@ export const getAllUsers = async () => {
     return [];
   }
 };
-export default async function Dashboard() {
+export default async function page() {
   const user = await getUserDetails();
   if (!user) return redirect("/auth/admin");
 
