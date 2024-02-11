@@ -1,5 +1,6 @@
 import connectToDB from "@/database/connectToDB";
 import { Labtest } from "@/database/modals/Labtest";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -19,6 +20,7 @@ export async function POST(req: Request) {
       patient: data.patient,
     });
     console.log(newTest);
+    revalidatePath("/api/labtest");
     return new Response(JSON.stringify(newTest), {
       status: 201,
     });

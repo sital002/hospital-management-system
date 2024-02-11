@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
   try {
     await connectToDB();
     // const patientId = req.query.get("patientId");
-    const tests = await Labtest.find();
+    const tests = await Labtest.find().populate("patient");
     return new Response(JSON.stringify(tests), {
       status: 200,
     });

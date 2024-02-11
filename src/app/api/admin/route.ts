@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
     return new Response(
       JSON.stringify({
         success: true,
-        message: "Doctor created successfully",
+        message: "Admin created successfully",
         data: newAdmin,
       }),
       { status: 201 },
