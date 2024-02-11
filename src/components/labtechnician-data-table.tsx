@@ -148,7 +148,6 @@ export function LabTechnicaianTable({ users }: LabTechnicianTableProps) {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
-            <Button variant="outline">View</Button>
             <EditLabTechnicianModal labtechnician={row.original} />
             <Button
               variant="destructive"

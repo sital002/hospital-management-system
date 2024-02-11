@@ -48,9 +48,13 @@ export default async function Page({ params }: { params: { id: string } }) {
         <div className="w-full">
           <h3 className="mb-3 text-xl font-medium">Recent Tests</h3>
           <div className="h-[400px] w-full  overflow-y-scroll p-5 shadow-md">
-            {labtests.map((labtest) => {
-              return <LabtestCard key={labtest._id} labtest={labtest} />;
-            })}
+            {labtests.length > 0 ? (
+              labtests.map((labtest) => {
+                return <LabtestCard key={labtest._id} labtest={labtest} />;
+              })
+            ) : (
+              <h1>No labtest found</h1>
+            )}
           </div>
         </div>
       </div>
