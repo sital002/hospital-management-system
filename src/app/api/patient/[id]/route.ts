@@ -1,4 +1,5 @@
 import connectToDB from "@/database/connectToDB";
+import { Labtest } from "@/database/modals/Labtest";
 import { Patient, PatientType } from "@/database/modals/PatientModel";
 import { getUserDetails } from "@/utils/Auth";
 import { NextRequest } from "next/server";
@@ -48,8 +49,19 @@ export async function DELETE(req: NextRequest) {
         }),
         { status: 400 },
       );
-
+    connectToDB();
     const deletedUser = await Patient.findByIdAndDelete(id);
+    if (deletedUser === null)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Patient not found",
+        }),
+        { status: 404 },
+      );
+
+    await Labtest.deleteMany({ patient: id });
+
     return new Response(
       JSON.stringify({
         success: true,
