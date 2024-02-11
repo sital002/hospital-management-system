@@ -8,6 +8,7 @@ export const CoagulationTest = [
           normalRange: "3-10",
           unit: "min",
           input: true,
+          result:""
         }
       ]
     },

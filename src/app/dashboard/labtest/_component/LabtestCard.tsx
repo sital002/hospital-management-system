@@ -19,7 +19,7 @@ export default function LabtestCard({
   );
   return (
     <Card
-      className=" transition-scale relative flex max-w-[300px] cursor-pointer flex-col items-center justify-center px-2 py-3 duration-200 hover:scale-105"
+      className={`${selecteed ? "bg-primary text-white":""}transition-scale relative flex max-w-[300px] cursor-pointer flex-col items-center justify-center px-2 py-3 duration-200 hover:scale-105`}
       {...rest}
     >
       {/* <CheckCircle color="green" className="absolute right-2 top-1" /> */}
@@ -27,7 +27,7 @@ export default function LabtestCard({
         <CheckCircle color="green" className="absolute right-2 top-1" />
       ) : null}
       <div>{test.icon}</div>
-      <h3 className="text-xl font-medium">{test.name}</h3>
+      <h3 className={`text-white text-xl font-medium`}>{test.name}</h3>
     </Card>
   );
 }

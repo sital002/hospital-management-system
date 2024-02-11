@@ -4,7 +4,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "react-toastify";
@@ -42,6 +41,7 @@ export default function SignIn() {
           body: JSON.stringify(data),
         },
       );
+
       const json = await res.json();
       if (json.success) {
         toast.success("Logged in successfully");
@@ -51,7 +51,7 @@ export default function SignIn() {
       }
       return toast.error(json.message);
     } catch (err: any) {
-      console.log(err);
+      console.log(err.message);
       toast.error(err.message);
     } finally {
       setLoading(false);

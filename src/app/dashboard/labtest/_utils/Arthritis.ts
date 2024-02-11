@@ -1,4 +1,6 @@
-export const arthritis = [
+import { LabtestFormType } from "./CBC";
+
+export const arthritis:LabtestFormType[] = [
   {
     name: "Serum Uric Acid",
     input: false,

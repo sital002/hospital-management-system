@@ -17,7 +17,7 @@ export default function Page() {
   const searchParams = new URLSearchParams();
   return (
     <div className="px-2">
-      <h2 className="my-3 text-2xl font-extrabold">Select a Category</h2>
+      <h2 className="my-3 text-xl font-bold">Select a Category</h2>
       <div className="grid grid-cols-4 gap-2">
         {testCategory.map((test, i) => (
           <TestCategoryCard
@@ -33,7 +33,7 @@ export default function Page() {
       </div>
       {selectedCategory && (
         <div>
-          <h2 className="my-3 text-2xl font-extrabold">
+          <h2 className="my-3 text-2xl ">
             {selectedCategory.name}
             <span className="ml-4 text-lg font-normal">
               ({selectedTests.length} out of{" "}

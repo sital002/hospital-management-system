@@ -9,14 +9,12 @@ import {
   LayoutDashboard,
   Pill,
   UserRound,
-  FlaskConical,
   ChevronRight,
   PlusSquare,
   FolderKanban,
-  Eye,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, } from "next/navigation";
 
 interface Option {
   name: string;
@@ -38,7 +36,7 @@ const sideBarOptions = [
       {
         name: "Register Patient",
         url: "/dashboard/patient/new",
-        icon: <PlusSquare size={20}  />,
+        icon: <PlusSquare size={20} />,
       },
       {
         name: "Manage Patient",
@@ -99,8 +97,12 @@ const sideBarOptions = [
   },
   {
     name: "Labtest",
-    url: "/dashboard/labtest",
+    roles: ["admin", "labtechnician"],
     icon: <Pill />,
+    dropdown: [
+      { name: "Create LabTest", url: "/dashboard/labtest",icon:<PlusSquare size={20} /> },
+      { name: "Manage LabTest", url: "/dashboard/labtest/manage",icon:<FolderKanban size={20} /> },
+    ],
   },
 ];
 export default function Sidebar({ role }: { role: string | undefined }) {
@@ -115,7 +117,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
     patient: boolean;
     staff: boolean;
     doctor: boolean;
-    labreport: boolean;
+    labtest: boolean;
     labtechnician: boolean;
   }
 
@@ -127,7 +129,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
     patient: false,
     staff: false,
     doctor: false,
-    labreport: false,
+    labtest: false,
     labtechnician: false,
   });
 
@@ -136,7 +138,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
       patient: name === "patient" ? !prv.patient : false,
       staff: name === "staff" ? !prv.staff : false,
       doctor: name === "doctor" ? !prv.doctor : false,
-      labreport: name === "labreport" ? !prv.labreport : false,
+      labtest: name === "labtest" ? !prv.labtest : false,
       labtechnician: name === "labtechnician" ? !prv.labtechnician : false,
     }));
   };
@@ -145,7 +147,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
   console.log(router);
 
   return (
-    <div className="sticky scrollbar-width-2 left-0 top-0 max-h-[88vh] w-[23vw]  overflow-y-scroll">
+    <div className="scrollbar-width-2 sticky left-0 top-0 max-h-[88vh] w-[23vw]  overflow-y-scroll">
       <ul className="my-5  border-t-2 border-gray-200  ">
         {sideBarOptions.map((option, index) => {
           const name = option.name.toLowerCase().trim();
@@ -185,7 +187,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
               )}
               {option.dropdown && (
                 <ul
-                  className={`h-0  overflow-scroll  text-center transition-all pl-5  ${
+                  className={`h-0  overflow-scroll  pl-5 text-center transition-all  ${
                     dropdown[name as keyof DropdownState] ? "h-fit  " : ""
                   }`}
                 >
@@ -199,7 +201,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
                         key={element.name + index}
                       >
                         <li
-                          className={`rounded-none w-full hover:text-primary ${
+                          className={`w-full rounded-none hover:text-primary ${
                             router === element.url ? "text-primary" : ""
                           }`}
                         >
