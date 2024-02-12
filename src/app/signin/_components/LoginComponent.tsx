@@ -16,7 +16,9 @@ type FormInputs = {
 export function LoginComponent() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [select, setSelect] = useState<"admin" | "staff" | "doctor">("admin");
+  const [select, setSelect] = useState<
+    "admin" | "staff" | "doctor" | "labtechnician"
+  >("admin");
 
   const {
     register,
@@ -59,7 +61,7 @@ export function LoginComponent() {
   };
   watch();
 
-  const handleTab = (value: "admin" | "doctor" | "staff") => {
+  const handleTab = (value: "admin" | "doctor" | "staff" | "labtechnician") => {
     setSelect(value);
   };
   return (
@@ -85,13 +87,13 @@ export function LoginComponent() {
             Staff
           </Button>
           <Button
-            onClick={() => handleTab("doctor")}
+            onClick={() => handleTab("labtechnician")}
             size={"lg"}
             className={`grow  rounded-sm text-lg shadow-md hover:bg-purple-500 ${
               select === "doctor" ? "bg-purple-500" : "bg-neutral-400"
             }`}
           >
-            Doctor
+            Labtechnician
           </Button>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>

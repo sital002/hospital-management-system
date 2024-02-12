@@ -10,6 +10,7 @@ import { NextRequest } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
+    console.log(email, password);
     if (!email || !password)
       return new Response(
         JSON.stringify({
@@ -19,9 +20,7 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     await connectToDB();
-    const user = (await Labtechnician.findOne({ email })).select(
-      "+password",
-    ) as LabtechnicianType;
+    const user = (await Labtechnician.findOne({ email })) as LabtechnicianType;
     if (!user)
       return new Response(
         JSON.stringify({

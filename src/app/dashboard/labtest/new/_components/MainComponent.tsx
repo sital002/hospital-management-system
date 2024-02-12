@@ -75,7 +75,7 @@ export function MainComponent({ data }: MainComponentProps) {
         return;
       }
       const newTest = await res.json();
-      console.log(newTest);
+      // console.log(newTest);
       router.push(`/dashboard/labtest/${newTest._id}`);
       toast.success("Test added successfully");
     } catch (e) {
