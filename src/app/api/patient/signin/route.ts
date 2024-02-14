@@ -1,3 +1,6 @@
+import { Patient } from "@/database/modals/PatientModel";
+import { generateToken } from "@/utils/generateToken";
+import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
@@ -29,6 +32,31 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
+    const patient = await Patient.findOne({ email });
+    if (!patient) {
+      return new Response(
+        JSON.stringify({
+          message: "Invalid email or password",
+        }),
+        { status: 400 },
+      );
+    }
+    // const valid = await patient.comparePassword(password);
+    if (patient.password !== password) {
+      return new Response(
+        JSON.stringify({
+          message: "Invalid email or password",
+        }),
+        { status: 400 },
+      );
+    }
+    const token = generateToken({
+      _id: patient._id.toString(),
+      role: "patient",
+    });
+    cookies().set("auth_token", token, {
+      path: "/",
+    });
     return new Response(
       JSON.stringify({
         success: true,

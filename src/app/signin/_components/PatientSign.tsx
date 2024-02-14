@@ -43,7 +43,7 @@ export function PatientLogin() {
       const json = await res.json();
       if (json.success) {
         toast.success("Logged in successfully");
-        router.push("/dashboard");
+        router.replace("/dashboard");
         router.refresh();
         return;
       }

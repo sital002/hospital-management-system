@@ -8,7 +8,7 @@ import { formatDate } from "@/utils/formatDate";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-async function getLabtests(patientId: string) {
+export async function getLabtests(patientId: string) {
   try {
     await connectToDB();
     const data = (await Labtest.find({ patient: patientId }).populate(
@@ -20,7 +20,7 @@ async function getLabtests(patientId: string) {
     return [];
   }
 }
-async function getPatientDetail(id: string) {
+export async function getPatientDetail(id: string) {
   // console.log("params is : ", id);
   try {
     const res = await fetch(
