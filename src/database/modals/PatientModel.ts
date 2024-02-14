@@ -1,11 +1,16 @@
 import mongoose, { InferSchemaType, Schema, Types } from "mongoose";
-import { Labtest } from "./Labtest";
 
 const PatientSchema = new Schema({
   name: {
     type: String,
     required: [true, "Please provide a name"],
     minLength: [3, "Name cannot be less than 3 characters"],
+  },
+  email: {
+    type: String,
+  },
+  password: {
+    type: String,
   },
   gender: {
     type: String,
@@ -19,12 +24,10 @@ const PatientSchema = new Schema({
   admitType: {
     type: String,
     enum: ["emergency", "normal"],
-    required: [true, "Please provide a admit type"],
   },
   patientType: {
     type: String,
     enum: ["outpatient", "inpatient"],
-    required: [true, "Please provide a  Patient type"],
   },
   phone: {
     type: String,
@@ -39,6 +42,17 @@ const PatientSchema = new Schema({
 export const Patient =
   mongoose.models.Patient || mongoose.model("Patient", PatientSchema);
 
-export type PatientType = InferSchemaType<typeof PatientSchema> & {
-  _id: string | Types.ObjectId;
+export type PatientType = {
+  _id?: string | Types.ObjectId;
+  name: string;
+  phone: string;
+  dob: string;
+  address: string;
+  gender: "male" | "female";
+  patientType: "outpatient" | "inpatient";
+  admitType: "emergency" | "normal";
+};
+export type PatientTypePlus = PatientType & {
+  email: string;
+  password: string;
 };

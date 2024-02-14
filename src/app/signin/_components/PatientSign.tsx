@@ -105,6 +105,10 @@ export function PatientLogin() {
             {loading ? "Loading..." : "Sign In"}
           </Button>
         </form>
+        <p>
+          Don&apos;t have an account?{" "}
+          <Link href={"/auth/patient/signup"}>Sign Up</Link>
+        </p>
       </div>
     </div>
   );

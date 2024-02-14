@@ -1,5 +1,5 @@
 import { PatientType } from "@/database/modals/PatientModel";
-import Sidebar from "@/components/sidebar";
+import { Sidebar } from "@/components/sidebar";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

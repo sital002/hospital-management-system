@@ -9,6 +9,7 @@ import {
 import { Admin, type AdminType } from "@/database/modals/AdminModal";
 import { Doctor, type DoctorType } from "@/database/modals/DoctorModel";
 import { Staff, type StaffType } from "@/database/modals/StaffModal";
+import { Patient, PatientTypePlus } from "@/database/modals/PatientModel";
 
 export function isAuthenticated(): boolean {
   try {
@@ -26,7 +27,7 @@ export function isAuthenticated(): boolean {
   }
 }
 
-type RoleType = "admin" | "doctor" | "labtechnician" | "staff";
+type RoleType = "admin" | "doctor" | "labtechnician" | "staff" | "patient";
 export async function isAuthorized(role: RoleType) {
   try {
     const authToken = cookies().get("auth_token");
@@ -47,7 +48,15 @@ export async function isAuthorized(role: RoleType) {
   }
 }
 
-export async function getUserDetails() {
+export async function getUserDetails(): Promise<{
+  data:
+    | DoctorType
+    | LabtechnicianType
+    | StaffType
+    | AdminType
+    | PatientTypePlus;
+  role: RoleType;
+} | null> {
   try {
     const authToken = cookies().get("auth_token");
     // console.log("The auth token is ", authToken);
@@ -57,7 +66,7 @@ export async function getUserDetails() {
       process.env.JWT_SECRET as string,
     ) as {
       _id: string;
-      role: "doctor" | "labtechnician" | "admin" | "staff";
+      role: RoleType;
     };
     if (!decoded) return null;
     await connectToDB();
@@ -79,6 +88,10 @@ export async function getUserDetails() {
     if (decoded.role === "admin") {
       const data = (await Admin.findById(decoded._id)) as AdminType;
       return { data, role: "admin" };
+    }
+    if (decoded.role === "patient") {
+      const data = (await Patient.findById(decoded._id)) as PatientTypePlus;
+      return { data, role: "patient" };
     }
     return null;
   } catch (err) {

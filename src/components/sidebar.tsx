@@ -1,128 +1,22 @@
 "use client";
-import { MdDashboard } from "react-icons/md";
 import "@/components/CSS/style.css";
-import { Fragment, useEffect, useState } from "react";
-import {
-  Accessibility,
-  BookOpenCheck,
-  CircleUser,
-  LayoutDashboard,
-  Pill,
-  UserRound,
-  ChevronRight,
-  PlusSquare,
-  FolderKanban,
-} from "lucide-react";
+import { Fragment, useState } from "react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { usePathname, } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { SidebarOptionType } from "@/app/dashboard/_utils/SidebarOptions";
 
-interface Option {
-  name: string;
-  url?: string;
-  icon: React.ReactNode;
-  dropdown?: Option[];
+interface SidebarProps {
+  sideBarOptions: SidebarOptionType[];
+  role: string | undefined;
 }
-
-const sideBarOptions = [
-  {
-    name: "Dashboard",
-    url: "/dashboard",
-    icon: <LayoutDashboard />,
-  },
-  {
-    name: "Patient",
-    icon: <Accessibility />,
-    dropdown: [
-      {
-        name: "Register Patient",
-        url: "/dashboard/patient/new",
-        icon: <PlusSquare size={20} />,
-      },
-      {
-        name: "Manage Patient",
-        url: "/dashboard/patient",
-        icon: <FolderKanban size={20} />,
-      },
-    ],
-  },
-  {
-    name: "Staff",
-    icon: <UserRound />,
-    roles: ["admin"],
-    dropdown: [
-      {
-        name: "Register Staff",
-        url: "/dashboard/staff/new",
-        icon: <PlusSquare size={20} />,
-      },
-      {
-        name: "Manage Staff",
-        url: "/dashboard/staff",
-        icon: <FolderKanban size={20} />,
-      },
-    ],
-  },
-  {
-    name: "Doctor",
-    icon: <CircleUser />,
-    roles: ["admin", "staff"],
-    dropdown: [
-      {
-        name: "Register Doctor",
-        url: "/dashboard/doctor/new",
-        icon: <PlusSquare size={20} />,
-      },
-      {
-        name: "Manage Doctor",
-        url: "/dashboard/doctor",
-        icon: <FolderKanban size={20} />,
-      },
-    ],
-  },
-  {
-    name: "LabTechnician",
-    icon: <Accessibility />,
-    dropdown: [
-      {
-        name: "Register Lab Technician",
-        url: "/dashboard/labtechnician/new",
-        icon: <PlusSquare size={20} />,
-      },
-      {
-        name: "Manage Lab Technicaian",
-        url: "/dashboard/labtechnician",
-        icon: <FolderKanban size={20} />,
-      },
-    ],
-  },
-  {
-    name: "Labtest",
-    roles: ["admin", "labtechnician"],
-    icon: <Pill />,
-    dropdown: [
-      { name: "Create LabTest", url: "/dashboard/labtest",icon:<PlusSquare size={20} /> },
-      { name: "Manage LabTest", url: "/dashboard/labtest/manage",icon:<FolderKanban size={20} /> },
-    ],
-  },
-];
-export default function Sidebar({ role }: { role: string | undefined }) {
-  interface Option {
-    name: string;
-    url?: string;
-    icon: React.ReactNode;
-    dropdown?: Option[];
-  }
-
+export function Sidebar({ role, sideBarOptions }: SidebarProps) {
   interface DropdownState {
     patient: boolean;
     staff: boolean;
     doctor: boolean;
     labtest: boolean;
     labtechnician: boolean;
-  }
-
-  interface SidebarProps {
-    sideBarOptions: Option[];
   }
 
   const [dropdown, setDropdown] = useState<DropdownState>({
@@ -144,7 +38,6 @@ export default function Sidebar({ role }: { role: string | undefined }) {
   };
 
   const router = usePathname();
-  console.log(router);
 
   return (
     <div className="scrollbar-width-2 sticky left-0 top-0 max-h-[88vh] w-[23vw]  overflow-y-scroll">
@@ -197,7 +90,7 @@ export default function Sidebar({ role }: { role: string | undefined }) {
                         className={`flex gap-3  ${
                           router === element.url ? "text-primary" : ""
                         } `}
-                        href={element.url}
+                        href={element.url || ""}
                         key={element.name + index}
                       >
                         <li
