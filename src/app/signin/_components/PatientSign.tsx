@@ -13,11 +13,9 @@ type FormInputs = {
   password: string;
 };
 
-type Roles = "admin" | "staff" | "doctor" | "labtechnician" | "patient";
-export function LoginComponent() {
+export function PatientLogin() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [select, setSelect] = useState<Roles>("admin");
 
   const {
     register,
@@ -33,10 +31,9 @@ export function LoginComponent() {
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
-      console.log(select, data);
       setLoading(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/${select}/signin`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/signin`,
         {
           method: "POST",
           body: JSON.stringify(data),
@@ -60,50 +57,10 @@ export function LoginComponent() {
   };
   watch();
 
-  const handleTab = (value: Roles) => {
-    setSelect(value);
-  };
   return (
     <div className="mx-2 w-full  overflow-y-hidden rounded-lg p-5 ">
       <div className="mx-auto mt-10 max-w-[800px] rounded-md border-2 p-4 shadow-md">
-        <div className="my-5 flex items-center gap-1">
-          <Button
-            onClick={() => handleTab("admin")}
-            size={"lg"}
-            className={`grow  rounded-sm text-lg shadow-md hover:bg-purple-500 ${
-              select === "admin" ? "bg-purple-500" : "bg-neutral-400"
-            }`}
-          >
-            Admin
-          </Button>
-          <Button
-            onClick={() => handleTab("staff")}
-            size={"lg"}
-            className={`grow rounded-sm  text-lg shadow-md hover:bg-purple-500 ${
-              select === "staff" ? "bg-purple-500" : "bg-neutral-400"
-            }`}
-          >
-            Staff
-          </Button>
-          <Button
-            onClick={() => handleTab("labtechnician")}
-            size={"lg"}
-            className={`grow  rounded-sm text-lg shadow-md hover:bg-purple-500 ${
-              select === "labtechnician" ? "bg-purple-500" : "bg-neutral-400"
-            }`}
-          >
-            Labtechnician
-          </Button>
-          <Button
-            onClick={() => handleTab("doctor")}
-            size={"lg"}
-            className={`grow  rounded-sm text-lg shadow-md hover:bg-purple-500 ${
-              select === "doctor" ? "bg-purple-500" : "bg-neutral-400"
-            }`}
-          >
-            Doctor
-          </Button>
-        </div>
+        <h2 className="my-3 text-center text-3xl">Sign In</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <Label className="my-3">Email</Label>
