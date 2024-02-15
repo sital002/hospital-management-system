@@ -217,22 +217,7 @@ export const UpdatePatientForm = (props: PatientFormProps) => {
             />
           </div>
 
-          <div className="my-6 grow">
-            <FormField
-              control={form.control}
-              name="dob"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>DOB</FormLabel>
-                  <FormControl>
-                    <Input placeholder="2002-09-22" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="my-10 flex gap-4">
+          <div className="my-6 flex gap-4">
             <div className="grow">
               <FormField
                 control={form.control}
@@ -263,24 +248,23 @@ export const UpdatePatientForm = (props: PatientFormProps) => {
               />
             </div>
           </div>
-          <div className="flex gap-4">
-            <div className="my-6 grow">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="********" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+
+          <div className="my-3 grow">
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="********" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-          <div className="my-6 grow">
+          <div className="my-3 grow">
             <FormField
               control={form.control}
               name="cpassword"
