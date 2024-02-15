@@ -5,6 +5,8 @@ import {
   handlePatientApproveStatus,
   handlePatientRejectStatus,
 } from "../_actions";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 interface PatientStatusTableProps {
   patients: PatientTypePlus[];
@@ -12,6 +14,7 @@ interface PatientStatusTableProps {
 
 export function PatientStatusTable({ patients }: PatientStatusTableProps) {
   console.log(patients);
+  const router = useRouter();
   if (patients.length === 0) return <p>No patients to show</p>;
   return (
     <div>
@@ -27,6 +30,8 @@ export function PatientStatusTable({ patients }: PatientStatusTableProps) {
                 <form
                   action={() => {
                     handlePatientApproveStatus(patient._id.toString());
+                    toast.success("Patient account approved");
+                    router.refresh();
                   }}
                 >
                   <Button>Approve</Button>
@@ -34,6 +39,8 @@ export function PatientStatusTable({ patients }: PatientStatusTableProps) {
                 <form
                   action={() => {
                     handlePatientRejectStatus(patient._id.toString());
+                    toast.error("Patient account rejected");
+                    router.refresh();
                   }}
                 >
                   <Button variant={"destructive"} className="ml-3">
