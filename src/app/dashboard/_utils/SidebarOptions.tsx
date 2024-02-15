@@ -58,6 +58,11 @@ export const sideBarOptions: SidebarOptionType[] = [
         url: "/dashboard/patient",
         icon: <FolderKanban size={20} />,
       },
+      {
+        name: "Approve Profile",
+        url: "/dashboard/patient/approve",
+        icon: <FolderKanban size={20} />,
+      },
     ],
   },
   {

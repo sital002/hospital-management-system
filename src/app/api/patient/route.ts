@@ -2,6 +2,7 @@ import connectToDB from "@/database/connectToDB";
 import { Patient } from "@/database/modals/PatientModel";
 import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
+import { getUserDetails } from "@/utils/Auth";
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
@@ -50,19 +51,15 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
-    const authToken = req.cookies.get("auth_token")?.value;
-    // console.log("the token is", authToken);
-    if (!authToken) {
-      return new Response("You must be logged in", { status: 401 });
-    }
-    const decoded = jwt.verify(authToken, process.env.JWT_SECRET as string) as {
-      name: string;
-      role: string;
-    };
-    if (!decoded) {
-      return new Response("You are not authorized", { status: 401 });
-    }
-
+    // const user = await getUserDetails();
+    // // console.log("the token is", authToken);
+    // console.log(user, "the user is");
+    // if (!user) {
+    //   return new Response(
+    //     JSON.stringify({ message: "You are not authorized" }),
+    //     { status: 401 },
+    //   );
+    // }
     await connectToDB();
     const patients = await Patient.find();
     return new Response(JSON.stringify(patients));

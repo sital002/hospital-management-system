@@ -6,6 +6,11 @@ const PatientSchema = new Schema({
     required: [true, "Please provide a name"],
     minLength: [3, "Name cannot be less than 3 characters"],
   },
+  status: {
+    type: String,
+    enum: ["approved", "pending", "active", "inactive"],
+    default: "pending",
+  },
   email: {
     type: String,
   },
@@ -54,5 +59,6 @@ export type PatientType = {
 };
 export type PatientTypePlus = PatientType & {
   email: string;
+  status: "approved" | "pending" | "active" | "inactive";
   password: string;
 };

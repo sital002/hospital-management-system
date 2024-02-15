@@ -41,7 +41,6 @@ export async function POST(req: NextRequest) {
       role: "admin",
     });
     cookies().set("auth_token", token, {
-      httpOnly: true,
       path: "/",
       secure: true,
     });

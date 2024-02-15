@@ -1,6 +1,6 @@
 import { PatientTable } from "@/components/data-table";
 import { DoctorTable } from "@/components/doctor-data-table";
-import Sidebar from "@/components/sidebar";
+import { Sidebar } from "@/components/sidebar";
 import { type DoctorType } from "@/database/modals/DoctorModel";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";

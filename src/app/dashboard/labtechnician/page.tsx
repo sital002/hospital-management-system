@@ -1,5 +1,5 @@
 import { LabTechnicaianTable } from "@/components/labtechnician-data-table";
-import Sidebar from "@/components/sidebar";
+import { Sidebar } from "@/components/sidebar";
 import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";

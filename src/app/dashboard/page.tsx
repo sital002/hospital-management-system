@@ -34,6 +34,8 @@ export default async function page() {
   const inPatient = data.filter((item) => item.patientType === "inpatient");
   const doctor = await getDoctors();
   // console.log(data);
+  if (user.role === "patient" && user.data.status === "pending")
+    return <p>Your account is pending for approval</p>;
   return (
     <div className="px-2">
       {user.role === "patient" ? (
