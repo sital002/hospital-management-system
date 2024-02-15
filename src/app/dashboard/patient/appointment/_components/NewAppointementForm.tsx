@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/utils/formatDate";
 import { cn } from "@/lib/utils";
+import axios, { AxiosError } from "axios";
 import {
   Popover,
   PopoverContent,
@@ -31,93 +32,98 @@ import {
 } from "@/components/ui/popover";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "@/components/ui/calendar";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { FormSchema } from "../utils/schema";
 
 const medicalDepart = [
   {
-    name:"Oncology department",
-    value:"oncology"
+    name: "Oncology department",
+    value: "oncology",
   },
   {
-    name:"Outpatient Department (OPD)",
-    value:"outpatient"
+    name: "Outpatient Department (OPD)",
+    value: "outpatient",
   },
   {
-    name:"Inpatient Department (IPD)",
-    value:"inpatient"
+    name: "Inpatient Department (IPD)",
+    value: "inpatient",
   },
   {
-    name:"Neurology department",
-    value:"neurology"
+    name: "Neurology department",
+    value: "neurology",
   },
   {
-    name:"Haematology department",
-    value:"haematology"
+    name: "Haematology department",
+    value: "haematology",
   },
   {
-    name:"Cardiology department",
-    value:"cardiology"
+    name: "Cardiology department",
+    value: "cardiology",
   },
   {
-    name:"General surgery",
-    value:"general"
+    name: "General surgery",
+    value: "general",
   },
   {
-    name:"Orthopaedic department",
-    value:"orthopaedic"
+    name: "Orthopaedic department",
+    value: "orthopaedic",
   },
   {
-    name:"Opthalmology department",
-    value:"opthalmology"
+    name: "Opthalmology department",
+    value: "opthalmology",
   },
   {
-    name:"Gastroenterology department",
-    value:"gastroenterology"
+    name: "Gastroenterology department",
+    value: "gastroenterology",
   },
   {
-    name:"Geriatric department",
-    value:"geriatric"
+    name: "Geriatric department",
+    value: "geriatric",
   },
   {
-    name:"Gynaecology department",
-    value:"gynaecology"
-  }
+    name: "Gynaecology department",
+    value: "gynaecology",
+  },
 ];
 
-const FormSchema = z.object({
-  name: z.string({
-    required_error: "Name is required",
-  }),
-  phone: z.string({
-    required_error: "Phone is required",
-  }),
-  email: z.string({
-    required_error: "Email is required",
-  }),
-  type: z.enum(
-    [
-      "oncology","gynaecology","geriatric","gastroenterology","opthalmology","orthopaedic","general","cardiology","haematology","neurology","inpatient","outpatient"
-
-    ],
-    {
-      required_error: "You need to select a department.",
-    },
-  ),
-  contact: z.enum(["email", "phone"], {
-    required_error: "You need to select a Contact Preference.",
-  }),
-  date: z.date({
-    required_error: "You need to select a date.",
-  }).min(new Date(), "Invalid Date"),
-});
-export function NewAppointementForm() {
-  const [date, setDate] = React.useState<Date>();
+interface NewAppointementFormProps {
+  patientId: string;
+}
+export function NewAppointementForm({ patientId }: NewAppointementFormProps) {
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      patientId: patientId,
+      date: new Date(),
+      contact: "email",
+      email: "sital@gmail.com",
+      name: "sital",
+      phone: "1234567890",
+      type: "oncology",
+    },
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
-    console.log(data);
+    // console.log(data);
+    try {
+      const res = await axios.post("/api/patient/appointment/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data,
+      });
+      if (res.status === 201) {
+        toast.success("Appointment created successfully.");
+        return router.push("/dashboard");
+      }
+    } catch (err: any) {
+      console.log(err.response.data.message);
+      toast.error(err.response.data.message);
+    }
   };
 
   return (
@@ -214,46 +220,44 @@ export function NewAppointementForm() {
           </div>
 
           <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        formatDate(field.value)
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date < new Date("1900-01-01")
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Date of birth</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[240px] pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        {field.value ? (
+                          formatDate(field.value)
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) => date < new Date("1900-01-01")}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <div className="my-6 flex">
             <FormField

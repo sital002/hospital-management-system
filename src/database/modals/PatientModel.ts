@@ -43,7 +43,7 @@ export const Patient =
   mongoose.models.Patient || mongoose.model("Patient", PatientSchema);
 
 export type PatientType = {
-  _id?: string | Types.ObjectId;
+  _id: string | Types.ObjectId;
   name: string;
   phone: string;
   dob: string;

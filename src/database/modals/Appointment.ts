@@ -6,10 +6,6 @@ const AppointmentSchema = new Schema({
     ref: "Patient",
     required: [true, "Please provide a patientId"],
   },
-  doctorId: {
-    type: String,
-    required: [true, "Please provide a doctorId"],
-  },
   contactPreference: {
     type: String,
     enum: ["email", "phone"],
