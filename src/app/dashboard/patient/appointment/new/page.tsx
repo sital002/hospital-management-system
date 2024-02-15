@@ -16,7 +16,7 @@ export default async function page() {
   }
   return (
     <div>
-      <NewAppointementForm patientId={user.data._id.toString()} />
+      <NewAppointementForm patient={user.data} />
     </div>
   );
 }

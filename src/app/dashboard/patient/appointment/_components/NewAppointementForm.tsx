@@ -35,6 +35,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { FormSchema } from "../utils/schema";
+import { PatientTypePlus } from "@/database/modals/PatientModel";
 
 const medicalDepart = [
   {
@@ -88,20 +89,20 @@ const medicalDepart = [
 ];
 
 interface NewAppointementFormProps {
-  patientId: string;
+  patient: PatientTypePlus;
 }
-export function NewAppointementForm({ patientId }: NewAppointementFormProps) {
+export function NewAppointementForm({ patient }: NewAppointementFormProps) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      patientId: patientId,
+      patientId: patient._id.toString(),
       date: new Date(),
       contact: "email",
-      email: "sital@gmail.com",
-      name: "sital",
-      phone: "1234567890",
+      email: patient.email,
+      name: patient.name,
+      phone: patient.phone,
       type: "oncology",
     },
   });
