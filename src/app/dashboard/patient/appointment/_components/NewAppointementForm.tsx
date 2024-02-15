@@ -18,6 +18,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -30,21 +31,56 @@ import {
 } from "@/components/ui/popover";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "@/components/ui/calendar";
-import { Label } from "@/components/ui/label";
 
 const medicalDepart = [
-  "all",
-  "ball",
-  "call",
-  "dall",
-  "all",
-  "ball",
-  "call",
-  "dall",
-  "all",
-  "ball",
-  "call",
-  "dall",
+  {
+    name:"Oncology department",
+    value:"oncology"
+  },
+  {
+    name:"Outpatient Department (OPD)",
+    value:"outpatient"
+  },
+  {
+    name:"Inpatient Department (IPD)",
+    value:"inpatient"
+  },
+  {
+    name:"Neurology department",
+    value:"neurology"
+  },
+  {
+    name:"Haematology department",
+    value:"haematology"
+  },
+  {
+    name:"Cardiology department",
+    value:"cardiology"
+  },
+  {
+    name:"General surgery",
+    value:"general"
+  },
+  {
+    name:"Orthopaedic department",
+    value:"orthopaedic"
+  },
+  {
+    name:"Opthalmology department",
+    value:"opthalmology"
+  },
+  {
+    name:"Gastroenterology department",
+    value:"gastroenterology"
+  },
+  {
+    name:"Geriatric department",
+    value:"geriatric"
+  },
+  {
+    name:"Gynaecology department",
+    value:"gynaecology"
+  }
 ];
 
 const FormSchema = z.object({
@@ -57,9 +93,21 @@ const FormSchema = z.object({
   email: z.string({
     required_error: "Email is required",
   }),
-  type: z.enum(["all"], {
-    required_error: "You need to select a notification type.",
+  type: z.enum(
+    [
+      "oncology","gynaecology","geriatric","gastroenterology","opthalmology","orthopaedic","general","cardiology","haematology","neurology","inpatient","outpatient"
+
+    ],
+    {
+      required_error: "You need to select a department.",
+    },
+  ),
+  contact: z.enum(["email", "phone"], {
+    required_error: "You need to select a Contact Preference.",
   }),
+  date: z.date({
+    required_error: "You need to select a date.",
+  }).min(new Date(), "Invalid Date"),
 });
 export function NewAppointementForm() {
   const [date, setDate] = React.useState<Date>();
@@ -98,12 +146,12 @@ export function NewAppointementForm() {
 
               <FormField
                 control={form.control}
-                name="phone"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="97++++++++" {...field} />
+                      <Input placeholder="abc@gmail.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -118,7 +166,7 @@ export function NewAppointementForm() {
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input placeholder="97++++++++" {...field} />
+                    <Input placeholder="+977********" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -129,7 +177,7 @@ export function NewAppointementForm() {
           <div className="my-6 flex">
             <FormField
               control={form.control}
-              name="type"
+              name="contact"
               render={({ field }) => (
                 <FormItem className="space-y-3">
                   <FormLabel>Contact Preference</FormLabel>
@@ -165,28 +213,47 @@ export function NewAppointementForm() {
             />
           </div>
 
-           <Label className="mr-4">Select Date</Label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-[280px] border-black justify-start text-left font-normal",
-                  !date && "text-muted-foreground",
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? formatDate(date) : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-              />
-            </PopoverContent>
-          </Popover>
+          <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date of birth</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[240px] pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        formatDate(field.value)
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
           <div className="my-6 flex">
             <FormField
@@ -210,10 +277,10 @@ export function NewAppointementForm() {
                             <Fragment key={index}>
                               <FormItem className="flex items-center space-x-3 space-y-0">
                                 <FormControl>
-                                  <RadioGroupItem  value={item} />
+                                  <RadioGroupItem value={item.value} />
                                 </FormControl>
                                 <FormLabel className="font-normal">
-                                  {item}
+                                  {item.name}
                                 </FormLabel>
                               </FormItem>
                             </Fragment>
