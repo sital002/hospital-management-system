@@ -1,3 +1,4 @@
+import connectToDB from "@/database/connectToDB";
 import { Patient } from "@/database/modals/PatientModel";
 import { generateToken } from "@/utils/generateToken";
 import { cookies } from "next/headers";
@@ -32,6 +33,7 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
+    await connectToDB();
     const patient = await Patient.findOne({ email });
     if (!patient) {
       return new Response(

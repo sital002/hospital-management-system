@@ -48,15 +48,28 @@ export async function isAuthorized(role: RoleType) {
   }
 }
 
-export async function getUserDetails(): Promise<{
-  data:
-    | DoctorType
-    | LabtechnicianType
-    | StaffType
-    | AdminType
-    | PatientTypePlus;
-  role: RoleType;
-} | null> {
+interface Doctor {
+  role: "doctor";
+  data: DoctorType;
+}
+interface Staff {
+  role: "staff";
+  data: StaffType;
+}
+interface Admin {
+  role: "admin";
+  data: AdminType;
+}
+interface Labtechnician {
+  role: "labtechnician";
+  data: LabtechnicianType;
+}
+interface Patient {
+  data: PatientTypePlus;
+  role: "patient";
+}
+type User = Doctor | Staff | Admin | Labtechnician | Patient | null;
+export async function getUserDetails(): Promise<User> {
   try {
     const authToken = cookies().get("auth_token");
     // console.log("The auth token is ", authToken);

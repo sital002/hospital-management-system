@@ -49,7 +49,7 @@ export default async function Navbar() {
           ) : (
             <div>
               <Link
-                href="/signin"
+                href="/auth/admin"
                 className="rounded-lg bg-primary px-4 py-2 text-white "
               >
                 Sign In

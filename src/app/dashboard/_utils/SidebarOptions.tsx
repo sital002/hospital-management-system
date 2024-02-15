@@ -24,7 +24,7 @@ export const PaitentSidebarOptions: SidebarOptionType[] = [
   },
   {
     name: "Update My Profile",
-    url: "/dashboard/profile",
+    url: "/dashboard/patient/update",
     icon: <PlusSquare size={20} />,
   },
   {
