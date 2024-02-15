@@ -36,6 +36,8 @@ export default async function page() {
   // console.log(data);
   if (user.role === "patient" && user.data.status === "pending")
     return <p>Your account is pending for approval</p>;
+  if (user.role === "patient" && user.data.status === "rejected")
+    return <p>Your account is rejected</p>;
   return (
     <div className="px-2">
       {user.role === "patient" ? (

@@ -14,6 +14,9 @@ export default async function page() {
       },
     };
   }
+  if (user.data.status === "pending")
+    return <p>Your account is pending for approval</p>;
+  if (user.data.status === "rejected") return <p>Your account is rejected</p>;
   return (
     <div>
       <NewAppointementForm patient={user.data} />

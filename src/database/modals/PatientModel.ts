@@ -8,7 +8,7 @@ const PatientSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["approved", "pending", "active", "inactive"],
+    enum: ["approved", "pending", "active", "inactive", "rejected"],
     default: "pending",
   },
   email: {
@@ -59,6 +59,6 @@ export type PatientType = {
 };
 export type PatientTypePlus = PatientType & {
   email: string;
-  status: "approved" | "pending" | "active" | "inactive";
+  status: "approved" | "pending" | "active" | "inactive" | "rejected";
   password: string;
 };
