@@ -104,13 +104,24 @@ export function DoctorTable({ users }: DoctorTableProps) {
         <div className="capitalize">{row.getValue("name")}</div>
       ),
     },
-    // {
-    //   accessorKey: "patientType",
-    //   header: "Patient Type",
-    //   cell: ({ row }) => (
-    //     <div className="uppercase">{row.getValue("patientType")}</div>
-    //   ),
-    // },
+    {
+      accessorKey: "email",
+      header: "Email",
+      cell: ({ row }) => <div>{row.getValue("email")}</div>,
+    },
+    {
+      accessorKey: "contact",
+      header: "Contact",
+      cell: ({ row }) => <div className="uppercase">{row.original.phone}</div>,
+    },
+    {
+      accessorKey: "department",
+      header: "Department",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("department")}</div>
+      ),
+    },
+
     {
       accessorKey: "dob",
       header: "DOB",

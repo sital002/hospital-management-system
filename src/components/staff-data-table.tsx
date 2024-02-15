@@ -104,18 +104,36 @@ export function StaffTable({ users }: StaffTableProps) {
         <div className="capitalize">{row.getValue("name")}</div>
       ),
     },
-    // {
-    //   accessorKey: "patientType",
-    //   header: "Patient Type",
-    //   cell: ({ row }) => (
-    //     <div className="uppercase">{row.getValue("patientType")}</div>
-    //   ),
-    // },
+    {
+      accessorKey: "email",
+      header: "Email",
+      cell: ({ row }) => <div>{row.original.email}</div>,
+    },
+    {
+      accessorKey: "phone",
+      header: "Contact",
+      cell: ({ row }) => <div>{row.original.phone}</div>,
+    },
     {
       accessorKey: "dob",
       header: "DOB",
       cell: ({ row }) => <div className="uppercase">{row.getValue("dob")}</div>,
     },
+    {
+      accessorKey: "shift",
+      header: "Shift",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("shift")}</div>
+      ),
+    },
+    {
+      accessorKey: "shift",
+      header: "Shift",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("shift")}</div>
+      ),
+    },
+
     {
       accessorKey: "address",
       header: ({ column }) => {
