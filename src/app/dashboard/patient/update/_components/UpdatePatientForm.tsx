@@ -26,17 +26,6 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-type FormInputs = {
-  name: string;
-  id?: string;
-  phone: string;
-  address: string;
-  dob: string;
-  gender: string;
-  patientType: "inpatient" | "outpatient";
-  admitType: "normal" | "emergency";
-};
-
 const genderOptions = [
   {
     name: "Male",
@@ -54,13 +43,6 @@ type PatientFormProps = {
 };
 
 const FormSchema = z.object({
-  email: z
-    .string({
-      invalid_type_error: "Email must be a string",
-      required_error: "Email is required",
-    })
-    .min(1, "Email is required")
-    .email("Invalid email address"),
   name: z
     .string({
       required_error: "Name is required",
@@ -104,31 +86,18 @@ const FormSchema = z.object({
 
 export const UpdatePatientForm = (props: PatientFormProps) => {
   const [loading, setLoading] = useState(false);
-  // const { update, patient, open, setOpen } = props;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: props.update
-      ? {
-          name: props.patient.name,
-          phone: props.patient.phone,
-          address: props.patient.address,
-          dob: props.patient.dob,
-          gender: props.patient.gender,
-          email: props.patient.email,
-          password: props.patient.password,
-          cpassword: props.patient.password,
-        }
-      : {
-          name: "John Doe",
-          phone: "9860098600",
-          address: "Ratnapark, Kathmandu",
-          gender: "male",
-          email: "test@gmail.com",
-          password: "Password@123",
-          cpassword: "Password@123",
-          dob: "2002/07/33",
-        },
+    defaultValues: {
+      name: props.patient.name,
+      phone: props.patient.phone,
+      address: props.patient.address,
+      dob: props.patient.dob,
+      gender: props.patient.gender,
+      password: props.patient.password,
+      cpassword: props.patient.password,
+    },
   });
   const router = useRouter();
   //   console.log(form.watch());
@@ -295,21 +264,6 @@ export const UpdatePatientForm = (props: PatientFormProps) => {
             </div>
           </div>
           <div className="flex gap-4">
-            <div className="my-6 grow">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="test@gmail.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
             <div className="my-6 grow">
               <FormField
                 control={form.control}
