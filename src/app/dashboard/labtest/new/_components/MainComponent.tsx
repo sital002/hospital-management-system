@@ -14,6 +14,7 @@ interface MainComponentProps {
 }
 export function MainComponent({ data }: MainComponentProps) {
   const searchParams = useSearchParams();
+  const [disabled, setDisabled] = useState(false);
   const category = searchParams.get("selectedCategory");
   // console.log(category);
   const selectedCategory = testCategory.find((item) => item.name === category);
@@ -55,6 +56,7 @@ export function MainComponent({ data }: MainComponentProps) {
     if (!validateLabtestForms(tests))
       return toast.error("Please fill all the fields");
     try {
+      setDisabled(true);
       // console.log(selectedCategory);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtest`,
@@ -82,6 +84,8 @@ export function MainComponent({ data }: MainComponentProps) {
     } catch (e) {
       console.log(e);
       toast.error("Failed to add test");
+    } finally {
+      setDisabled(false);
     }
   };
 
@@ -96,6 +100,7 @@ export function MainComponent({ data }: MainComponentProps) {
 
       {selectedCategory && (
         <LabtestForm
+          disabled={disabled}
           handleSubmit={handleSubmit}
           setTests={setTests}
           tests={tests}
