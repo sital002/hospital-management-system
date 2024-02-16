@@ -26,7 +26,11 @@ const AppointmentSchema = new Schema({
   },
 });
 
-export type TAppointment = mongoose.InferSchemaType<typeof AppointmentSchema>;
+export type TAppointment = mongoose.InferSchemaType<
+  typeof AppointmentSchema
+> & {
+  _id: string | mongoose.Types.ObjectId;
+};
 
 export const Appointment =
   mongoose.models.Appointment ||

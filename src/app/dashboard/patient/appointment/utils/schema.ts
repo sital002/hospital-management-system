@@ -45,5 +45,8 @@ export const FormSchema = z.object({
       required_error: "You need to select a date.",
       invalid_type_error: "Invalid Date",
     })
-    .min(new Date(), "Invalid Date"),
+    .min(new Date(), "Invalid Date")
+    .refine((date) => {
+      return date > new Date();
+    }, "Date should be in the future"),
 });

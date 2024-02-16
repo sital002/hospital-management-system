@@ -119,7 +119,8 @@ export function NewAppointementForm({ patient }: NewAppointementFormProps) {
       });
       if (res.status === 201) {
         toast.success("Appointment created successfully.");
-        return router.push("/dashboard");
+        router.push("/dashboard/patient/appointment");
+        return router.refresh();
       }
     } catch (err: any) {
       console.log(err.response.data.message);

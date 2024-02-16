@@ -34,7 +34,7 @@ export const PaitentSidebarOptions: SidebarOptionType[] = [
   },
   {
     name: "View Appointments",
-    url: "/dashboard/appointment",
+    url: "/dashboard/patient/appointment",
     icon: <PlusSquare size={20} />,
   },
 ];

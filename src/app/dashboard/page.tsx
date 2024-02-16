@@ -28,20 +28,20 @@ const getAllUsers = async () => {
 export default async function page() {
   const user = await getUserDetails();
   if (!user) return redirect("/signin");
-
+  if (user.role === "patient" && user.data.status === "pending")
+    return <p>Your account is pending for approval</p>;
+  if (user.role === "patient" && user.data.status === "rejected")
+    return <p>Your account is rejected</p>;
   const data = await getAllUsers();
   const totalPatient = data.length;
   const inPatient = data.filter((item) => item.patientType === "inpatient");
   const doctor = await getDoctors();
   // console.log(data);
-  if (user.role === "patient" && user.data.status === "pending")
-    return <p>Your account is pending for approval</p>;
-  if (user.role === "patient" && user.data.status === "rejected")
-    return <p>Your account is rejected</p>;
+
   return (
     <div className="px-2">
       {user.role === "patient" ? (
-        <PatientDashboard patientId={user.data._id!.toString()} />
+        <PatientDashboard patientId={user.data._id.toString()} />
       ) : (
         <>
           <Stats
