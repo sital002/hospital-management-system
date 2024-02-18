@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
+import { StaffFormSchema } from "@/app/dashboard/patient/appointment/utils/schema";
 
 const genderOptions = [
   {
@@ -62,74 +63,11 @@ type StaffFormProps =
       update: false;
     };
 
-const FormSchema = z.object({
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
-    })
-    .email(),
-  name: z
-    .string({
-      required_error: "Name is required",
-    })
-    .min(1, "Name is required")
-    .max(60, "Name cannot be more than 100"),
-  password: z
-    .string({
-      required_error: "Password is required",
-    })
-    .optional(),
-  cpassword: z
-    .string({
-      required_error: "Password is required",
-    })
-    .optional(),
-  phone: z
-    .string()
-    .min(1, "Phone number is required")
-    .max(10, "Phone number cannot be more than 10")
-    .refine((value) => {
-      const phoneRegex = /^\d{10}$/;
-      return phoneRegex.test(value);
-    }, "Invalid phone number"),
-  address: z
-    .string({
-      required_error: "Address is required",
-    })
-    .min(1, "Address is required")
-    .max(100, "Address cannot be more than 100"),
-  dob: z
-    .string({
-      required_error: "date is requireds",
-    })
-    .min(1, "Date is required")
-    .refine((value) => {
-      const dateRegex = /^\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/;
-      if (!dateRegex.test(value)) return false;
-      const [year, month, day] = value.split("/").map(Number);
-      const date = new Date(year, month - 1, day);
-      return (
-        date.getFullYear() === year &&
-        date.getMonth() === month - 1 &&
-        date.getDate() === day
-      );
-    }, "Invalid date format or value"),
-  gender: z
-    .string({
-      required_error: "Gender is required",
-    })
-    .min(1, "Gender is required"),
-  shift: z
-    .string({
-      required_error: "shift is required",
-    })
-    .min(1, "Shift is required"),
-});
 const StaffForm: FC<StaffFormProps> = (props) => {
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof StaffFormSchema>>({
+    resolver: zodResolver(StaffFormSchema),
     defaultValues: props.update
       ? {
           name: props.staff?.name || "",
@@ -157,7 +95,7 @@ const StaffForm: FC<StaffFormProps> = (props) => {
   // const [showModal, setShowModal] = useState(false);
   console.log(form.watch());
   const createNewStaff = async (
-    data: z.infer<typeof FormSchema>,
+    data: z.infer<typeof StaffFormSchema>,
     router: any,
   ) => {
     console.log(data);
@@ -182,7 +120,7 @@ const StaffForm: FC<StaffFormProps> = (props) => {
     }
   };
 
-  const updateStaffDetail = async (data: z.infer<typeof FormSchema>) => {
+  const updateStaffDetail = async (data: z.infer<typeof StaffFormSchema>) => {
     try {
       console.log(data);
       if (!props.update) return;
@@ -221,7 +159,9 @@ const StaffForm: FC<StaffFormProps> = (props) => {
     }
   };
 
-  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof StaffFormSchema>> = async (
+    data,
+  ) => {
     if (props.update) {
       updateStaffDetail(data);
     } else {
