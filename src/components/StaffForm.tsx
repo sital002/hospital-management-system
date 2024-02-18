@@ -328,7 +328,11 @@ const StaffForm: FC<StaffFormProps> = (props) => {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="*********" {...field} />
+                          <Input
+                            type={"password"}
+                            placeholder="*********"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -343,7 +347,11 @@ const StaffForm: FC<StaffFormProps> = (props) => {
                       <FormItem>
                         <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="*********" {...field} />
+                          <Input
+                            type={"password"}
+                            placeholder="*********"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

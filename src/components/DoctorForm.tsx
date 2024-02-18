@@ -375,7 +375,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="*********" {...field} />
+                          <Input type={'password'} placeholder="*********" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -390,7 +390,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
                       <FormItem>
                         <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="*********" {...field} />
+                          <Input type={'password'}placeholder="*********" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

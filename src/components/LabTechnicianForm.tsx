@@ -336,7 +336,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="*********" {...field} />
+                          <Input type={'password'} placeholder="*********" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -351,7 +351,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = ({
                       <FormItem>
                         <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="*********" {...field} />
+                          <Input type={'password'} placeholder="*********" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

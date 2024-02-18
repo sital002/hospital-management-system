@@ -35,7 +35,11 @@ const PatientSchema = new Schema({
 });
 
 export const Patient =
-  mongoose.models.Patient || mongoose.model("Patient", PatientSchema);
+  mongoose.models.Patient ||
+  mongoose.model<InferSchemaType<typeof PatientSchema>>(
+    "Patient",
+    PatientSchema,
+  );
 
 export type PatientType = InferSchemaType<typeof PatientSchema> & {
   _id: string | Types.ObjectId;
