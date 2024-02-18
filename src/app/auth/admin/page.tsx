@@ -13,7 +13,7 @@ type FormInputs = {
   password: string;
 };
 
-type Role = "admin" | "staff" | "doctor" | "patient" | "labtechnician";
+type Role = "admin" | "staff" | "doctor" | "labtechnician";
 export default function SignIn() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -102,15 +102,6 @@ export default function SignIn() {
             }`}
           >
             Labtechnician
-          </Button>
-          <Button
-            onClick={() => handleTab("patient")}
-            size={"lg"}
-            className={`grow  rounded-sm text-lg shadow-md hover:bg-purple-500 ${
-              select === "patient" ? "bg-purple-500" : "bg-neutral-400"
-            }`}
-          >
-            Patient
           </Button>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>

@@ -77,29 +77,43 @@ type PatientFormProps = {
 };
 
 const FormSchema = z.object({
-  name: z.string({
-    required_error: "Name is required",
-  }),
-  phone: z.string({
-    required_error: "Phone is required",
-  }),
-  address: z.string({
-    required_error: "Address is required",
-  }),
-  dob: z.string({
-    required_error: "date is requireds",
-  }),
-  gender: z.string({
-    required_error: "Gender is required",
-  }),
-  admitType: z.string({
-    required_error: "AdmitType is required",
-  }),
-  patientType: z.string({
-    required_error: "PatientType is required",
-  }),
+  name: z
+    .string({
+      required_error: "Name is required",
+    })
+    .min(1, "Name is required"),
+  phone: z
+    .string({
+      required_error: "Phone is required",
+    })
+    .min(10, "Phone number must be 10 digits"),
+  address: z
+    .string({
+      required_error: "Address is required",
+    })
+    .min(1, "Address is required")
+    .max(100, "Address is too long"),
+  dob: z
+    .string({
+      required_error: "date is requireds",
+    })
+    .min(1, "Date is required"),
+  gender: z
+    .string({
+      required_error: "Gender is required",
+    })
+    .min(1, "Gender is required"),
+  admitType: z
+    .string({
+      required_error: "AdmitType is required",
+    })
+    .min(1, "AdmitType is required"),
+  patientType: z
+    .string({
+      required_error: "PatientType is required",
+    })
+    .min(1, "PatientType is required"),
 });
-
 
 const PatientForm = ({
   patient,
@@ -139,13 +153,15 @@ const PatientForm = ({
     data: z.infer<typeof FormSchema>;
     router: any;
   }) => {
-  
     try {
-      setLoading(true)
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/patient`, {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+      setLoading(true);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient`,
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+      );
       const json = await res.json();
       if (json.success) {
         toast.success("Account created successfully");
@@ -158,11 +174,10 @@ const PatientForm = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err?.message);
-    } finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
-
 
   const updatePatientDetail = async ({
     data,
@@ -171,7 +186,7 @@ const PatientForm = ({
   }) => {
     try {
       console.log(data);
-      setLoading(true)
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${patient?._id}`,
         {
@@ -201,8 +216,8 @@ const PatientForm = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err?.message);
-    } finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
@@ -376,7 +391,7 @@ const PatientForm = ({
             </div>
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Loading...':update ? "Update" : "Create"}
+            {loading ? "Loading..." : update ? "Update" : "Create"}
           </Button>
         </form>
       </Form>
