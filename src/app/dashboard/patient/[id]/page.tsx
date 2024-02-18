@@ -37,7 +37,7 @@ export async function getPatientDetail(id: string) {
   }
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function page({ params }: { params: { id: string } }) {
   const user = await getUserDetails();
   if (!user) redirect("/signin");
   const patient = await getPatientDetail(params.id);
