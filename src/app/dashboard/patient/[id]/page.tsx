@@ -8,7 +8,7 @@ import { getPatientDetail } from "@/utils/getPatientDetail";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-async function getLabtests(patientId: string) {
+export async function getLabtests(patientId: string) {
   try {
     await connectToDB();
     const data = (await Labtest.find({ patient: patientId }).populate(
