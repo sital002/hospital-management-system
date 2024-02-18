@@ -41,7 +41,7 @@ export default function SignIn() {
       const json = await res.json();
       if (json.success) {
         toast.success("Logged in successfully");
-        router.push(json.redirect);
+        router.replace("/dashboard");
         router.refresh();
         return;
       }
@@ -84,7 +84,7 @@ export default function SignIn() {
             },
           })}
           placeholder="Password@123"
-          type="text"
+          type="password"
         />
         {errors.password && (
           <p className="text-red-500">{errors.password.message}</p>

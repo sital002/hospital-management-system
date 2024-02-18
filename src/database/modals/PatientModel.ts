@@ -1,46 +1,58 @@
 import mongoose, { InferSchemaType, Schema, Types } from "mongoose";
+import { Labtest } from "./Labtest";
 
-const PatientSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: [true, "Please provide a name"],
-      minLength: [3, "Name cannot be less than 3 characters"],
-    },
-    gender: {
-      type: String,
-      enum: ["male", "female"],
-      required: [true, "Please provide a gender"],
-    },
-    dob: {
-      type: Date,
-      required: [true, "Please provide a dob"],
-    },
-    admitType: {
-      type: String,
-      enum: ["emergency", "normal"],
-      required: [true, "Please provide a admit type"],
-    },
-    patientType: {
-      type: String,
-      enum: ["outpatient", "inpatient"],
-      required: [true, "Please provide a  Patient type"],
-    },
-    phone: {
-      type: Number,
-      required: [true, "Please provide a contact"],
-    },
-    address: {
-      type: String,
-      required: [true, "Please provide a address"],
-    },
+const PatientSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, "Please provide a name"],
+    minLength: [3, "Name cannot be less than 3 characters"],
   },
-  { timestamps: true },
-);
+  status: {
+    type: String,
+    enum: ["approved", "pending", "active", "inactive", "rejected"],
+  },
+  email: {
+    type: String,
+  },
+  password: {
+    type: String,
+  },
+  gender: {
+    type: String,
+    enum: ["male", "female"],
+    required: [true, "Please provide a gender"],
+  },
+  dob: {
+    type: String,
+    required: [true, "Please provide a dob"],
+  },
+  admitType: {
+    type: String,
+    enum: ["emergency", "normal"],
+  },
+  patientType: {
+    type: String,
+    enum: ["outpatient", "inpatient"],
+  },
+  phone: {
+    type: String,
+    required: [true, "Please provide a contact"],
+  },
+  address: {
+    type: String,
+    required: [true, "Please provide a address"],
+  },
+});
 
 export const Patient =
   mongoose.models.Patient || mongoose.model("Patient", PatientSchema);
 
-export type PatientType = InferSchemaType<typeof PatientSchema> & {
-  _id: Types.ObjectId;
+export type PatientType = mongoose.InferSchemaType<typeof PatientSchema> & {
+  _id: string | Types.ObjectId;
+};
+
+export type PatientTypePlus = PatientType & {
+  email: string;
+  status: "approved" | "pending" | "active" | "inactive" | "rejected";
+  password: string;
 };

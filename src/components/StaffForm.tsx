@@ -1,27 +1,30 @@
 "use client";
 import React, { FC, useState } from "react";
-import Label from "./common/Label";
-import Select from "./common/Select";
-import Input from "./common/Input";
-import Button from "./common/Button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { X } from "lucide-react";
-
-type FormInputs = {
-  name: string;
-  email: string;
-  password: string;
-  cpassword: string;
-  phone: number;
-  address: string;
-  dob: string;
-  gender: string;
-  role: string;
-  shift: string;
-  department: string;
-};
+import { StaffType } from "@/database/modals/StaffModal";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { StaffFormSchema } from "@/app/dashboard/patient/appointment/utils/schema";
 
 const genderOptions = [
   {
@@ -49,34 +52,55 @@ const workShift = [
   },
 ];
 
-interface StaffFormProps {
-  // showModal: boolean;
-}
-const StaffForm: FC<StaffFormProps> = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormInputs>({
-    defaultValues: {
-      name: "John Doe",
-      email: "johndoe33@gmail.com",
-      phone: 9860098600,
-      address: "Ratnapark, Kathmandu",
-      gender: "male",
-      dob: "2000-01-01",
-      shift: "morning",
-      password: "Password@123",
-      cpassword: "Password@123",
-    },
+type StaffFormProps =
+  | {
+      update: true;
+      staff: StaffType;
+      open: boolean;
+      setOpen: (value: boolean) => void;
+    }
+  | {
+      update: false;
+    };
+
+const StaffForm: FC<StaffFormProps> = (props) => {
+  const [loading, setLoading] = useState(false);
+
+  const form = useForm<z.infer<typeof StaffFormSchema>>({
+    resolver: zodResolver(StaffFormSchema),
+    defaultValues: props.update
+      ? {
+          name: props.staff?.name || "",
+          address: props.staff?.address || "",
+          gender: props.staff?.gender || "",
+          phone: props.staff?.phone || "",
+          dob: props.staff?.dob?.toString() || "",
+          shift: props.staff?.shift || "",
+          email: props.staff?.email || "",
+        }
+      : {
+          name: "John Doe",
+          email: "johndoe33@gmail.com",
+          phone: "9876543210",
+          address: "Ratnapark, Kathmandu",
+          gender: "male",
+          dob: "2002/02/12",
+          shift: "morning",
+          password: "Password@123",
+          cpassword: "Password@123",
+        },
   });
 
   const router = useRouter();
   // const [showModal, setShowModal] = useState(false);
-
-  const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+  console.log(form.watch());
+  const createNewStaff = async (
+    data: z.infer<typeof StaffFormSchema>,
+    router: any,
+  ) => {
     console.log(data);
     try {
+      setLoading(true);
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`, {
         method: "POST",
         body: JSON.stringify(data),
@@ -91,145 +115,250 @@ const StaffForm: FC<StaffFormProps> = () => {
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateStaffDetail = async (data: z.infer<typeof StaffFormSchema>) => {
+    try {
+      console.log(data);
+      if (!props.update) return;
+      setLoading(true);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${props.staff?._id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            name: data?.name,
+            phone: data?.phone,
+            address: data?.address,
+            shift: data?.shift,
+            email: data?.email,
+            dob: data?.dob,
+            gender: data.gender,
+          }),
+        },
+      );
+      const json = await res.json();
+      if (json) {
+        toast.success("Detail updated successfully");
+        router.refresh();
+        if (props.update) {
+          props.setOpen(false);
+        }
+
+        return;
+      }
+      return toast.error(json.message);
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onSubmit: SubmitHandler<z.infer<typeof StaffFormSchema>> = async (
+    data,
+  ) => {
+    if (props.update) {
+      updateStaffDetail(data);
+    } else {
+      createNewStaff(data, router);
     }
   };
 
   return (
-    <div>
-      {" "}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="ml-auto w-fit cursor-pointer "></div>
-        <h1 className="text-center text-3xl font-medium">Create New Staff</h1>
-        <Label>Name</Label>
-        <Input
-          {...register("name", {
-            required: {
-              value: true,
-              message: "Name is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Name must be less than 64 characters long",
-            },
-          })}
-          placeholder="John Doe"
-        />
-        <p className="text-red-800">{errors.name?.message}</p>
-        <Label>Email</Label>
-        <Input
-          {...register("email", {
-            required: {
-              value: true,
-              message: "Email is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Email must be less than 64 characters long",
-            },
-          })}
-          placeholder="johndoe@gmail.com"
-        />
-        <p className="text-red-800">{errors.email?.message}</p>
-        <Label>Phone</Label>
-        <Input
-          {...register("phone", {
-            required: {
-              value: true,
-              message: "Phone is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Phone must be less than 64 characters long",
-            },
-          })}
-          placeholder="+97700000000"
-        />
-        <p className="text-red-800">{errors.phone?.message}</p>
-        <Label>DOB</Label>
-        <Input
-          {...register("dob", {
-            required: {
-              value: true,
-              message: "DOB is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "DOb must be less than 64 characters long",
-            },
-          })}
-          placeholder="2002/01/01"
-          type="date"
-        />
-        <p className="text-red-800">{errors.dob?.message}</p>
-        <Label>Address</Label>
-        <Input
-          {...register("address", {
-            required: {
-              value: true,
-              message: "Address is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Address must be less than 64 characters long",
-            },
-          })}
-          placeholder="Ratnapark, Kathmandu"
-        />
-        <p className="text-red-800">{errors.address?.message}</p>
-        <Label>Gender</Label>
-        <Select
-          options={genderOptions}
-          {...register("gender", {
-            required: {
-              value: true,
-              message: "Gender is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.gender?.message}</p>
-        <Label>Shift</Label>
-        <Select
-          options={workShift}
-          {...register("shift", {
-            required: {
-              value: true,
-              message: "Shift is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.shift?.message}</p>
-        <Label>Password</Label>
-        <Input
-          {...register("password", {
-            required: {
-              value: true,
-              message: "Password is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Password must be less than 64 characters long",
-            },
-          })}
-          placeholder="xxxxxxxxx"
-        />
-        <p className="text-red-800">{errors.password?.message}</p>
-        <Label>Confirm password</Label>
-        <Input
-          {...register("cpassword", {
-            required: {
-              value: true,
-              message: "Confirm password is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Confirm password must be less than 64 characters long",
-            },
-          })}
-          placeholder="xxxxxxxxx"
-        />
-        <p className="text-red-800">{errors.cpassword?.message}</p>
-        <Button>Add</Button>
-      </form>
+    <div className="max-h-[600px] px-6">
+      <Form {...form}>
+        <h1 className=" text-center text-4xl font-semibold">
+          {props.update ? "Update Staff details" : "Create New Staff"}
+        </h1>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <div className="my-4 flex gap-4 ">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="johndoe@gmail.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="grow">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ratnangar-3" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="my-10 flex gap-4 ">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="97++++++++" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      DOB <span className="text-slate-400">(YYYY/MM/DD)</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="2002/09/22" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gender</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {genderOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="shift"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Shift</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {workShift.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          {props.update ? null : (
+            <>
+              <div className="my-10 flex gap-4 ">
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="cpassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Loading..." : "Submit"}
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };

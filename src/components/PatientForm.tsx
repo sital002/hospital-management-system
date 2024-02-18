@@ -1,24 +1,29 @@
 "use client";
-import React, { FC, useState } from "react";
-import Label from "./common/Label";
-import Select from "./common/Select";
-import Input from "./common/Input";
-import Button from "./common/Button";
+import React, { FC, useEffect, useState } from "react";
+import { Label } from "./ui/label";
+import { Select } from "./ui/select";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { PatientType } from "@/database/modals/PatientModel";
-
-type FormInputs = {
-  name: string;
-  id?: string;
-  phone: number;
-  address: string;
-  dob: Date | null;
-  gender: string;
-  patientType: "inpatient" | "outpatient";
-  admitType: "normal" | "emergency";
-};
+import {
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import {
+  FormControl,
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 const genderOptions = [
   {
@@ -53,92 +58,116 @@ const admitType = [
   },
 ];
 
-interface PatientFormProps {
-  // showModal: boolean;S
-  show?: boolean;
-  setShow?: (e: boolean) => void;
-  update?: boolean;
-  patient?: PatientType;
-}
-
-const addNewPatient = async ({
-  data,
-  router,
-}: {
-  data: FormInputs;
-  router: any;
-}) => {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/patient`, {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-    const json = await res.json();
-    if (json.success) {
-      toast.success("Account created successfully");
-      console.log(json);
-      // router.push("/dashboard/patient");
-      router.refresh();
-      return;
+type PatientFormProps =
+  | {
+      update: true;
+      patient: PatientType;
+      open: boolean;
+      setOpen: (value: boolean) => void;
     }
-    return toast.error(json.message);
-  } catch (err: any) {
-    console.log(err);
-    toast.error(err?.message);
-  }
-};
+  | {
+      update: false;
+    };
 
-const PatientForm: FC<PatientFormProps> = ({
-  patient,
-  show,
-  setShow,
-  update = false,
-}) => {
-  console.log(patient);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormInputs>({
-    defaultValues: update
+const FormSchema = z.object({
+  name: z
+    .string({
+      required_error: "Name is required",
+    })
+    .min(1, "Name is required"),
+  phone: z
+    .string()
+    .min(1, "Phone number is required")
+    .max(10, "Phone number cannot be more than 10")
+    .refine((value) => {
+      const phoneRegex = /^\d{10}$/;
+      return phoneRegex.test(value);
+    }, "Invalid phone number"),
+  address: z
+    .string({
+      required_error: "Address is required",
+    })
+    .min(1, "Address is required")
+    .max(100, "Address is too long"),
+  dob: z
+    .string({
+      required_error: "date is requireds",
+    })
+    .min(1, "Date is required")
+    .refine((value) => {
+      const dateRegex = /^\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/;
+      if (!dateRegex.test(value)) return false;
+      const [year, month, day] = value.split("/").map(Number);
+      const date = new Date(year, month - 1, day);
+      return (
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
+      );
+    }, "Invalid date format or value"),
+  gender: z
+    .string({
+      required_error: "Gender is required",
+    })
+    .min(1, "Gender is required"),
+  admitType: z
+    .string({
+      required_error: "AdmitType is required",
+    })
+    .min(1, "AdmitType is required"),
+  patientType: z
+    .string({
+      required_error: "PatientType is required",
+    })
+    .min(1, "PatientType is required"),
+});
+
+const PatientForm = (props: PatientFormProps) => {
+  const [loading, setLoading] = useState(false);
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: props.update
       ? {
-          id: patient?._id.toString(),
-          name: patient?.name,
-          phone: patient?.phone,
-          address: patient?.address,
-          admitType: patient?.admitType,
-          patientType: patient?.patientType,
-          dob: patient?.dob,
-          gender: patient?.gender,
+          name: props.patient.name ?? "",
+          phone: props.patient.phone ?? "",
+          address: props.patient.address ?? "",
+          admitType: props.patient?.admitType ?? "",
+          patientType: props.patient?.patientType ?? "",
+          dob: props.patient.dob ?? "",
+          gender: props.patient.gender ?? "",
         }
       : {
           name: "John Doe",
-          phone: 9860098600,
+          phone: "9860098600",
           address: "Ratnapark, Kathmandu",
           gender: "male",
           admitType: "emergency",
           patientType: "inpatient",
-          dob: null,
+          dob: "2002/07/33",
         },
   });
-
   const router = useRouter();
-  const updatePatientDetail = async ({ data }: { data: FormInputs }) => {
+  const addNewPatient = async ({
+    data,
+    router,
+  }: {
+    data: z.infer<typeof FormSchema>;
+    router: any;
+  }) => {
     try {
+      setLoading(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${data?.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient`,
         {
-          method: "PUT",
+          method: "POST",
           body: JSON.stringify(data),
         },
       );
       const json = await res.json();
       if (json.success) {
-        toast.success("Detail updated successfully");
+        toast.success("Account created successfully");
         console.log(json);
-        if (setShow) {
-          setShow(false);
-        }
+        // router.push("/dashboard/patient");
         router.refresh();
         return;
       }
@@ -146,12 +175,55 @@ const PatientForm: FC<PatientFormProps> = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err?.message);
+    } finally {
+      setLoading(false);
     }
   };
-  const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    // console.log(data);
 
-    if (update) {
+  const updatePatientDetail = async ({
+    data,
+  }: {
+    data: z.infer<typeof FormSchema>;
+  }) => {
+    try {
+      console.log(data);
+      setLoading(true);
+      if (!props.update) return toast.error("Invalid request");
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${props.patient?._id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            name: data?.name,
+            phone: data?.phone,
+            address: data?.address,
+            admitType: data?.admitType,
+            patientType: data?.patientType,
+            dob: data?.dob,
+            gender: data.gender,
+          }),
+        },
+      );
+      const json = await res.json();
+      if (json) {
+        toast.success("Detail updated successfully");
+        router.refresh();
+        if (props.update) {
+          props.setOpen(false);
+        }
+
+        return;
+      }
+      return toast.error(json.message);
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+    if (props.update) {
       updatePatientDetail({ data });
     } else {
       addNewPatient({ data, router });
@@ -159,103 +231,178 @@ const PatientForm: FC<PatientFormProps> = ({
   };
 
   return (
-    <div className="px-4">
-      {" "}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h1 className="text-center text-3xl font-medium">
-          {update ? "Update Patient Detail" : "Add New Patient"}
+    <div className=" w-full">
+      <Form {...form}>
+        <h1 className="my-6 text-center text-4xl font-semibold">
+          {props.update ? "Update Patient Detail" : "Add New Patient"}
         </h1>
-        <Label>Name</Label>
-        <Input
-          {...register("name", {
-            required: {
-              value: true,
-              message: "Name is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Name must be less than 64 characters long",
-            },
-          })}
-          placeholder="John Doe"
-        />
-        <p className="text-red-800">{errors.name?.message}</p>
-        <Label>Phone</Label>
-        <Input
-          {...register("phone", {
-            required: {
-              value: true,
-              message: "Phone is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Phone must be less than 64 characters long",
-            },
-          })}
-          placeholder="+97700000000"
-        />
-        <p className="text-red-800">{errors.phone?.message}</p>
-        <Label>DOB</Label>
-        <Input
-          {...register("dob", {
-            required: {
-              value: true,
-              message: "DOB is required",
-            },
-          })}
-          placeholder="2002/01/01"
-          type="date"
-        />
-        <p className="text-red-800">{errors.dob?.message}</p>
-        <Label>Address</Label>
-        <Input
-          {...register("address", {
-            required: {
-              value: true,
-              message: "Address is required",
-            },
-            maxLength: {
-              value: 64,
-              message: "Address must be less than 64 characters long",
-            },
-          })}
-          placeholder="Ratnapark, Kathmandu"
-        />
-        <p className="text-red-800">{errors.address?.message}</p>
-        <Label>Gender</Label>
-        <Select
-          options={genderOptions}
-          {...register("gender", {
-            required: {
-              value: true,
-              message: "Gender is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.gender?.message}</p>
-        <Label>Admit Type</Label>
-        <Select
-          options={admitType}
-          {...register("admitType", {
-            required: {
-              value: true,
-              message: "Admit Type is required",
-            },
-          })}
-        />
-        <p className="text-red-800">{errors.admitType?.message}</p>
-        <Label>Patient Type</Label>
-        <Select
-          options={patientTypeOption}
-          {...register("patientType", {
-            required: {
-              value: true,
-              message: "PatientType is required",
-            },
-          })}
-        />
-        <Button>Add</Button>
-      </form>
+
+        <form className=" mt-4  px-10" onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="97++++++++" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          <div className="my-6 grow">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ratnangar-3" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="my-6 grow">
+            <FormField
+              control={form.control}
+              name="dob"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    DOB <span className="text-slate-400">(YYYY/MM/DD)</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="2002/09/22" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="my-10 flex gap-4">
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gender</FormLabel>
+                    <FormControl>
+                      <Select
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {genderOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="admitType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>AdmitType</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {admitType.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grow">
+              <FormField
+                control={form.control}
+                name="patientType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>PatientType</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {patientTypeOption.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading
+              ? "Loading..."
+              : props.update
+                ? "Update"
+                : "Add new Patient"}
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };

@@ -1,42 +1,57 @@
-import Maindashboard from "@/components/MainDashboard";
-import Sidebar from "@/components/sidebar";
 import { PatientType } from "@/database/modals/PatientModel";
-import { UserType } from "@/database/modals/UserModel";
-import { getUserDetails, isAuthenticated } from "@/utils/Auth";
+import { Sidebar } from "@/components/sidebar";
+import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { PatientTable } from "@/components/data-table";
+import Stats from "@/components/stats";
+import { getAllUsers as getDoctors } from "@/app/dashboard/doctor/page";
+import { PatientDashboard } from "./_components/PatientDashboard";
 
 const getAllUsers = async () => {
   const authToken = cookies().get("auth_token")?.value;
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/patient`, {
-      cache: "no-store",
+      // cache: "no-store",
       credentials: "include",
       headers: {
         Cookie: `auth_token=${authToken};`,
       },
     });
     const data = (await res.json()) as PatientType[];
-    // console.log(data);
     return data;
   } catch (err: any) {
     console.log(err?.message);
     return [];
   }
 };
-export default async function Dashboard() {
-  // const isAuthencated = isAuthenticated();
-  // if (!isAuthencated) return redirect("/signin");
+export default async function page() {
   const user = await getUserDetails();
-  console.log(user);
-  if (!user) return redirect("/");
-
+  if (!user) return redirect("/signin");
+  if (user.role === "patient" && user.data.status === "pending")
+    return <p>Your account is pending for approval</p>;
+  if (user.role === "patient" && user.data.status === "rejected")
+    return <p>Your account is rejected</p>;
   const data = await getAllUsers();
-  console.log(data);
+  const totalPatient = data.length;
+  const inPatient = data.filter((item) => item.patientType === "inpatient");
+  const doctor = await getDoctors();
   // console.log(data);
+
   return (
-    <div>
-      <Maindashboard users={data} user={user} />
+    <div className="px-2">
+      {user.role === "patient" ? (
+        <PatientDashboard patientId={user.data._id.toString()} />
+      ) : (
+        <>
+          <Stats
+            totalPatient={totalPatient}
+            inPatient={inPatient.length}
+            doctor={doctor.length}
+          />
+          <PatientTable users={data} />
+        </>
+      )}
     </div>
   );
 }

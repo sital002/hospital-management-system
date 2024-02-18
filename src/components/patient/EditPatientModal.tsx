@@ -1,29 +1,32 @@
-import { FC } from "react";
-import Modal from "../common/Modal";
+import { FC, useState } from "react";
 import PatientForm from "../PatientForm";
 import { PatientType } from "@/database/modals/PatientModel";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Button } from "../ui/button";
 
 interface EditLabtestModalProps {
-  setShow: (e: boolean) => void;
-  show: boolean;
-  patient?: PatientType;
+  patient: PatientType;
 }
-const EditPatientModal: FC<EditLabtestModalProps> = ({
-  setShow,
-  patient,
-  show,
-}) => {
+const EditPatientModal: FC<EditLabtestModalProps> = ({ patient }) => {
   console.log(patient);
+  const [open, setOpen] = useState(false);
   return (
     <div>
-      <Modal showModal={show} setShowModal={setShow}>
-        <PatientForm
-          show={show}
-          setShow={setShow}
-          update={true}
-          patient={patient}
-        />
-      </Modal>
+      <Dialog onOpenChange={setOpen} open={open}>
+        <DialogTrigger asChild>
+          <Button variant="default">Edit</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <div className="w-full">
+            <PatientForm
+              update={true}
+              patient={patient}
+              open={open}
+              setOpen={setOpen}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

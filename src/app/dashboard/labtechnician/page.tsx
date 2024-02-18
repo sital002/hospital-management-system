@@ -1,5 +1,5 @@
-import LabTechnicianDashboard from "@/components/labtechnician/LabTechnicianDashboard";
-import Sidebar from "@/components/sidebar";
+import { LabTechnicaianTable } from "@/components/labtechnician-data-table";
+import { Sidebar } from "@/components/sidebar";
 import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
@@ -11,7 +11,7 @@ const getAllUsers = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician`,
       {
-        cache: "no-store",
+        // cache: "no-store",
         credentials: "include",
         headers: {
           Cookie: `auth_token=${authToken};`,
@@ -25,6 +25,7 @@ const getAllUsers = async () => {
     return [];
   }
 };
+
 export default async function Dashboard() {
   const user = await getUserDetails();
   if (!user) return redirect("/signin");
@@ -33,7 +34,7 @@ export default async function Dashboard() {
   console.log(data);
   return (
     <div className="flex items-start justify-around bg-[#fafbfb]">
-      <LabTechnicianDashboard users={data} />
+      <LabTechnicaianTable users={data} />
     </div>
   );
 }

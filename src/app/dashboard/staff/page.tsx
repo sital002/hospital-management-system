@@ -1,16 +1,18 @@
-import Sidebar from "@/components/sidebar";
-import StaffDashboard from "@/components/staff/StaffDashboard";
-import { PatientType } from "@/database/modals/PatientModel";
-import { Staff, StaffType } from "@/database/modals/StaffModal";
+import { Sidebar } from "@/components/sidebar";
+import { type StaffType } from "@/database/modals/StaffModal";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { StaffTable } from "@/components/staff-data-table";
+import Stats from "@/components/stats";
+import { getAllUsers as getPatients } from "@/app/dashboard/patient/page";
+import { getAllUsers as getDoctors } from "@/app/dashboard/doctor/page";
 
 const getAllUsers = async () => {
   const authToken = cookies().get("auth_token")?.value;
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`, {
-      cache: "no-store",
+      // cache: "no-store",
       credentials: "include",
       headers: {
         Cookie: `auth_token=${authToken};`,
@@ -28,10 +30,22 @@ export default async function Dashboard() {
   if (!user) return redirect("/signin");
 
   const data = await getAllUsers();
-  console.log(data);
+
+  const patient = await getPatients();
+
+  const totalPatient = patient.length;
+  const inPatient = patient.filter(
+    (item, index) => item.patientType === "inpatient",
+  );
+  const doctor = await getDoctors();
   return (
-    <div className="flex items-start justify-around bg-[#fafbfb]">
-      <StaffDashboard users={data} />
+    <div className="px-2">
+      <Stats
+        totalPatient={totalPatient}
+        inPatient={inPatient.length}
+        doctor={doctor.length}
+      />
+      <StaffTable users={data} />
     </div>
   );
 }

@@ -18,7 +18,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(function Select(
   return (
     <select
       ref={ref}
-      className={twMerge("my-2 w-full rounded-md px-3 py-2", className)}
+      className={twMerge("my-2 w-full rounded-md px-3 py-2 text-xl", className)}
       {...rest}
     >
       {options.length > 0 &&

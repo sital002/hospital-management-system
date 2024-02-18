@@ -9,6 +9,7 @@ import {
 import { Admin, type AdminType } from "@/database/modals/AdminModal";
 import { Doctor, type DoctorType } from "@/database/modals/DoctorModel";
 import { Staff, type StaffType } from "@/database/modals/StaffModal";
+import { Patient, PatientTypePlus } from "@/database/modals/PatientModel";
 
 export function isAuthenticated(): boolean {
   try {
@@ -26,7 +27,7 @@ export function isAuthenticated(): boolean {
   }
 }
 
-type RoleType = "admin" | "patient" | "hospital" | "staff";
+type RoleType = "admin" | "doctor" | "labtechnician" | "staff" | "patient";
 export async function isAuthorized(role: RoleType) {
   try {
     const authToken = cookies().get("auth_token");
@@ -47,37 +48,63 @@ export async function isAuthorized(role: RoleType) {
   }
 }
 
-export async function getUserDetails() {
+interface Doctor {
+  role: "doctor";
+  data: DoctorType;
+}
+interface Staff {
+  role: "staff";
+  data: StaffType;
+}
+interface Admin {
+  role: "admin";
+  data: AdminType;
+}
+interface Labtechnician {
+  role: "labtechnician";
+  data: LabtechnicianType;
+}
+interface Patient {
+  data: PatientTypePlus;
+  role: "patient";
+}
+type User = Doctor | Staff | Admin | Labtechnician | Patient | null;
+export async function getUserDetails(): Promise<User> {
   try {
     const authToken = cookies().get("auth_token");
+    // console.log("The auth token is ", authToken);
     if (!authToken) return null;
     const decoded = jwt.verify(
       authToken.value,
       process.env.JWT_SECRET as string,
     ) as {
       _id: string;
-      role: "doctor" | "labtechnician" | "admin" | "staff";
+      role: RoleType;
     };
     if (!decoded) return null;
     await connectToDB();
 
     if (decoded.role === "labtechnician") {
-      const user = (await Labtechnician.findById(
+      const data = (await Labtechnician.findById(
         decoded._id,
       )) as LabtechnicianType;
-      return user;
+      return { data, role: "labtechnician" };
     }
     if (decoded.role === "doctor") {
-      const user = (await Doctor.findById(decoded._id)) as DoctorType;
-      return user;
+      const data = (await Doctor.findById(decoded._id)) as DoctorType;
+      return { data, role: "doctor" };
     }
     if (decoded.role === "staff") {
-      const user = (await Staff.findById(decoded._id)) as StaffType;
-      return user;
+      const data = (await Staff.findById(decoded._id)) as StaffType;
+      return { data, role: "staff" };
     }
     if (decoded.role === "admin") {
-      const user = (await Admin.findById(decoded._id)) as AdminType;
-      return user;
+      const data = (await Admin.findById(decoded._id)) as AdminType;
+      return { data, role: "admin" };
+    }
+    if (decoded.role === "patient") {
+      const data = (await Patient.findById(decoded._id)) as PatientTypePlus;
+      return { data, role: "patient" };
     }
     return null;
   } catch (err) {

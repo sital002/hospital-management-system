@@ -1,5 +1,9 @@
+import { getUserDetails } from "@/utils/Auth";
+import { redirect } from "next/navigation";
 import React from "react";
 
-export default function Home() {
-  return <div>Home</div>;
+export default async function Home() {
+  const user = await getUserDetails();
+  if (!user) redirect("/signin");
+  redirect("/dashboard");
 }

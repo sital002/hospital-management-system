@@ -1,29 +1,67 @@
-"use client";
-
-import React, { useState } from "react";
+import { getUserDetails } from "@/utils/Auth";
+import Image from "next/image";
+import Link from "next/link";
 import { MdDashboard } from "react-icons/md";
-
-export default function Navbar() {
+import { Button } from "./ui/button";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import maleImage from "@/assets/undraw_male_avatar_g98d.svg";
+import femaleImage from "@/assets/undraw_female_avatar_efig.svg";
+export default async function Navbar() {
+  const user = await getUserDetails();
+  const handleLogout = async () => {
+    "use server";
+    cookies().set("auth_token", "", {
+      expires: new Date(0),
+    });
+    redirect("/signin");
+  };
+  // console.log("The user is ", user);
+  let image;
+  if (user) {
+    image = user.data.gender === "male" ? maleImage : femaleImage;
+  }
   return (
-    <nav className=" relative w-full p-2 bg-[#092635]  ">
-     
-      <div className="flex relative justify-between items-center px-3 py-3">
-        <div className="flex items-center gap-2  pt-4 text-3xl cursor-pointer font-semibold text-white">
+    <nav className=" relative w-full p-2  ">
+      <div className="relative flex items-center justify-between px-3 py-3">
+        <div className="flex cursor-pointer items-center  gap-2 pt-4 text-xl font-semibold ">
           <MdDashboard />
-          <span>Hospital MS</span>
+          <span className="text-black dark:text-white">Hospital MS</span>
         </div>
-        <div
-          className=" flex cursor-pointer gap-3"
-        >
-          <img
-            className="h-[50px] w-[50px] rounded-full border-2 border-white p-[1px]"
-            src="https://th.bing.com/th/id/OIP.HLuY60jzx5puuKjbqmWRRwHaEK?rs=1&pid=ImgDetMain"
-            alt=""
-          />
-          <div className="text-white">
-            <p className="text-lg">Sital Adhikari</p>
-            <p className="text-sm">Admin</p>
-          </div>
+        <div>
+          {user ? (
+            <div className=" flex cursor-pointer gap-3">
+              <Image
+                src={image}
+                className=" rounded-full border-2 border-white p-[1px]"
+                alt="profile-image"
+                height={50}
+                width={50}
+              />
+              <div>
+                <p className="text-lg">{user.data?.name}</p>
+                <p className="text-sm capitalize">{user?.role}</p>
+              </div>
+              <form action={handleLogout}>
+                <Button type="submit">Logout</Button>
+              </form>
+            </div>
+          ) : (
+            <div>
+              <Link
+                href="/auth/admin"
+                className="mr-3 rounded-lg bg-primary px-4 py-2 text-white"
+              >
+                Sign In as Hospital
+              </Link>
+              <Link
+                href="/signin"
+                className="rounded-lg bg-primary px-4 py-2 text-white "
+              >
+                Sign In as Patient
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </nav>

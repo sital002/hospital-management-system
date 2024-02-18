@@ -1,25 +1,66 @@
-import React from "react"
-import { PatientType } from "@/database/modals/PatientModel"
-import { formatDate } from "@/utils/formatDate"
+import React from "react";
+import { PatientType } from "@/database/modals/PatientModel";
+import male from "@/assets/undraw_male_avatar_g98d.svg";
+import female from "@/assets/undraw_female_avatar_efig.svg";
+import Image from "next/image";
 
-const PatientDetailCard = ({patient}:{patient:PatientType}) => {
+const PatientDetailCard = ({ patient }: { patient: PatientType }) => {
+  let image = patient.gender === "male" ? male : female;
+  console.log(patient);
   return (
-    <div className="bg-neutral-50 rounded-lg overflow-hidden shadow-md max-w-[570px] w-full">
-    <div className="p-4">
-      <h2 className="text-lg font-bold text-gray-800 mb-6">{patient.name} Profile</h2>
-      <img src="https://th.bing.com/th/id/OIP.EYHt8f5tqkTU5l6szP5XbQHaE8?rs=1&pid=ImgDetMain" alt="" className="w-20 h-20 rounded-full mx-auto mb-4" />
-      <div className="text-gray-700 flex flex-col gap-10 p-6">
-        <p><span className="font-bold mr-16">Full Name:</span> {patient.name}</p>
-        <p><span className="font-bold mr-16">Mobile:</span> {patient.phone}</p>
-        <p><span className="font-bold mr-16">Address:</span>{patient.address}</p>
-        <p><span className="font-bold mr-16">Date Of Birth:</span>{formatDate(patient.dob)}</p>
-        <p><span className="font-bold mr-16">Patient Type:</span>{patient.patientType}</p>
-        <p><span className="font-bold mr-16">Admit Type:</span>{patient.admitType}</p>
-        {/* <p><span className="font-bold mr-16">Data Recorded:</span>{patient.updatedAt}</p> */}
+    <div className="w-full max-w-[500px] overflow-hidden rounded-lg bg-neutral-50 shadow-md">
+      <div className="p-2">
+        <h2 className=" text-center text-xl font-bold text-gray-800">
+          {patient.name} Profile
+        </h2>
+
+        <div className="flex  flex-col gap-4 p-6 text-gray-700">
+          <Image
+            src={image}
+            className=" mx-auto rounded-full border-2 border-white p-[1px]"
+            alt="profile-image"
+            height={150}
+            width={150}
+          />
+          <div className="mx-auto text-xl">
+            <div className="flex gap-3">
+              <p className="font-bold">Full Name: </p>
+              <p>{patient.name}</p>
+            </div>
+            <div className="my-3 flex gap-6">
+              <p className="font-bold">Mobile: </p>
+              <p>{patient.phone}</p>
+            </div>
+            <div className="my-3 flex gap-6">
+              <p className="font-bold">Address: </p>
+              <p>{patient.address}</p>
+            </div>
+            <div className="my-3 flex gap-6">
+              <p className="font-bold">Date Of Birth: </p>
+              <p>{patient.dob}</p>
+            </div>
+            <div className="my-3 flex gap-6">
+              <p className="font-bold">Gender: </p>
+              <p>{patient.gender}</p>
+            </div>
+            {patient.patientType && (
+              <div className="my-3 flex gap-6">
+                <p className="font-bold">Patient Type: </p>
+
+                <p>{patient.patientType}</p>
+              </div>
+            )}
+            {patient.patientType && (
+              <div className="my-3 flex gap-6">
+                <p className="font-bold">Admit Type: </p>
+                {patient.patientType && <p>{patient.admitType}</p>}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  )
-}
+  );
+};
 
-export default PatientDetailCard
+export default PatientDetailCard;
