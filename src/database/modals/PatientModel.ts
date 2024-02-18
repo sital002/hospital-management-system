@@ -9,7 +9,6 @@ const PatientSchema = new Schema({
   status: {
     type: String,
     enum: ["approved", "pending", "active", "inactive", "rejected"],
-    default: "pending",
   },
   email: {
     type: String,
@@ -47,17 +46,10 @@ const PatientSchema = new Schema({
 export const Patient =
   mongoose.models.Patient || mongoose.model("Patient", PatientSchema);
 
-type P = mongoose.InferSchemaType<typeof PatientSchema>;
-export type PatientType = {
+export type PatientType = mongoose.InferSchemaType<typeof PatientSchema> & {
   _id: string | Types.ObjectId;
-  name: string;
-  phone: string;
-  dob: string;
-  address: string;
-  gender: "male" | "female";
-  patientType: "outpatient" | "inpatient";
-  admitType: "emergency" | "normal";
 };
+
 export type PatientTypePlus = PatientType & {
   email: string;
   status: "approved" | "pending" | "active" | "inactive" | "rejected";

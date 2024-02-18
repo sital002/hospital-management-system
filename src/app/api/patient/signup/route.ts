@@ -71,6 +71,7 @@ export async function POST(req: NextRequest) {
     }
     const newPatient = await Patient.create({
       name: data.data.name,
+      status: "pending",
       email: data.data.email,
       phone: data.data.phone,
       dob: data.data.dob,
