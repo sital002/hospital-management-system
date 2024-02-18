@@ -256,9 +256,11 @@ const PatientSignup = (props: PatientFormProps) => {
               name="dob"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>DOB</FormLabel>
+                  <FormLabel>
+                    DOB <span className="text-slate-400">(YYYY/MM/DD)</span>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="2002-09-22" {...field} />
+                    <Input placeholder="2002/09/22" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

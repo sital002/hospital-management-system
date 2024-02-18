@@ -51,23 +51,29 @@ const workShift = [
   },
 ];
 
-type StaffFormProps = {
-  update?: boolean;
-  staff?: StaffType;
-  open?: boolean;
-  setOpen?: (value: boolean) => void;
-};
+type StaffFormProps =
+  | {
+      update: true;
+      staff: StaffType;
+      open: boolean;
+      setOpen: (value: boolean) => void;
+    }
+  | {
+      update: false;
+    };
 
-type UpdateProps = StaffFormProps["update"] extends true ? StaffFormProps : {};
 const FormSchema = z.object({
   email: z
     .string({
       required_error: "Please select an email to display.",
     })
     .email(),
-  name: z.string({
-    required_error: "Name is required",
-  }),
+  name: z
+    .string({
+      required_error: "Name is required",
+    })
+    .min(1, "Name is required")
+    .max(60, "Name cannot be more than 100"),
   password: z
     .string({
       required_error: "Password is required",
@@ -86,9 +92,12 @@ const FormSchema = z.object({
       const phoneRegex = /^\d{10}$/;
       return phoneRegex.test(value);
     }, "Invalid phone number"),
-  address: z.string({
-    required_error: "Address is required",
-  }),
+  address: z
+    .string({
+      required_error: "Address is required",
+    })
+    .min(1, "Address is required")
+    .max(100, "Address cannot be more than 100"),
   dob: z
     .string({
       required_error: "date is requireds",
@@ -105,32 +114,31 @@ const FormSchema = z.object({
         date.getDate() === day
       );
     }, "Invalid date format or value"),
-  gender: z.string({
-    required_error: "Gender is required",
-  }),
-  shift: z.string({
-    required_error: "shift is required",
-  }),
+  gender: z
+    .string({
+      required_error: "Gender is required",
+    })
+    .min(1, "Gender is required"),
+  shift: z
+    .string({
+      required_error: "shift is required",
+    })
+    .min(1, "Shift is required"),
 });
-const StaffForm: FC<StaffFormProps> = ({
-  open,
-  setOpen,
-  staff,
-  update = false,
-}) => {
+const StaffForm: FC<StaffFormProps> = (props) => {
   const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: update
+    defaultValues: props.update
       ? {
-          name: staff?.name || "",
-          address: staff?.address || "",
-          gender: staff?.gender || "",
-          phone: staff?.phone || "",
-          dob: staff?.dob?.toString() || "",
-          shift: staff?.shift || "",
-          email: staff?.email || "",
+          name: props.staff?.name || "",
+          address: props.staff?.address || "",
+          gender: props.staff?.gender || "",
+          phone: props.staff?.phone || "",
+          dob: props.staff?.dob?.toString() || "",
+          shift: props.staff?.shift || "",
+          email: props.staff?.email || "",
         }
       : {
           name: "John Doe",
@@ -177,9 +185,10 @@ const StaffForm: FC<StaffFormProps> = ({
   const updateStaffDetail = async (data: z.infer<typeof FormSchema>) => {
     try {
       console.log(data);
+      if (!props.update) return;
       setLoading(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${staff?._id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${props.staff?._id}`,
         {
           method: "PUT",
           body: JSON.stringify({
@@ -197,8 +206,8 @@ const StaffForm: FC<StaffFormProps> = ({
       if (json) {
         toast.success("Detail updated successfully");
         router.refresh();
-        if (setOpen) {
-          setOpen(false);
+        if (props.update) {
+          props.setOpen(false);
         }
 
         return;
@@ -213,7 +222,7 @@ const StaffForm: FC<StaffFormProps> = ({
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
-    if (update) {
+    if (props.update) {
       updateStaffDetail(data);
     } else {
       createNewStaff(data, router);
@@ -296,9 +305,11 @@ const StaffForm: FC<StaffFormProps> = ({
                 name="dob"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>DOB</FormLabel>
+                    <FormLabel>
+                      DOB <span className="text-slate-400">(YYYY/MM/DD)</span>
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="2002-09-22" {...field} />
+                      <Input placeholder="2002/09/22" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -366,42 +377,42 @@ const StaffForm: FC<StaffFormProps> = ({
               />
             </div>
           </div>
-          {!update ? (
-            <>
-              <div className="my-10 flex gap-4 ">
-                <div className="grow">
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input placeholder="*********" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grow">
-                  <FormField
-                    control={form.control}
-                    name="cpassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Confirm Password</FormLabel>
-                        <FormControl>
-                          <Input placeholder="*********" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+
+          <>
+            <div className="my-10 flex gap-4 ">
+              <div className="grow">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input placeholder="*********" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-            </>
-          ) : null}
+              <div className="grow">
+                <FormField
+                  control={form.control}
+                  name="cpassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm Password</FormLabel>
+                      <FormControl>
+                        <Input placeholder="*********" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </>
+
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Loading..." : "Submit"}
           </Button>
