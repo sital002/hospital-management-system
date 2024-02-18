@@ -1,4 +1,5 @@
 import mongoose, { InferSchemaType, Schema, Types } from "mongoose";
+import { Labtest } from "./Labtest";
 
 const PatientSchema = new Schema({
   name: {
