@@ -126,13 +126,6 @@ export function StaffTable({ users }: StaffTableProps) {
         <div className="uppercase">{row.getValue("shift")}</div>
       ),
     },
-    {
-      accessorKey: "shift",
-      header: "Shift",
-      cell: ({ row }) => (
-        <div className="uppercase">{row.getValue("shift")}</div>
-      ),
-    },
 
     {
       accessorKey: "address",
@@ -220,10 +213,10 @@ export function StaffTable({ users }: StaffTableProps) {
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
-              .map((column) => {
+              .map((column, index) => {
                 return (
                   <DropdownMenuCheckboxItem
-                    key={column.id}
+                    key={column.id + index}
                     className="capitalize"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
@@ -242,9 +235,9 @@ export function StaffTable({ users }: StaffTableProps) {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map((header, index) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id + index}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -259,9 +252,9 @@ export function StaffTable({ users }: StaffTableProps) {
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index) => (
                 <TableRow
-                  key={row.id}
+                  key={row.id + index}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (

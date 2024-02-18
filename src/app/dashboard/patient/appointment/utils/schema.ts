@@ -60,8 +60,30 @@ export const patientZodSchema = z.object({
     .min(1, "Email is required")
     .email("Invalid email address"),
   name: z.string().min(3, "Name cannot be less than 3 characters"),
-  phone: z.string().min(10, "Phone number cannot be less than 10 characters"),
-  dob: z.string().min(1, "DOB is required"),
+  phone: z
+    .string()
+    .min(1, "Phone number is required")
+    .max(10, "Phone number cannot be more than 10")
+    .refine((value) => {
+      const phoneRegex = /^\d{10}$/;
+      return phoneRegex.test(value);
+    }, "Invalid phone number"),
+  dob: z
+    .string({
+      required_error: "date is requireds",
+    })
+    .min(1, "Date is required")
+    .refine((value) => {
+      const dateRegex = /^\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/;
+      if (!dateRegex.test(value)) return false;
+      const [year, month, day] = value.split("/").map(Number);
+      const date = new Date(year, month - 1, day);
+      return (
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
+      );
+    }, "Invalid date format or value"),
   address: z.string().min(1, "Address is required"),
   gender: z.enum(["male", "female"]),
   password: z
@@ -75,17 +97,17 @@ export const patientZodSchema = z.object({
 
 export const StaffFormSchema = z
   .object({
-    email: z
-      .string({
-        required_error: "Please select an email to display.",
-      })
-      .email(),
     name: z
       .string({
         required_error: "Name is required",
       })
       .min(1, "Name is required")
       .max(60, "Name cannot be more than 100"),
+    email: z
+      .string({
+        required_error: "Email is required.",
+      })
+      .email("Please enter a valid email"),
     password: z
       .string({
         required_error: "Password is required",

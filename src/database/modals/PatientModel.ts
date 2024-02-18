@@ -16,6 +16,10 @@ const PatientSchema = new Schema({
     type: String,
     required: [true, "Please provide a dob"],
   },
+  status: {
+    type: String,
+    enum: ["pending", "approved", "active"],
+  },
   admitType: {
     type: String,
     enum: ["emergency", "normal"],
