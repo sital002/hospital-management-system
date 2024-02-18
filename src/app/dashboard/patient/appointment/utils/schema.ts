@@ -50,3 +50,25 @@ export const FormSchema = z.object({
       return date > new Date();
     }, "Date should be in the future"),
 });
+
+export const patientZodSchema = z.object({
+  email: z
+    .string({
+      invalid_type_error: "Email must be a string",
+      required_error: "Email is required",
+    })
+    .min(1, "Email is required")
+    .email("Invalid email address"),
+  name: z.string().min(3, "Name cannot be less than 3 characters"),
+  phone: z.string().min(10, "Phone number cannot be less than 10 characters"),
+  dob: z.string().min(1, "DOB is required"),
+  address: z.string().min(1, "Address is required"),
+  gender: z.enum(["male", "female"]),
+  password: z
+    .string({
+      invalid_type_error: "Password must be a string",
+      required_error: "Password is required",
+    })
+    .min(8, "Password must be at least 8 characters long"),
+  cpassword: z.string().min(8, "Password must be at least 8 characters long"),
+});
