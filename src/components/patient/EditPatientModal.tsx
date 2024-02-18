@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 
 interface EditLabtestModalProps {
-  patient?: PatientType;
+  patient: PatientType;
 }
 const EditPatientModal: FC<EditLabtestModalProps> = ({ patient }) => {
   console.log(patient);
