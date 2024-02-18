@@ -40,10 +40,9 @@ const StaffSchema = new Schema({
     required: [true, "Please provide a dob"],
   },
 });
-
-export const Staff =
-  mongoose.models.Staff || mongoose.model("Staff", StaffSchema);
-
 export type StaffType = InferSchemaType<typeof StaffSchema> & {
   _id: string | Types.ObjectId;
 };
+
+export const Staff =
+  mongoose.models.Staff || mongoose.model<StaffType>("Staff", StaffSchema);

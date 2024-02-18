@@ -25,17 +25,6 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-type FormInputs = {
-  name: string;
-  id?: string;
-  phone: string;
-  address: string;
-  dob: string;
-  gender: string;
-  patientType: "inpatient" | "outpatient";
-  admitType: "normal" | "emergency";
-};
-
 const genderOptions = [
   {
     name: "Male",
@@ -69,12 +58,16 @@ const admitType = [
   },
 ];
 
-type PatientFormProps = {
-  update?: boolean;
-  patient?: PatientType;
-  open?: boolean;
-  setOpen?: (value: boolean) => void;
-};
+type PatientFormProps =
+  | {
+      update: true;
+      patient: PatientType;
+      open: boolean;
+      setOpen: (value: boolean) => void;
+    }
+  | {
+      update: false;
+    };
 
 const FormSchema = z.object({
   name: z
@@ -83,10 +76,13 @@ const FormSchema = z.object({
     })
     .min(1, "Name is required"),
   phone: z
-    .string({
-      required_error: "Phone is required",
-    })
-    .min(10, "Phone number must be 10 digits"),
+    .string()
+    .min(1, "Phone number is required")
+    .max(10, "Phone number cannot be more than 10")
+    .refine((value) => {
+      const phoneRegex = /^\d{10}$/;
+      return phoneRegex.test(value);
+    }, "Invalid phone number"),
   address: z
     .string({
       required_error: "Address is required",
@@ -97,7 +93,18 @@ const FormSchema = z.object({
     .string({
       required_error: "date is requireds",
     })
-    .min(1, "Date is required"),
+    .min(1, "Date is required")
+    .refine((value) => {
+      const dateRegex = /^\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/;
+      if (!dateRegex.test(value)) return false;
+      const [year, month, day] = value.split("/").map(Number);
+      const date = new Date(year, month - 1, day);
+      return (
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
+      );
+    }, "Invalid date format or value"),
   gender: z
     .string({
       required_error: "Gender is required",
@@ -115,25 +122,19 @@ const FormSchema = z.object({
     .min(1, "PatientType is required"),
 });
 
-const PatientForm = ({
-  patient,
-  update = false,
-  open,
-  setOpen,
-}: PatientFormProps) => {
+const PatientForm = (props: PatientFormProps) => {
   const [loading, setLoading] = useState(false);
-  console.log(patient?.dob);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: update
+    defaultValues: props.update
       ? {
-          name: patient?.name ?? "",
-          phone: patient?.phone ?? "",
-          address: patient?.address ?? "",
-          admitType: patient?.admitType ?? "",
-          patientType: patient?.patientType ?? "",
-          dob: patient?.dob ?? "",
-          gender: patient?.gender ?? "",
+          name: props.patient.name ?? "",
+          phone: props.patient.phone ?? "",
+          address: props.patient.address ?? "",
+          admitType: props.patient?.admitType ?? "",
+          patientType: props.patient?.patientType ?? "",
+          dob: props.patient.dob ?? "",
+          gender: props.patient.gender ?? "",
         }
       : {
           name: "John Doe",
@@ -187,8 +188,9 @@ const PatientForm = ({
     try {
       console.log(data);
       setLoading(true);
+      if (!props.update) return toast.error("Invalid request");
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${patient?._id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${props.patient?._id}`,
         {
           method: "PUT",
           body: JSON.stringify({
@@ -206,8 +208,8 @@ const PatientForm = ({
       if (json) {
         toast.success("Detail updated successfully");
         router.refresh();
-        if (setOpen) {
-          setOpen(false);
+        if (props.update) {
+          props.setOpen(false);
         }
 
         return;
@@ -221,7 +223,7 @@ const PatientForm = ({
     }
   };
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
-    if (update) {
+    if (props.update) {
       updatePatientDetail({ data });
     } else {
       addNewPatient({ data, router });
@@ -232,7 +234,7 @@ const PatientForm = ({
     <div className=" w-full">
       <Form {...form}>
         <h1 className="my-6 text-center text-4xl font-semibold">
-          {update ? "Update Patient Detail" : "Add New Patient"}
+          {props.update ? "Update Patient Detail" : "Add New Patient"}
         </h1>
 
         <form className=" mt-4  px-10" onSubmit={form.handleSubmit(onSubmit)}>
@@ -292,9 +294,11 @@ const PatientForm = ({
               name="dob"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>DOB</FormLabel>
+                  <FormLabel>
+                    DOB <span className="text-slate-400">(YYYY/MM/DD)</span>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="2002-09-22" {...field} />
+                    <Input placeholder="2002/09/22" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -391,7 +395,11 @@ const PatientForm = ({
             </div>
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Loading..." : update ? "Update" : "Create"}
+            {loading
+              ? "Loading..."
+              : props.update
+                ? "Update"
+                : "Add new Patient"}
           </Button>
         </form>
       </Form>

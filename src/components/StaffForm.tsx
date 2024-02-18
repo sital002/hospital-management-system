@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
+import { StaffFormSchema } from "@/app/dashboard/patient/appointment/utils/schema";
 
 const genderOptions = [
   {
@@ -51,76 +52,39 @@ const workShift = [
   },
 ];
 
-type StaffFormProps = {
-  update?: boolean;
-  staff?: StaffType;
-  open?: boolean;
-  setOpen?: (value: boolean) => void;
-};
+type StaffFormProps =
+  | {
+      update: true;
+      staff: StaffType;
+      open: boolean;
+      setOpen: (value: boolean) => void;
+    }
+  | {
+      update: false;
+    };
 
-type UpdateProps = StaffFormProps["update"] extends true ? StaffFormProps : {};
-const FormSchema = z.object({
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
-    })
-    .email(),
-  name: z.string({
-    required_error: "Name is required",
-  }),
-  password: z
-    .string({
-      required_error: "Password is required",
-    })
-    .optional(),
-  cpassword: z
-    .string({
-      required_error: "Password is required",
-    })
-    .optional(),
-  phone: z.string({
-    required_error: "Phone is required",
-  }),
-  address: z.string({
-    required_error: "Address is required",
-  }),
-  dob: z.string({
-    required_error: "date is requireds",
-  }),
-  gender: z.string({
-    required_error: "Gender is required",
-  }),
-  shift: z.string({
-    required_error: "shift is required",
-  }),
-});
-const StaffForm: FC<StaffFormProps> = ({
-  open,
-  setOpen,
-  staff,
-  update = false,
-}) => {
+const StaffForm: FC<StaffFormProps> = (props) => {
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: update
+  const form = useForm<z.infer<typeof StaffFormSchema>>({
+    resolver: zodResolver(StaffFormSchema),
+    defaultValues: props.update
       ? {
-          name: staff?.name || "",
-          address: staff?.address || "",
-          gender: staff?.gender || "",
-          phone: staff?.phone || "",
-          dob: staff?.dob?.toString() || "",
-          shift: staff?.shift || "",
-          email: staff?.email || "",
+          name: props.staff?.name || "",
+          address: props.staff?.address || "",
+          gender: props.staff?.gender || "",
+          phone: props.staff?.phone || "",
+          dob: props.staff?.dob?.toString() || "",
+          shift: props.staff?.shift || "",
+          email: props.staff?.email || "",
         }
       : {
           name: "John Doe",
           email: "johndoe33@gmail.com",
-          phone: "s",
+          phone: "9876543210",
           address: "Ratnapark, Kathmandu",
           gender: "male",
-          dob: "2002",
+          dob: "2002/02/12",
           shift: "morning",
           password: "Password@123",
           cpassword: "Password@123",
@@ -131,7 +95,7 @@ const StaffForm: FC<StaffFormProps> = ({
   // const [showModal, setShowModal] = useState(false);
   console.log(form.watch());
   const createNewStaff = async (
-    data: z.infer<typeof FormSchema>,
+    data: z.infer<typeof StaffFormSchema>,
     router: any,
   ) => {
     console.log(data);
@@ -151,17 +115,18 @@ const StaffForm: FC<StaffFormProps> = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
 
-  const updateStaffDetail = async (data: z.infer<typeof FormSchema>) => {
+  const updateStaffDetail = async (data: z.infer<typeof StaffFormSchema>) => {
     try {
       console.log(data);
+      if (!props.update) return;
       setLoading(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${staff?._id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${props.staff?._id}`,
         {
           method: "PUT",
           body: JSON.stringify({
@@ -179,8 +144,8 @@ const StaffForm: FC<StaffFormProps> = ({
       if (json) {
         toast.success("Detail updated successfully");
         router.refresh();
-        if (setOpen) {
-          setOpen(false);
+        if (props.update) {
+          props.setOpen(false);
         }
 
         return;
@@ -189,13 +154,15 @@ const StaffForm: FC<StaffFormProps> = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err?.message);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
 
-  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
-    if (update) {
+  const onSubmit: SubmitHandler<z.infer<typeof StaffFormSchema>> = async (
+    data,
+  ) => {
+    if (props.update) {
       updateStaffDetail(data);
     } else {
       createNewStaff(data, router);
@@ -206,7 +173,7 @@ const StaffForm: FC<StaffFormProps> = ({
     <div className="max-h-[600px] px-6">
       <Form {...form}>
         <h1 className=" text-center text-4xl font-semibold">
-          Create New Staff
+          {props.update ? "Update Staff details" : "Create New Staff"}
         </h1>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="my-4 flex gap-4 ">
@@ -278,9 +245,11 @@ const StaffForm: FC<StaffFormProps> = ({
                 name="dob"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>DOB</FormLabel>
+                    <FormLabel>
+                      DOB <span className="text-slate-400">(YYYY/MM/DD)</span>
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="2002-09-22" {...field} />
+                      <Input placeholder="2002/09/22" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -348,7 +317,7 @@ const StaffForm: FC<StaffFormProps> = ({
               />
             </div>
           </div>
-          {!update ? (
+          {props.update ? null : (
             <>
               <div className="my-10 flex gap-4 ">
                 <div className="grow">
@@ -383,9 +352,10 @@ const StaffForm: FC<StaffFormProps> = ({
                 </div>
               </div>
             </>
-          ) : null}
+          )}
+
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ?'Loading...' :'Submit'}
+            {loading ? "Loading..." : "Submit"}
           </Button>
         </form>
       </Form>
