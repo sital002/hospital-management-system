@@ -195,7 +195,8 @@ const PatientSignup = (props: PatientFormProps) => {
     <div className=" w-full">
       <Form {...form}>
         <h1 className="my-6 text-center text-4xl font-semibold">
-          {props.update ? "Update Patient Detail" : "Add New Patient"}
+          {/* {props.update ? "Update Patient Detail" : "Add New Patient"} */}
+          Create a New Account
         </h1>
 
         <form className=" mt-4  px-10" onSubmit={form.handleSubmit(onSubmit)}>
@@ -343,7 +344,7 @@ const PatientSignup = (props: PatientFormProps) => {
             />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Loading..." : props.update ? "Update" : "Create"}
+            {loading ? "Loading..." : props.update ? "Update" : "Signup"}
           </Button>
         </form>
       </Form>

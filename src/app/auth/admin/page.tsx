@@ -66,6 +66,8 @@ export default function SignIn() {
   return (
     <div className="mx-2 w-full  overflow-y-hidden rounded-lg p-5 ">
       <div className="mx-auto mt-10 max-w-[800px] rounded-md border-2 p-4 shadow-md">
+        <h2 className="my-3 text-center text-3xl">Login as Hospital</h2>
+
         <div className="my-5 flex items-center gap-1">
           <Button
             onClick={() => handleTab("admin")}

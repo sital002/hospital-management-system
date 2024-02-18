@@ -60,7 +60,7 @@ export function PatientLogin() {
   return (
     <div className="mx-2 w-full  overflow-y-hidden rounded-lg p-5 ">
       <div className="mx-auto mt-10 max-w-[800px] rounded-md border-2 p-4 shadow-md">
-        <h2 className="my-3 text-center text-3xl">Sign In</h2>
+        <h2 className="my-3 text-center text-3xl">Login as Patient</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <Label className="my-3">Email</Label>
@@ -105,7 +105,7 @@ export function PatientLogin() {
             {loading ? "Loading..." : "Sign In"}
           </Button>
         </form>
-        <p>
+        <p className="mt-3">
           Don&apos;t have an account?{" "}
           <Link href={"/auth/patient/signup"}>Sign Up</Link>
         </p>
