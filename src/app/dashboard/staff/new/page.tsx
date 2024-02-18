@@ -4,7 +4,7 @@ import React from "react";
 export default function page() {
   return (
     <div>
-      <StaffForm />
+      <StaffForm update={false} />
     </div>
   );
 }
