@@ -80,9 +80,11 @@ export async function DELETE(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
+  const roles = ["staff", "admin", "labtechnician", "patient"];
   try {
     const user = await getUserDetails();
-    console.log(user);
+    // console.log(user);
+
     if (!user)
       return new Response(
         JSON.stringify({
@@ -102,8 +104,25 @@ export async function PUT(req: NextRequest) {
       );
 
     const data = await req.json();
+    if (!roles.includes(user.role))
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not authorized",
+        }),
+        { status: 401 },
+      );
     // console.log(data);
+    if (user.role === "patient" && user.data._id?.toString() !== id)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not authorized",
+        }),
+        { status: 401 },
+      );
 
+    await connectToDB();
     const patient = (await Patient.findByIdAndUpdate(id, data)) as PatientType;
     console.log(patient);
     if (!patient)

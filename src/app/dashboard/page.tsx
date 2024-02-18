@@ -1,11 +1,12 @@
 import { PatientType } from "@/database/modals/PatientModel";
-import Sidebar from "@/components/sidebar";
+import { Sidebar } from "@/components/sidebar";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { PatientTable } from "@/components/data-table";
 import Stats from "@/components/stats";
 import { getAllUsers as getDoctors } from "@/app/dashboard/doctor/page";
+import { PatientDashboard } from "./_components/PatientDashboard";
 
 const getAllUsers = async () => {
   const authToken = cookies().get("auth_token")?.value;
@@ -27,22 +28,30 @@ const getAllUsers = async () => {
 export default async function page() {
   const user = await getUserDetails();
   if (!user) return redirect("/signin");
-
+  if (user.role === "patient" && user.data.status === "pending")
+    return <p>Your account is pending for approval</p>;
+  if (user.role === "patient" && user.data.status === "rejected")
+    return <p>Your account is rejected</p>;
   const data = await getAllUsers();
   const totalPatient = data.length;
-  const inPatient = data.filter(
-    (item, index) => item.patientType === "inpatient",
-  );
+  const inPatient = data.filter((item) => item.patientType === "inpatient");
   const doctor = await getDoctors();
   // console.log(data);
+
   return (
     <div className="px-2">
-      <Stats
-        totalPatient={totalPatient}
-        inPatient={inPatient.length}
-        doctor={doctor.length}
-      />
-      <PatientTable users={data} />
+      {user.role === "patient" ? (
+        <PatientDashboard patientId={user.data._id.toString()} />
+      ) : (
+        <>
+          <Stats
+            totalPatient={totalPatient}
+            inPatient={inPatient.length}
+            doctor={doctor.length}
+          />
+          <PatientTable users={data} />
+        </>
+      )}
     </div>
   );
 }

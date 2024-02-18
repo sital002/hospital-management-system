@@ -7,6 +7,16 @@ const PatientSchema = new Schema({
     required: [true, "Please provide a name"],
     minLength: [3, "Name cannot be less than 3 characters"],
   },
+  status: {
+    type: String,
+    enum: ["approved", "pending", "active", "inactive", "rejected"],
+  },
+  email: {
+    type: String,
+  },
+  password: {
+    type: String,
+  },
   gender: {
     type: String,
     enum: ["male", "female"],
@@ -19,12 +29,10 @@ const PatientSchema = new Schema({
   admitType: {
     type: String,
     enum: ["emergency", "normal"],
-    required: [true, "Please provide a admit type"],
   },
   patientType: {
     type: String,
     enum: ["outpatient", "inpatient"],
-    required: [true, "Please provide a  Patient type"],
   },
   phone: {
     type: String,
@@ -39,6 +47,12 @@ const PatientSchema = new Schema({
 export const Patient =
   mongoose.models.Patient || mongoose.model("Patient", PatientSchema);
 
-export type PatientType = InferSchemaType<typeof PatientSchema> & {
+export type PatientType = mongoose.InferSchemaType<typeof PatientSchema> & {
   _id: string | Types.ObjectId;
+};
+
+export type PatientTypePlus = PatientType & {
+  email: string;
+  status: "approved" | "pending" | "active" | "inactive" | "rejected";
+  password: string;
 };

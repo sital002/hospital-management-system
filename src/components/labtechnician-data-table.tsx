@@ -104,13 +104,19 @@ export function LabTechnicaianTable({ users }: LabTechnicianTableProps) {
         <div className="capitalize">{row.getValue("name")}</div>
       ),
     },
-    // {
-    //   accessorKey: "patientType",
-    //   header: "Patient Type",
-    //   cell: ({ row }) => (
-    //     <div className="uppercase">{row.getValue("patientType")}</div>
-    //   ),
-    // },
+    {
+      accessorKey: "email",
+      header: "Email",
+      cell: ({ row }) => <div>{row.getValue("email")}</div>,
+    },
+    {
+      accessorKey: "phone",
+      header: "Contact",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("phone")}</div>
+      ),
+    },
+
     {
       accessorKey: "dob",
       header: "DOB",

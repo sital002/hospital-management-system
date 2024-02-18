@@ -1,12 +1,12 @@
 import { getUserDetails } from "@/utils/Auth";
 import { redirect } from "next/navigation";
-import { LoginComponent } from "./_components/LoginComponent";
+import { PatientLogin } from "./_components/PatientSign";
 export default async function page() {
   const user = await getUserDetails();
   if (user) return redirect("/dashboard");
   return (
     <main className="flex items-center justify-center">
-      <LoginComponent />
+      <PatientLogin />
     </main>
   );
 }

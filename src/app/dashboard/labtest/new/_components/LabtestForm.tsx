@@ -18,11 +18,13 @@ interface LabtestFormProps {
   selectedPatient: PatientType | null;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   tests: LabtestFormType[];
+  disabled: boolean;
   setTests: React.Dispatch<React.SetStateAction<LabtestFormType[]>>;
 }
 export const LabtestForm = ({
   handleSubmit,
   setTests,
+  disabled,
   tests,
 }: LabtestFormProps) => {
   return (
@@ -77,7 +79,7 @@ export const LabtestForm = ({
             ))}
           </TableBody>
         </Table>
-        <Button type="submit" className="my-3 w-full">
+        <Button type="submit" className="my-3 w-full" disabled={disabled}>
           Submit
         </Button>
       </form>

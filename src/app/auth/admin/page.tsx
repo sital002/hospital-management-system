@@ -13,10 +13,11 @@ type FormInputs = {
   password: string;
 };
 
+type Role = "admin" | "staff" | "doctor" | "labtechnician";
 export default function SignIn() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [select, setSelect] = useState<"admin" | "staff" | "doctor">("admin");
+  const [select, setSelect] = useState<Role>("admin");
 
   const {
     register,
@@ -25,8 +26,8 @@ export default function SignIn() {
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: {
-      email: "admin@gmail.com",
-      password: "admin123",
+      email: "test@gmail.com",
+      password: "Password@123",
     },
   });
 
@@ -59,12 +60,14 @@ export default function SignIn() {
   };
   watch();
 
-  const handleTab = (value: "admin" | "doctor" | "staff") => {
+  const handleTab = (value: Role) => {
     setSelect(value);
   };
   return (
     <div className="mx-2 w-full  overflow-y-hidden rounded-lg p-5 ">
-      <div className="mx-auto mt-10 max-w-[500px] rounded-md border-2 p-4 shadow-md">
+      <div className="mx-auto mt-10 max-w-[800px] rounded-md border-2 p-4 shadow-md">
+        <h2 className="my-3 text-center text-3xl">Login as Hospital</h2>
+
         <div className="my-5 flex items-center gap-1">
           <Button
             onClick={() => handleTab("admin")}
@@ -92,6 +95,15 @@ export default function SignIn() {
             }`}
           >
             Doctor
+          </Button>
+          <Button
+            onClick={() => handleTab("labtechnician")}
+            size={"lg"}
+            className={`grow  rounded-sm text-lg shadow-md hover:bg-purple-500 ${
+              select === "labtechnician" ? "bg-purple-500" : "bg-neutral-400"
+            }`}
+          >
+            Labtechnician
           </Button>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>

@@ -1,8 +1,6 @@
 import Maindashboard from "@/components/MainDashboard";
-import Sidebar from "@/components/sidebar";
 import { PatientType } from "@/database/modals/PatientModel";
-import { UserType } from "@/database/modals/UserModel";
-import { getUserDetails, isAuthenticated } from "@/utils/Auth";
+import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

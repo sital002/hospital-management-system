@@ -13,10 +13,11 @@ type FormInputs = {
   password: string;
 };
 
+type Roles = "admin" | "staff" | "doctor" | "labtechnician" | "patient";
 export function LoginComponent() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [select, setSelect] = useState<"admin" | "staff" | "doctor">("admin");
+  const [select, setSelect] = useState<Roles>("admin");
 
   const {
     register,
@@ -59,12 +60,12 @@ export function LoginComponent() {
   };
   watch();
 
-  const handleTab = (value: "admin" | "doctor" | "staff") => {
+  const handleTab = (value: Roles) => {
     setSelect(value);
   };
   return (
     <div className="mx-2 w-full  overflow-y-hidden rounded-lg p-5 ">
-      <div className="mx-auto mt-10 max-w-[500px] rounded-md border-2 p-4 shadow-md">
+      <div className="mx-auto mt-10 max-w-[800px] rounded-md border-2 p-4 shadow-md">
         <div className="my-5 flex items-center gap-1">
           <Button
             onClick={() => handleTab("admin")}
@@ -83,6 +84,15 @@ export function LoginComponent() {
             }`}
           >
             Staff
+          </Button>
+          <Button
+            onClick={() => handleTab("labtechnician")}
+            size={"lg"}
+            className={`grow  rounded-sm text-lg shadow-md hover:bg-purple-500 ${
+              select === "labtechnician" ? "bg-purple-500" : "bg-neutral-400"
+            }`}
+          >
+            Labtechnician
           </Button>
           <Button
             onClick={() => handleTab("doctor")}
