@@ -78,15 +78,33 @@ const FormSchema = z.object({
       required_error: "Password is required",
     })
     .optional(),
-  phone: z.string({
-    required_error: "Phone is required",
-  }),
+  phone: z
+    .string()
+    .min(1, "Phone number is required")
+    .max(10, "Phone number cannot be more than 10")
+    .refine((value) => {
+      const phoneRegex = /^\d{10}$/;
+      return phoneRegex.test(value);
+    }, "Invalid phone number"),
   address: z.string({
     required_error: "Address is required",
   }),
-  dob: z.string({
-    required_error: "date is requireds",
-  }),
+  dob: z
+    .string({
+      required_error: "date is requireds",
+    })
+    .min(1, "Date is required")
+    .refine((value) => {
+      const dateRegex = /^\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/;
+      if (!dateRegex.test(value)) return false;
+      const [year, month, day] = value.split("/").map(Number);
+      const date = new Date(year, month - 1, day);
+      return (
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
+      );
+    }, "Invalid date format or value"),
   gender: z.string({
     required_error: "Gender is required",
   }),
@@ -117,10 +135,10 @@ const StaffForm: FC<StaffFormProps> = ({
       : {
           name: "John Doe",
           email: "johndoe33@gmail.com",
-          phone: "s",
+          phone: "9876543210",
           address: "Ratnapark, Kathmandu",
           gender: "male",
-          dob: "2002",
+          dob: "2002/02/12",
           shift: "morning",
           password: "Password@123",
           cpassword: "Password@123",
@@ -151,7 +169,7 @@ const StaffForm: FC<StaffFormProps> = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -189,7 +207,7 @@ const StaffForm: FC<StaffFormProps> = ({
     } catch (err: any) {
       console.log(err);
       toast.error(err?.message);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -385,7 +403,7 @@ const StaffForm: FC<StaffFormProps> = ({
             </>
           ) : null}
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ?'Loading...' :'Submit'}
+            {loading ? "Loading..." : "Submit"}
           </Button>
         </form>
       </Form>
