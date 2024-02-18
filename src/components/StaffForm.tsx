@@ -173,7 +173,7 @@ const StaffForm: FC<StaffFormProps> = (props) => {
     <div className="max-h-[600px] px-6">
       <Form {...form}>
         <h1 className=" text-center text-4xl font-semibold">
-          Create New Staff
+          {props.update ? "Update Staff details" : "Create New Staff"}
         </h1>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="my-4 flex gap-4 ">
@@ -317,41 +317,42 @@ const StaffForm: FC<StaffFormProps> = (props) => {
               />
             </div>
           </div>
-
-          <>
-            <div className="my-10 flex gap-4 ">
-              <div className="grow">
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input placeholder="*********" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+          {props.update ? null : (
+            <>
+              <div className="my-10 flex gap-4 ">
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grow">
+                  <FormField
+                    control={form.control}
+                    name="cpassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="*********" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
-              <div className="grow">
-                <FormField
-                  control={form.control}
-                  name="cpassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Confirm Password</FormLabel>
-                      <FormControl>
-                        <Input placeholder="*********" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-          </>
+            </>
+          )}
 
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Loading..." : "Submit"}
