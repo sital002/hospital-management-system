@@ -2,9 +2,9 @@ import PatientDetailCard from "@/components/patientDetails/PatientDetailCard";
 import { Card } from "@/components/ui/card";
 import connectToDB from "@/database/connectToDB";
 import { Labtest, LabtestType } from "@/database/modals/Labtest";
-import { PatientType } from "@/database/modals/PatientModel";
 import { getUserDetails } from "@/utils/Auth";
 import { formatDate } from "@/utils/formatDate";
+import { getPatientDetail } from "@/utils/getPatientDetail";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -63,20 +63,4 @@ function LabtestCard({ labtest }: { labtest: LabtestType }) {
       </Card>
     </Link>
   );
-}
-export async function getPatientDetail(id: string) {
-  // console.log("params is : ", id);
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${id}`,
-      {
-        credentials: "include",
-      },
-    );
-    const data = (await res.json()) as PatientType;
-    return data;
-  } catch (err: any) {
-    console.log(err.message);
-    return null;
-  }
 }
