@@ -147,6 +147,7 @@ const PatientForm = ({
         body: JSON.stringify(data),
       });
       const json = await res.json();
+      console.log(json)
       if (json.success) {
         toast.success("Account created successfully");
         console.log(json);

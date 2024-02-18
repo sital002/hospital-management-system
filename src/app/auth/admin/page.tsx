@@ -132,6 +132,7 @@ export default function SignIn() {
           <div className="my-6">
             <Label className="my-3">Password</Label>
             <Input
+            type={"password"}
               {...register("password", {
                 required: {
                   value: true,
@@ -147,7 +148,6 @@ export default function SignIn() {
                 },
               })}
               placeholder="Password@123"
-              type="text"
             />
             {errors.password && (
               <p className="text-red-500">{errors.password.message}</p>

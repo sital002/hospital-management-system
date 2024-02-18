@@ -264,7 +264,7 @@ const PatientSignup = (props: PatientFormProps) => {
               )}
             />
           </div>
-          <div className="my-10 flex gap-4">
+          <div className="my-10 items-center flex gap-4">
             <div className="grow">
               <FormField
                 control={form.control}
@@ -277,7 +277,7 @@ const PatientSignup = (props: PatientFormProps) => {
                         defaultValue={field.value}
                         onValueChange={field.onChange}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="h-[47px] border-black">
                           <SelectValue placeholder={"Select Gender"} />
                         </SelectTrigger>
                         <SelectContent>
@@ -294,9 +294,7 @@ const PatientSignup = (props: PatientFormProps) => {
                 )}
               />
             </div>
-          </div>
-          <div className="flex gap-4">
-            <div className="my-6 grow">
+            <div className="mt-2 grow">
               <FormField
                 control={form.control}
                 name="email"
@@ -311,6 +309,9 @@ const PatientSignup = (props: PatientFormProps) => {
                 )}
               />
             </div>
+          </div>
+
+          <div className="flex gap-3">
             <div className="my-6 grow">
               <FormField
                 control={form.control}
@@ -319,28 +320,36 @@ const PatientSignup = (props: PatientFormProps) => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="********" {...field} />
+                      <Input
+                        type={"password"}
+                        placeholder="********"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-          </div>
-          <div className="my-6 grow">
-            <FormField
-              control={form.control}
-              name="cpassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <Input placeholder="2002-09-22" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="my-6 grow">
+              <FormField
+                control={form.control}
+                name="cpassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type={"password"}
+                        placeholder="2002-09-22"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Loading..." : props.update ? "Update" : "Create"}

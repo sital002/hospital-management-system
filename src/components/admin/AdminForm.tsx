@@ -174,6 +174,7 @@ const AdminForm: FC<AdminFormProps> = ({}) => {
 
         <Label>Password</Label>
         <Input
+          
           {...register("password", {
             required: {
               value: true,
@@ -185,6 +186,7 @@ const AdminForm: FC<AdminFormProps> = ({}) => {
             },
           })}
           placeholder="xxxxxxxxx"
+          type={"password"}
         />
         <p className="text-red-800">{errors.password?.message}</p>
         <Label>Confirm password</Label>

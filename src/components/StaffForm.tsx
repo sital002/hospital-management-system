@@ -83,7 +83,7 @@ const FormSchema = z.object({
   }),
   address: z.string({
     required_error: "Address is required",
-  }),
+  }).min(1),
   dob: z.string({
     required_error: "date is requireds",
   }),
@@ -359,7 +359,7 @@ const StaffForm: FC<StaffFormProps> = ({
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="*********" {...field} />
+                          <Input type={'password'} placeholder="*********" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -374,7 +374,7 @@ const StaffForm: FC<StaffFormProps> = ({
                       <FormItem>
                         <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="*********" {...field} />
+                          <Input type={'password'} placeholder="*********" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
