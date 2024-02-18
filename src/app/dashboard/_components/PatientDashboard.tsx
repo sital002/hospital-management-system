@@ -1,8 +1,8 @@
 import { PatientView } from "@/components/patient/PatientView";
 import React from "react";
-import { getPatientDetail } from "../patient/[id]/page";
 import connectToDB from "@/database/connectToDB";
 import { Labtest, LabtestType } from "@/database/modals/Labtest";
+import { getPatientDetail } from "@/utils/getPatientDetail";
 
 interface PatientDashboardProps {
   patientId: string;
