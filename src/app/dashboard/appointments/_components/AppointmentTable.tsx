@@ -53,7 +53,7 @@ export function AppointmentTable({ appointments }: StaffTableProps) {
       accessorKey: "name",
       header: "Name",
       cell: ({ row }) => (
-        <div className="uppercase">{row.original.patient.name}</div>
+        <div className="uppercase">{row.original.patient?.name}</div>
       ),
     },
     {
@@ -67,7 +67,7 @@ export function AppointmentTable({ appointments }: StaffTableProps) {
       accessorKey: "contactPreference",
       header: "Contact Preference",
       cell: ({ row }) => (
-        <div className="uppercase">{row.original.contactPreference}</div>
+        <div className="uppercase">{row.original?.contactPreference}</div>
       ),
     },
     {
@@ -101,7 +101,9 @@ export function AppointmentTable({ appointments }: StaffTableProps) {
     {
       accessorKey: "status",
       header: "Status",
-      cell: ({ row }) => <div className="uppercase">{row.original.status}</div>,
+      cell: ({ row }) => (
+        <div className="uppercase">{row.original?.status}</div>
+      ),
     },
   ];
   const table = useReactTable({
