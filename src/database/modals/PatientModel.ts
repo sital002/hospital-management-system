@@ -18,7 +18,7 @@ const PatientSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "approved", "active"],
+    enum: ["pending", "approved", "active", "rejected"],
   },
   admitType: {
     type: String,
