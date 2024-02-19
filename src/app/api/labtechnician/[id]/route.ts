@@ -1,14 +1,16 @@
 import { LabtechnicainZodFormSchema } from "@/app/dashboard/labtechnician/_utils/labtechnicianSchema";
+import connectToDB from "@/database/connectToDB";
 import {
   Labtechnician,
   LabtechnicianType,
 } from "@/database/modals/LabtechnicianModal";
+import { getUserDetails } from "@/utils/Auth";
 import { NextRequest } from "next/server";
 
+const allowedRoles = ["admin", "staff"];
 export async function GET(req: NextRequest) {
   try {
     const id = req.nextUrl.pathname.split("/")[3];
-
     if (!id)
       return new Response(
         JSON.stringify({
@@ -17,7 +19,7 @@ export async function GET(req: NextRequest) {
         }),
         { status: 400 },
       );
-
+    await connectToDB();
     const labtechnician = (await Labtechnician.findById(
       id,
     )) as LabtechnicianType;
@@ -44,7 +46,25 @@ export async function DELETE(req: NextRequest) {
         }),
         { status: 400 },
       );
-
+    const user = await getUserDetails();
+    if (!user)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not authorized to perform this action",
+        }),
+        { status: 401 },
+      );
+    if (!allowedRoles.includes(user.role)) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not authorized to perform this action",
+        }),
+        { status: 401 },
+      );
+    }
+    await connectToDB();
     await Labtechnician.findByIdAndDelete(id);
     return new Response(
       JSON.stringify({
@@ -65,7 +85,25 @@ export async function DELETE(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     const id = req.nextUrl.pathname.split("/")[3];
-
+    const user = await getUserDetails();
+    console.log("The logged in user data is ", user);
+    if (!user)
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not authorized to perform this action",
+        }),
+        { status: 401 },
+      );
+    if (!allowedRoles.includes(user.role)) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not authorized to perform this action",
+        }),
+        { status: 401 },
+      );
+    }
     if (!id)
       return new Response(
         JSON.stringify({
@@ -86,6 +124,7 @@ export async function PUT(req: NextRequest) {
         { status: 400 },
       );
     }
+    await connectToDB();
     const labtechnician = (await Labtechnician.findByIdAndUpdate(id, {
       name: result.data.name,
       password: result.data.password,
