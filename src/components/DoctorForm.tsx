@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { doctorZodSchema } from "@/app/dashboard/doctor/_utils/doctorSchema";
+import axios, { AxiosError } from "axios";
 
 const genderOptions = [
   {
@@ -98,24 +99,20 @@ const DoctorForm: FC<DoctorFormProps> = (props) => {
     console.log(data);
     try {
       setLoading(true);
-      const res = await fetch(
+      const res = await axios(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor`,
         {
           method: "POST",
-          body: JSON.stringify(data),
+          data,
         },
       );
-      if (!res.ok) throw new Error("Failed to create account");
-      const json = await res.json();
-      if (json.success) {
-        toast.success("Account created successfully");
-        router.refresh();
-        return;
-      }
-      return toast.error(json.message);
-    } catch (err: any) {
+      toast.success("Doctor added successfully");
+      router.refresh();
+    } catch (err) {
       console.log(err);
-      toast.error(err.message);
+      if (axios.isAxiosError(err)) {
+        toast.error(err.response?.data?.message ?? "Failed to add doctor");
+      }
     } finally {
       setLoading(false);
     }
@@ -130,11 +127,11 @@ const DoctorForm: FC<DoctorFormProps> = (props) => {
       console.log(data);
       if (!props.update) throw new Error("Invalid request");
       setLoading(true);
-      const res = await fetch(
+      const res = await axios(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor/${props.doctor?._id}`,
         {
           method: "PUT",
-          body: JSON.stringify({
+          data: {
             name: data.name,
             phone: data.phone,
             address: data.address,
@@ -144,24 +141,20 @@ const DoctorForm: FC<DoctorFormProps> = (props) => {
             cpassword: data.password,
             gender: data.gender,
             department: data.department,
-          }),
+          },
         },
       );
-      if (!res.ok) {
-        throw new Error("Failed to update");
+
+      toast.success("Detail updated successfully");
+      router.refresh();
+      if (props.update) {
+        return props.setOpen(false);
       }
-      const json = await res.json();
-      if (json) {
-        toast.success("Detail updated successfully");
-        router.refresh();
-        if (props.update) {
-          return props.setOpen(false);
-        }
-      }
-      return toast.error(json.message);
-    } catch (err: any) {
+    } catch (err) {
       console.log(err);
-      toast.error(err?.message);
+      if (axios.isAxiosError(err)) {
+        toast.error(err?.response?.data?.message ?? "Failed to update doctor");
+      }
     } finally {
       setLoading(false);
     }

@@ -45,7 +45,10 @@ const LabtechnicianSchema = new Schema({
 
 export const Labtechnician =
   mongoose.models.Labtechnician ||
-  mongoose.model("Labtechnician", LabtechnicianSchema);
+  mongoose.model<InferSchemaType<typeof LabtechnicianSchema>>(
+    "Labtechnician",
+    LabtechnicianSchema,
+  );
 
 export type LabtechnicianType = InferSchemaType<typeof LabtechnicianSchema> & {
   _id: string | Types.ObjectId;
