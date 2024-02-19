@@ -1,4 +1,4 @@
-import { patientZodSchema } from "@/app/dashboard/patient/appointment/utils/schema";
+import { patientZodSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
 import connectToDB from "@/database/connectToDB";
 import { Patient, PatientTypePlus } from "@/database/modals/PatientModel";
 import { generateToken } from "@/utils/generateToken";

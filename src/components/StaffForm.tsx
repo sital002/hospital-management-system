@@ -24,7 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import { StaffFormSchema } from "@/app/dashboard/patient/appointment/utils/schema";
+import { StaffFormSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
 
 const genderOptions = [
   {

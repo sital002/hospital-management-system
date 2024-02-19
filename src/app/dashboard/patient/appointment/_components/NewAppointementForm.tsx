@@ -34,7 +34,7 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "@/components/ui/calendar";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { FormSchema } from "../utils/schema";
+import { FormSchema } from "../_utils/schema";
 import { PatientTypePlus } from "@/database/modals/PatientModel";
 
 const medicalDepart = [

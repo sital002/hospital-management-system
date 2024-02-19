@@ -1,4 +1,4 @@
-import { StaffFormSchema } from "@/app/dashboard/patient/appointment/utils/schema";
+import { StaffFormSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
 import connectToDB from "@/database/connectToDB";
 import { Staff, StaffType } from "@/database/modals/StaffModal";
 import { NextRequest, NextResponse } from "next/server";
