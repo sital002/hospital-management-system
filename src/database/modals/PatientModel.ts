@@ -7,6 +7,12 @@ const PatientSchema = new Schema({
     required: [true, "Please provide a name"],
     minLength: [3, "Name cannot be less than 3 characters"],
   },
+  email: {
+    type: String,
+  },
+  password: {
+    type: String,
+  },
   gender: {
     type: String,
     enum: ["male", "female"],
@@ -47,10 +53,4 @@ export const Patient =
 
 export type PatientType = InferSchemaType<typeof PatientSchema> & {
   _id: string | Types.ObjectId;
-};
-
-export type PatientTypePlus = PatientType & {
-  email: string;
-  status: "approved" | "pending" | "active" | "inactive" | "rejected";
-  password: string;
 };

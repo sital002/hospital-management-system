@@ -2,6 +2,7 @@ import React from "react";
 import { UpdatePatientForm } from "./_components/UpdatePatientForm";
 import { getUserDetails } from "@/utils/Auth";
 import { redirect } from "next/navigation";
+import PatientSignup from "@/app/auth/patient/signup/_components/PatientSignUp";
 
 export default async function page() {
   const user = await getUserDetails();
@@ -12,7 +13,7 @@ export default async function page() {
   if (user.data.status === "rejected") return <p>Your account is rejected</p>;
   return (
     <div>
-      <UpdatePatientForm update={true} patient={user.data} />
+      <PatientSignup update={true} patient={user.data} />
     </div>
   );
 }

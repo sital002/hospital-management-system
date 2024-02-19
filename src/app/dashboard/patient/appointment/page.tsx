@@ -19,6 +19,10 @@ export default async function page() {
   if (!user) return redirect("/signin");
   if (user.role !== "patient")
     return <div>You are not authorized to view this page</div>;
+  if (user.role === "patient" && user.data.status === "pending")
+    return <p>Your account is pending for approval</p>;
+  if (user.role === "patient" && user.data.status === "rejected")
+    return <p>Your account is rejected</p>;
   const appointments = await getAppointments(user.data._id.toString());
 
   return (

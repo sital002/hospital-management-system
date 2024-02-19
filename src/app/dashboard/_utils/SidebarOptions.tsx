@@ -132,4 +132,10 @@ export const sideBarOptions: SidebarOptionType[] = [
       },
     ],
   },
+  {
+    name: "Appointment",
+    roles: ["admin", "staff"],
+    icon: <PlusSquare size={20} />,
+    url: "/dashboard/appointments",
+  },
 ];

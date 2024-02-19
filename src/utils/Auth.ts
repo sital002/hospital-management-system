@@ -9,7 +9,7 @@ import {
 import { Admin, type AdminType } from "@/database/modals/AdminModal";
 import { Doctor, type DoctorType } from "@/database/modals/DoctorModel";
 import { Staff, type StaffType } from "@/database/modals/StaffModal";
-import { Patient, PatientTypePlus } from "@/database/modals/PatientModel";
+import { Patient, PatientType } from "@/database/modals/PatientModel";
 
 export function isAuthenticated(): boolean {
   try {
@@ -65,7 +65,7 @@ interface Labtechnician {
   data: LabtechnicianType;
 }
 interface Patient {
-  data: PatientTypePlus;
+  data: PatientType;
   role: "patient";
 }
 type User = Doctor | Staff | Admin | Labtechnician | Patient | null;
@@ -103,7 +103,7 @@ export async function getUserDetails(): Promise<User> {
       return { data, role: "admin" };
     }
     if (decoded.role === "patient") {
-      const data = (await Patient.findById(decoded._id)) as PatientTypePlus;
+      const data = (await Patient.findById(decoded._id)) as PatientType;
       return { data, role: "patient" };
     }
     return null;

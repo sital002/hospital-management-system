@@ -1,4 +1,4 @@
-import { Patient, PatientTypePlus } from "@/database/modals/PatientModel";
+import { Patient } from "@/database/modals/PatientModel";
 import { getUserDetails } from "@/utils/Auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
