@@ -35,7 +35,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { FormSchema } from "../_utils/schema";
-import { PatientTypePlus } from "@/database/modals/PatientModel";
+import { PatientType } from "@/database/modals/PatientModel";
 
 const medicalDepart = [
   {
@@ -89,7 +89,7 @@ const medicalDepart = [
 ];
 
 interface NewAppointementFormProps {
-  patient: PatientTypePlus;
+  patient: PatientType;
 }
 export function NewAppointementForm({ patient }: NewAppointementFormProps) {
   const router = useRouter();
@@ -100,7 +100,7 @@ export function NewAppointementForm({ patient }: NewAppointementFormProps) {
       patientId: patient._id.toString(),
       date: new Date(),
       contact: "email",
-      email: patient.email,
+      email: patient.email ?? "",
       name: patient.name,
       phone: patient.phone,
       type: "oncology",

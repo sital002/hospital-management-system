@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { PatientType, PatientTypePlus } from "@/database/modals/PatientModel";
+import { PatientType } from "@/database/modals/PatientModel";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -25,6 +25,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { patientZodSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
+import axios from "axios";
 
 type FormInputs = {
   name: string;
@@ -48,100 +50,29 @@ const genderOptions = [
   },
 ];
 
-const patientTypeOption = [
-  {
-    name: "In Patient",
-    value: "inpatient",
-  },
-  {
-    name: "Out Patient",
-    value: "outpatient",
-  },
-];
-
-const admitType = [
-  {
-    name: "Normal",
-    value: "normal",
-  },
-  {
-    name: "Emergency",
-    value: "emergency",
-  },
-];
-
 type PatientFormProps =
   | {
-      update: true;
-      patient: PatientTypePlus;
-      open: boolean;
-      setOpen: (value: boolean) => void;
+      update?: true;
+      patient: PatientType;
     }
   | {
-      update: false;
+      update?: false;
     };
-
-const FormSchema = z.object({
-  email: z
-    .string({
-      invalid_type_error: "Email must be a string",
-      required_error: "Email is required",
-    })
-    .min(1, "Email is required")
-    .email("Invalid email address"),
-  name: z
-    .string({
-      required_error: "Name is required",
-    })
-    .min(3, "Name cannot be less than 3 characters"),
-  phone: z
-    .string({
-      required_error: "Phone is required",
-      invalid_type_error: "Invalid phone type",
-    })
-    .min(10, "Phone number cannot be less than 10 characters"),
-  dob: z
-    .string({
-      invalid_type_error: "DOB must be a string",
-      required_error: "DOB is required",
-    })
-    .min(1, "DOB is required"),
-  address: z
-    .string({
-      invalid_type_error: "Address must be a string",
-      required_error: "Address is required",
-    })
-    .min(1, "Address is required"),
-  gender: z.enum(["male", "female"], {
-    required_error: "Gender is required",
-    invalid_type_error: "Invalid gender type",
-  }),
-  password: z
-    .string({
-      invalid_type_error: "Password must be a string",
-      required_error: "Password is required",
-    })
-    .min(8, "Password must be at least 8 characters long"),
-  cpassword: z
-    .string({
-      invalid_type_error: "Confirm Password must be a string",
-      required_error: "Confirm Password is required",
-    })
-    .min(8, "Confirm Password must be at least 8 characters long"),
-});
 
 const PatientSignup = (props: PatientFormProps) => {
   const [loading, setLoading] = useState(false);
-  // const { update, patient, open, setOpen } = props;
-
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  // console.log(props.patient, "the patient is");
+  const form = useForm<z.infer<typeof patientZodSchema>>({
+    resolver: zodResolver(patientZodSchema),
     defaultValues: props.update
       ? {
           name: props.patient.name,
           phone: props.patient.phone,
+          email: props.patient.email ?? "",
           address: props.patient.address,
           dob: props.patient.dob,
+          password: props.patient.password ?? "",
+          cpassword: props.patient.password ?? "",
           gender: props.patient.gender,
         }
       : {
@@ -156,36 +87,64 @@ const PatientSignup = (props: PatientFormProps) => {
         },
   });
   const router = useRouter();
-  console.log(form.watch());
-  function signUpPatient({ data }: { data: z.infer<typeof FormSchema> }) {
+  function signUpPatient({ data }: { data: z.infer<typeof patientZodSchema> }) {
     console.log("The data is ", data);
     setLoading(true);
-    fetch(`http://localhost:3000/api/patient/signup`, {
+    axios(`/api/patient/signup`, {
       method: "POST",
-      body: JSON.stringify(data),
+      data,
     })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success) {
-          router.replace("/dashboard");
-          toast.success("Account created successfully");
-          router.refresh();
-          return;
-        }
-        return toast.error(json.message);
+      .then((res) => {
+        console.log(res);
+        // toast.success("Patient added successfully");
+        toast.success("Account created succesfully");
+        router.replace("/dashboard");
       })
       .catch((err) => {
         console.log(err);
-        toast.error(err?.message);
+        if (axios.isAxiosError(err)) {
+          toast.error(err.response?.data.message ?? "Failed to create account");
+        }
       })
       .finally(() => {
         setLoading(false);
       });
   }
-
-  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+  function updatePatientDetail({
+    data,
+  }: {
+    data: z.infer<typeof patientZodSchema>;
+  }) {
+    if (!props.update) return;
+    console.log("The data is ", data);
+    setLoading(true);
+    axios(`/api/patient/update?id=${props.patient._id}`, {
+      method: "PUT",
+      withCredentials: true,
+      data,
+    })
+      .then((res) => {
+        console.log(res);
+        // toast.success("Patient added successfully");
+        toast.success("Account updated succesfully");
+        router.replace("/dashboard");
+        router.refresh();
+      })
+      .catch((err) => {
+        console.log(err);
+        if (axios.isAxiosError(err)) {
+          toast.error(err.response?.data.message ?? "Failed to update account");
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+  const onSubmit: SubmitHandler<z.infer<typeof patientZodSchema>> = async (
+    data,
+  ) => {
     if (props.update) {
-      //   updatePatientDetail({ data });
+      updatePatientDetail({ data });
     } else {
       signUpPatient({ data });
     }
@@ -195,8 +154,7 @@ const PatientSignup = (props: PatientFormProps) => {
     <div className=" w-full">
       <Form {...form}>
         <h1 className="my-6 text-center text-4xl font-semibold">
-          {/* {props.update ? "Update Patient Detail" : "Add New Patient"} */}
-          Create a New Account
+          {props.update ? "Update your Detail" : "Create New Account"}
         </h1>
 
         <form className=" mt-4  px-10" onSubmit={form.handleSubmit(onSubmit)}>
@@ -267,7 +225,7 @@ const PatientSignup = (props: PatientFormProps) => {
               )}
             />
           </div>
-          <div className="my-10 items-center flex gap-4">
+          <div className="my-10 flex items-center gap-4">
             <div className="grow">
               <FormField
                 control={form.control}
@@ -344,7 +302,7 @@ const PatientSignup = (props: PatientFormProps) => {
                     <FormControl>
                       <Input
                         type={"password"}
-                        placeholder="2002-09-22"
+                        placeholder="**********"
                         {...field}
                       />
                     </FormControl>

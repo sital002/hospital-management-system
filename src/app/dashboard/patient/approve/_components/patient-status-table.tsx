@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { PatientTypePlus } from "@/database/modals/PatientModel";
+import { PatientType } from "@/database/modals/PatientModel";
 import {
   handlePatientApproveStatus,
   handlePatientRejectStatus,
@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 interface PatientStatusTableProps {
-  patients: PatientTypePlus[];
+  patients: PatientType[];
 }
 
 export function PatientStatusTable({ patients }: PatientStatusTableProps) {

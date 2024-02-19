@@ -1,6 +1,6 @@
 import { patientZodSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
 import connectToDB from "@/database/connectToDB";
-import { Patient, PatientTypePlus } from "@/database/modals/PatientModel";
+import { Patient } from "@/database/modals/PatientModel";
 import { generateToken } from "@/utils/generateToken";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
