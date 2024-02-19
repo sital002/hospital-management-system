@@ -2,7 +2,7 @@ import { FormSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
 import connectToDB from "@/database/connectToDB";
 import { Appointment, TAppointment } from "@/database/modals/Appointment";
 import { getUserDetails } from "@/utils/Auth";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     await connectToDB();
 
     const newAppointment = await Appointment.create<TAppointment>({
-      patientId: user.data._id,
+      patient: user.data._id,
       date: data.data.date,
       medicalDepartment: data.data.type,
       contactPreference: data.data.contact,
@@ -71,6 +71,20 @@ export async function POST(req: NextRequest) {
       JSON.stringify({
         message: err.message,
       }),
+      { status: 500 },
+    );
+  }
+}
+
+export async function GET() {
+  try {
+    await connectToDB();
+    const appointments = await Appointment.find().populate("patient");
+    return NextResponse.json(appointments, { status: 200 });
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json(
+      { message: "Failed to fetch appointments" },
       { status: 500 },
     );
   }
