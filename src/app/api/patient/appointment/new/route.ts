@@ -1,4 +1,4 @@
-import { FormSchema } from "@/app/dashboard/patient/appointment/utils/schema";
+import { FormSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
 import connectToDB from "@/database/connectToDB";
 import { Appointment, TAppointment } from "@/database/modals/Appointment";
 import { getUserDetails } from "@/utils/Auth";

@@ -1,10 +1,9 @@
-import { patientZodSchema } from "@/app/dashboard/patient/appointment/utils/schema";
+import { patientZodSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
 import connectToDB from "@/database/connectToDB";
 import { Patient, PatientTypePlus } from "@/database/modals/PatientModel";
 import { generateToken } from "@/utils/generateToken";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();

@@ -24,7 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import { StaffFormSchema } from "@/app/dashboard/patient/appointment/utils/schema";
+import { StaffFormSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
 
 const genderOptions = [
   {
@@ -70,13 +70,15 @@ const StaffForm: FC<StaffFormProps> = (props) => {
     resolver: zodResolver(StaffFormSchema),
     defaultValues: props.update
       ? {
-          name: props.staff?.name || "",
-          address: props.staff?.address || "",
-          gender: props.staff?.gender || "",
-          phone: props.staff?.phone || "",
-          dob: props.staff?.dob?.toString() || "",
-          shift: props.staff?.shift || "",
-          email: props.staff?.email || "",
+          name: props.staff.name,
+          address: props.staff.address,
+          gender: props.staff.gender,
+          email: props.staff.email,
+          phone: props.staff.phone,
+          dob: props.staff.dob.toString(),
+          password: props.staff.password,
+          cpassword: props.staff.password,
+          shift: props.staff.shift,
         }
       : {
           name: "John Doe",
@@ -93,7 +95,7 @@ const StaffForm: FC<StaffFormProps> = (props) => {
 
   const router = useRouter();
   // const [showModal, setShowModal] = useState(false);
-  console.log(form.watch());
+  // console.log(form.watch());
   const createNewStaff = async (
     data: z.infer<typeof StaffFormSchema>,
     router: any,
@@ -122,24 +124,24 @@ const StaffForm: FC<StaffFormProps> = (props) => {
 
   const updateStaffDetail = async (data: z.infer<typeof StaffFormSchema>) => {
     try {
-      console.log(data);
+      // console.log(data);
       if (!props.update) return;
       setLoading(true);
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${props.staff?._id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify({
-            name: data?.name,
-            phone: data?.phone,
-            address: data?.address,
-            shift: data?.shift,
-            email: data?.email,
-            dob: data?.dob,
-            gender: data.gender,
-          }),
-        },
-      );
+      const res = await fetch(`/api/staff/${props.staff._id}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          password: data.password,
+          cpassword: data.cpassword,
+          address: data.address,
+          shift: data.shift,
+          dob: data.dob,
+          gender: data.gender,
+        }),
+      });
+      if (!res.ok) throw new Error("Something went wrong");
       const json = await res.json();
       if (json) {
         toast.success("Detail updated successfully");
@@ -192,6 +194,7 @@ const StaffForm: FC<StaffFormProps> = (props) => {
                 )}
               />
             </div>
+
             <div className="grow">
               <FormField
                 control={form.control}
@@ -200,7 +203,11 @@ const StaffForm: FC<StaffFormProps> = (props) => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="johndoe@gmail.com" {...field} />
+                      <Input
+                        placeholder="johndoe@gmail.com"
+                        disabled={props.update}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -317,7 +324,7 @@ const StaffForm: FC<StaffFormProps> = (props) => {
               />
             </div>
           </div>
-          {props.update ? null : (
+          {
             <>
               <div className="my-10 flex gap-4 ">
                 <div className="grow">
@@ -328,7 +335,11 @@ const StaffForm: FC<StaffFormProps> = (props) => {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="*********" {...field} />
+                          <Input
+                            type={"password"}
+                            placeholder="*********"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -343,7 +354,11 @@ const StaffForm: FC<StaffFormProps> = (props) => {
                       <FormItem>
                         <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="*********" {...field} />
+                          <Input
+                            type={"password"}
+                            placeholder="*********"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -352,7 +367,7 @@ const StaffForm: FC<StaffFormProps> = (props) => {
                 </div>
               </div>
             </>
-          )}
+          }
 
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Loading..." : "Submit"}

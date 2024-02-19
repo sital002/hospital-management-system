@@ -17,7 +17,7 @@ const EditStaffModal: FC<EditLabtestModalProps> = ({ staff }) => {
           <Button variant="default">Edit</Button>
         </DialogTrigger>
         <DialogContent>
-          <div className="w-full">
+          <div className="min-h-[700px] w-full">
             <StaffForm
               update={true}
               staff={staff}

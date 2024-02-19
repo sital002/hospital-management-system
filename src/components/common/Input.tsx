@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import { Eye, EyeOff } from "lucide-react";
+import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -9,11 +10,14 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
-  { className, variant = "primary", ...rest },
+  { className,type='text', variant = "primary", ...rest },
   ref,
 ) {
+  const[password,setPassword]=useState(true)
   return (
-    <input
+    <div className="relative">
+      <input
+    type={password ? type:'text'}
       ref={ref}
       className={twMerge(
         "my-2 w-full rounded-lg border border-slate-800 p-2 outline-none",
@@ -21,6 +25,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
       )}
       {...rest}
     />
+    {type==='password' ? (!password ? <Eye onClick={()=>setPassword(!password)} className="absolute left-[95%] cursor-pointer top-3"/>:<EyeOff onClick={()=>setPassword(!password)} className="absolute left-[95%] cursor-pointer top-3" />) : null}
+    <Eye/>
+
+    </div>
   );
 });
 
