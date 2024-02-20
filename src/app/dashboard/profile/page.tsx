@@ -1,17 +1,21 @@
 import { getUserDetails } from "@/utils/Auth";
 import { redirect } from "next/navigation";
 import React from "react";
-import male from "@/assets/undraw_male_avatar_g98d.svg";
-import female from "@/assets/undraw_female_avatar_efig.svg";
-import Image from "next/image";
 import PatientDetailCard from "@/components/patientDetails/PatientDetailCard";
+import { LabtechnicianDetailCard } from "./_components/LabtechnicianDetailCard";
+import { AdminDetailCard } from "./_components/AdminDetailCard";
+import { StaffDetailCard } from "./_components/StaffDetailCard";
+import { DoctorDetailCard } from "./_components/DoctorDetailCard";
 export default async function page() {
   const user = await getUserDetails();
   if (!user) {
     redirect("/signin");
   }
-  const { data } = user;
-  let image = data.gender === "male" ? male : female;
-  if (user.role === "patient") return <PatientDetailCard patient={data} />;
+  if (user.role === "patient") return <PatientDetailCard patient={user.data} />;
+  if (user.role === "staff") return <StaffDetailCard staff={user.data} />;
+  if (user.role === "doctor") return <DoctorDetailCard doctor={user.data} />;
+  if (user.role === "labtechnician")
+    return <LabtechnicianDetailCard labtechnician={user.data} />;
+  if (user.role === "admin") return <AdminDetailCard admin={user.data} />;
   return <div>Hello</div>;
 }

@@ -111,7 +111,7 @@ export const AdminForm: FC<AdminFormProps> = (props) => {
     <div className="w-full">
       <Form {...form}>
         <h1 className="text-center text-3xl font-medium">
-          {props.update ? "Update user" : "Create New user"}
+          {props.update ? "Update your detail" : "Create New user"}
         </h1>
         <form
           className="mx-auto   rounded-lg px-6 py-8 "
