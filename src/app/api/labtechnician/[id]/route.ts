@@ -95,15 +95,6 @@ export async function PUT(req: NextRequest) {
         }),
         { status: 401 },
       );
-    if (!allowedRoles.includes(user.role)) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          message: "You are not authorized to perform this action",
-        }),
-        { status: 401 },
-      );
-    }
     if (!id)
       return new Response(
         JSON.stringify({
@@ -112,6 +103,16 @@ export async function PUT(req: NextRequest) {
         }),
         { status: 400 },
       );
+    if (user.data._id.toString() !== id) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not authorized to perform this action yo ",
+        }),
+        { status: 401 },
+      );
+    }
+
 
     const body = await req.json();
     const result = LabtechnicainZodFormSchema.safeParse(body);

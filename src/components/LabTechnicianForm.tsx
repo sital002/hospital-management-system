@@ -138,10 +138,9 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = (props) => {
 
       if (props.update && props.setOpen) {
         props.setOpen(false);
-        toast.success("Detail updated successfully");
-        router.refresh();
-        return;
       }
+      router.refresh();
+      toast.success("Detail updated successfully");
     } catch (err) {
       console.log(err);
       if (axios.isAxiosError(err)) {

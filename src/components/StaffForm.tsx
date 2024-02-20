@@ -149,7 +149,6 @@ const StaffForm: FC<StaffFormProps> = (props) => {
         if (props.update && props.setOpen) {
           props.setOpen(false);
         }
-
         return;
       }
       return toast.error(json.message);
