@@ -4,8 +4,6 @@ import React, { FC, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { X } from "lucide-react";
-import { LabtechnicianType } from "@/database/modals/LabtechnicianModal";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -15,19 +13,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
+import axios from "axios";
 import {
+  SelectValue,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "./ui/select";
-import { LabtechnicainZodFormSchema } from "@/app/dashboard/labtechnician/_utils/labtechnicianSchema";
-import axios from "axios";
+} from "@/components/ui/select";
+import { AdminType } from "@/database/modals/AdminModal";
+import { AdminFormSchema } from "../../labtechnician/_utils/AdminFormSchema";
 
 const genderOptions = [
   {
@@ -40,10 +39,14 @@ const genderOptions = [
   },
 ];
 
-type LabTechnicianFormProps =
+type AdminFormProps =
   | {
       update: true;
-      labtechnician: LabtechnicianType;
+      user: AdminType;
+      handleAdminUpdate?: (data: any) => Promise<{
+        success: boolean;
+        message: string;
+      }>;
       open?: boolean;
       setOpen?: (value: boolean) => void;
     }
@@ -51,20 +54,20 @@ type LabTechnicianFormProps =
       update?: false;
     };
 
-const LabTechnicianForm: FC<LabTechnicianFormProps> = (props) => {
+export const AdminForm: FC<AdminFormProps> = (props) => {
   const [loading, setLoading] = useState(false);
-  const form = useForm<z.infer<typeof LabtechnicainZodFormSchema>>({
-    resolver: zodResolver(LabtechnicainZodFormSchema),
+  const form = useForm<z.infer<typeof AdminFormSchema>>({
+    resolver: zodResolver(AdminFormSchema),
     defaultValues: props.update
       ? {
-          name: props.labtechnician?.name || "",
-          email: props.labtechnician?.email || "",
-          address: props.labtechnician?.address || "",
-          phone: props.labtechnician?.phone || "",
-          dob: props.labtechnician?.dob.toString() || "",
-          gender: props.labtechnician?.gender,
-          password: props.labtechnician.password,
-          cpassword: props.labtechnician.password,
+          name: props.user.name || "",
+          email: props.user?.email || "",
+          address: props.user?.address || "",
+          phone: props.user?.phone || "",
+          dob: props.user?.dob.toString() || "",
+          gender: props.user?.gender,
+          password: props.user.password,
+          cpassword: props.user.password,
         }
       : {
           name: "John Doe",
@@ -80,85 +83,27 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = (props) => {
 
   const router = useRouter();
 
-  const addNewLabTechnician = async ({
+  const updateuserDetails = async ({
     data,
-    router,
   }: {
-    data: z.infer<typeof LabtechnicainZodFormSchema>;
-    router: any;
+    data: z.infer<typeof AdminFormSchema>;
   }) => {
-    try {
-      setLoading(true);
-      const res = await axios(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician`,
-        {
-          method: "POST",
-          data,
-        },
-      );
-
-      toast.success("Account created successfully");
-      router.refresh();
-      return;
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        toast.error(err.response?.data?.message ?? "Failed to create account");
+    // alert("update");
+    if (props.update && props.handleAdminUpdate) {
+      const res = await props.handleAdminUpdate(data);
+      if (res.success) {
+        toast.success("User Updated");
+      } else {
+        toast.error(res?.message);
       }
-      console.log(err);
-    } finally {
-      setLoading(false);
     }
   };
 
-  const updateLabTechnicianDetails = async ({
+  const onSubmit: SubmitHandler<z.infer<typeof AdminFormSchema>> = async (
     data,
-  }: {
-    data: z.infer<typeof LabtechnicainZodFormSchema>;
-  }) => {
-    try {
-      // console.log('labdata: ',data);
-      setLoading(true);
-      if (!props.update) throw new Error("Update is not allowed");
-      const res = await axios(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/labtechnician/${props.labtechnician?._id}`,
-        {
-          method: "PUT",
-          data: {
-            name: data.name,
-            email: data.email,
-            address: data.address,
-            phone: data.phone,
-            password: data.password,
-            cpassword: data.cpassword,
-            dob: data.dob,
-            gender: data.gender,
-          },
-        },
-      );
-
-      if (props.update && props.setOpen) {
-        props.setOpen(false);
-        toast.success("Detail updated successfully");
-        router.refresh();
-        return;
-      }
-    } catch (err) {
-      console.log(err);
-      if (axios.isAxiosError(err)) {
-        toast.error(err.response?.data?.message ?? "Failed to update details");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const onSubmit: SubmitHandler<
-    z.infer<typeof LabtechnicainZodFormSchema>
-  > = async (data) => {
+  ) => {
     if (props.update) {
-      updateLabTechnicianDetails({ data });
-    } else {
-      addNewLabTechnician({ data, router });
+      updateuserDetails({ data });
     }
   };
 
@@ -166,7 +111,7 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = (props) => {
     <div className="w-full">
       <Form {...form}>
         <h1 className="text-center text-3xl font-medium">
-          {props.update ? "Update LabTechnician" : "Create New LabTechnician"}
+          {props.update ? "Update user" : "Create New user"}
         </h1>
         <form
           className="mx-auto   rounded-lg px-6 py-8 "
@@ -328,16 +273,10 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = (props) => {
           </div>
 
           <Button className="my-2 w-full" disabled={loading}>
-            {loading
-              ? "Loading..."
-              : props.update
-                ? "Update Labtechnician"
-                : "Add Labtechnician"}
+            {loading ? "Loading..." : props.update ? "Update" : "Submit"}
           </Button>
         </form>
       </Form>
     </div>
   );
 };
-
-export default LabTechnicianForm;

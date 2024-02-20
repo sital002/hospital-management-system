@@ -2,7 +2,7 @@ import connectToDB from "@/database/connectToDB";
 import { Staff } from "@/database/modals/StaffModal";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { StaffFormSchema } from "@/app/dashboard/patient/appointment/utils/schema";
+import { StaffFormSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();

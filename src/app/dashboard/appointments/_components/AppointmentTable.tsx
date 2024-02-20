@@ -16,7 +16,6 @@ import {
 } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -32,149 +31,83 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
-import EditStaffModal from "./staff/EditStaffModal";
-import { StaffType } from "@/database/modals/StaffModal";
+import { TAppointment } from "@/database/modals/Appointment";
+import { formatDate } from "@/utils/formatDate";
 
-const handleDelete = async (id: string, router: any) => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${id}`,
-      {
-        method: "DELETE",
-        cache: "no-store",
-        credentials: "include",
-      },
-    );
-    if (!res.ok) return toast.error("Failed to delete account");
-    const data = await res.json();
-    // console.log(data);
-    toast.success("Account Deleted Successfully");
-    router.refresh();
-    // return data;
-  } catch (err: any) {
-    console.log(err?.message);
-    toast.error(err?.message);
-    return [];
-  }
-};
-
-interface StaffTableProps {
-  users: StaffType[];
+interface AppointmentTableProps {
+  data: string;
 }
-export function StaffTable({ users }: StaffTableProps) {
+export function AppointmentTable({ data }: AppointmentTableProps) {
+  const appointments: TAppointment[] = JSON.parse(data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-  const router = useRouter();
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const columns: ColumnDef<StaffType>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
+  const columns: ColumnDef<TAppointment>[] = [
     {
       accessorKey: "name",
       header: "Name",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("name")}</div>
+        <div className="uppercase">{row.original.patient?.name}</div>
+      ),
+    },
+    {
+      accessorKey: "date",
+      header: "Date",
+      cell: ({ row }) => (
+        <div className="uppercase">{formatDate(row.getValue("date"))}</div>
+      ),
+    },
+    {
+      accessorKey: "contactPreference",
+      header: "Contact Preference",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.original?.contactPreference}</div>
       ),
     },
     {
       accessorKey: "email",
       header: "Email",
-      cell: ({ row }) => <div>{row.original.email}</div>,
+      cell: ({ row }) => <div>{row.original.patient?.email}</div>,
     },
     {
-      accessorKey: "phone",
-      header: "Contact",
-      cell: ({ row }) => <div>{row.original.phone}</div>,
-    },
-    {
-      accessorKey: "dob",
-      header: "DOB",
-      cell: ({ row }) => <div className="uppercase">{row.getValue("dob")}</div>,
-    },
-    {
-      accessorKey: "shift",
-      header: "Shift",
+      accessorKey: "Phone",
+      header: "Phone",
       cell: ({ row }) => (
-        <div className="uppercase">{row.getValue("shift")}</div>
+        <div className="uppercase">{row.original.patient?.phone}</div>
       ),
     },
 
     {
-      accessorKey: "address",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Address
-            <CaretSortIcon className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      accessorKey: "medicalDepartment",
+      header: "Medical Department",
+
       cell: ({ row }) => (
-        <div className="uppercase">{row.getValue("address")}</div>
+        <div className="uppercase">{row.getValue("medicalDepartment")}</div>
       ),
     },
     {
       accessorKey: "gender",
       header: "Gender",
       cell: ({ row }) => (
-        <div className="uppercase">{row.getValue("gender")}</div>
+        <div className="uppercase">{row.original.patient?.gender}</div>
       ),
     },
     {
-      id: "actions",
-      header: "Actions",
-      enableHiding: false,
-
-      cell: ({ row }) => {
-        return (
-          <div className="flex gap-2">
-            <EditStaffModal staff={row.original} />
-            <Button
-              variant="destructive"
-              onClick={() => {
-                handleDelete(row.original._id.toString(), router);
-              }}
-            >
-              Delete
-            </Button>
-          </div>
-        );
-      },
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.original?.status}</div>
+      ),
     },
   ];
   const table = useReactTable({
-    data: users,
+    data: appointments,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

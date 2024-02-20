@@ -7,10 +7,6 @@ const PatientSchema = new Schema({
     required: [true, "Please provide a name"],
     minLength: [3, "Name cannot be less than 3 characters"],
   },
-  status: {
-    type: String,
-    enum: ["approved", "pending", "active", "inactive", "rejected"],
-  },
   email: {
     type: String,
   },
@@ -25,6 +21,10 @@ const PatientSchema = new Schema({
   dob: {
     type: String,
     required: [true, "Please provide a dob"],
+  },
+  status: {
+    type: String,
+    enum: ["pending", "approved", "active", "rejected"],
   },
   admitType: {
     type: String,
@@ -45,14 +45,12 @@ const PatientSchema = new Schema({
 });
 
 export const Patient =
-  mongoose.models.Patient || mongoose.model("Patient", PatientSchema);
+  mongoose.models.Patient ||
+  mongoose.model<InferSchemaType<typeof PatientSchema>>(
+    "Patient",
+    PatientSchema,
+  );
 
-export type PatientType = mongoose.InferSchemaType<typeof PatientSchema> & {
+export type PatientType = InferSchemaType<typeof PatientSchema> & {
   _id: string | Types.ObjectId;
-};
-
-export type PatientTypePlus = PatientType & {
-  email: string;
-  status: "approved" | "pending" | "active" | "inactive" | "rejected";
-  password: string;
 };

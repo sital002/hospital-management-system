@@ -25,54 +25,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-
-type FormInputs = {
-  name: string;
-  email: string;
-  password: string;
-  cpassword: string;
-  phone: string;
-  address: string;
-  department: string;
-  dob: Date | null;
-  gender: string;
-};
-
-const FormSchema = z.object({
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
-    })
-    .email(),
-  name: z.string({
-    required_error: "Name is required",
-  }),
-  password: z
-    .string({
-      required_error: "Password is required",
-    })
-    .optional(),
-  cpassword: z
-    .string({
-      required_error: "Confirm Password is required",
-    })
-    .optional(),
-  phone: z.string({
-    required_error: "Phone is required",
-  }),
-  address: z.string({
-    required_error: "Address is required",
-  }),
-  dob: z.string({
-    required_error: "date is requireds",
-  }),
-  gender: z.string({
-    required_error: "Gender is required",
-  }),
-  department: z.string({
-    required_error: "department is required",
-  }),
-});
+import { doctorZodSchema } from "@/app/dashboard/doctor/_utils/doctorSchema";
+import axios, { AxiosError } from "axios";
 
 const genderOptions = [
   {
@@ -96,31 +50,32 @@ const departmentOption = [
   },
 ];
 
-type DoctorFormProps = {
-  update?: boolean;
-  doctor?: DoctorType;
-  open?: boolean;
-  setOpen?: (value: boolean) => void;
-};
+type DoctorFormProps =
+  | {
+      update: true;
+      doctor: DoctorType;
+      open?: boolean;
+      setOpen?: (value: boolean) => void;
+    }
+  | {
+      update?: false;
+    };
 
-const DoctorForm: FC<DoctorFormProps> = ({
-  open,
-  setOpen,
-  doctor,
-  update = false,
-}) => {
-  const[loading,setLoading]=useState(false)
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: update
+const DoctorForm: FC<DoctorFormProps> = (props) => {
+  const [loading, setLoading] = useState(false);
+  const form = useForm<z.infer<typeof doctorZodSchema>>({
+    resolver: zodResolver(doctorZodSchema),
+    defaultValues: props.update
       ? {
-          name: doctor?.name || "",
-          email: doctor?.email || "",
-          phone: doctor?.phone || "",
-          address: doctor?.address || "",
-          gender: doctor?.gender || "",
-          department: doctor?.department ?? departmentOption[0].value,
-          dob: doctor?.dob.toString() || "",
+          name: props.doctor?.name || "",
+          email: props.doctor?.email || "",
+          phone: props.doctor?.phone || "",
+          address: props.doctor?.address || "",
+          gender: props.doctor?.gender || "",
+          password: props.doctor.password,
+          cpassword: props.doctor.password,
+          department: props.doctor?.department ?? departmentOption[0].value,
+          dob: props.doctor?.dob.toString() || "",
         }
       : {
           name: "John Doe",
@@ -128,7 +83,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
           phone: "9860098600",
           address: "Ratnapark, Kathmandu",
           gender: "male",
-          department: "dentiest",
+          department: departmentOption[0].value,
           dob: "2002",
           password: "Password@123",
           cpassword: "Password@123",
@@ -138,75 +93,78 @@ const DoctorForm: FC<DoctorFormProps> = ({
   const router = useRouter();
 
   const addNewDoctor = async (
-    data: z.infer<typeof FormSchema>,
+    data: z.infer<typeof doctorZodSchema>,
     router: any,
   ) => {
     console.log(data);
     try {
-      setLoading(true)
-      const res = await fetch(
+      setLoading(true);
+      const res = await axios(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor`,
         {
           method: "POST",
-          body: JSON.stringify(data),
+          data,
         },
       );
-      const json = await res.json();
-      if (json.success) {
-        toast.success("Account created successfully");
-        router.refresh();
-        return;
-      }
-      return toast.error(json.message);
-    } catch (err: any) {
+      toast.success("Doctor added successfully");
+      router.refresh();
+    } catch (err) {
       console.log(err);
-      toast.error(err.message);
-    } finally{
-      setLoading(false)
+      if (axios.isAxiosError(err)) {
+        toast.error(err.response?.data?.message ?? "Failed to add doctor");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   const updateDoctor = async ({
     data,
   }: {
-    data: z.infer<typeof FormSchema>;
+    data: z.infer<typeof doctorZodSchema>;
   }) => {
     try {
       console.log(data);
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor/${doctor?._id}`,
+      if (!props.update) throw new Error("Invalid request");
+      setLoading(true);
+      const res = await axios(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor/${props.doctor?._id}`,
         {
           method: "PUT",
-          body: JSON.stringify({
-            name: data?.name,
-            phone: data?.phone,
-            address: data?.address,
-            dob: data?.dob,
+          data: {
+            name: data.name,
+            phone: data.phone,
+            address: data.address,
+            dob: data.dob,
+            password: data.password,
+            email: data.email,
+            cpassword: data.password,
             gender: data.gender,
             department: data.department,
-          }),
+          },
         },
       );
-      const json = await res.json();
-      if (json) {
-        toast.success("Detail updated successfully");
-        router.refresh();
-        if (setOpen) {
-          setOpen(false);
-        }
 
-        return;
+      toast.success("Detail updated successfully");
+      router.refresh();
+      if (props.update && props.setOpen) {
+        return props.setOpen(false);
       }
-      return toast.error(json.message);
-    } catch (err: any) {
+    } catch (err) {
       console.log(err);
-      toast.error(err?.message);
+      if (axios.isAxiosError(err)) {
+        toast.error(err?.response?.data?.message ?? "Failed to update doctor");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
-    if (update) {
-      updateDoctor({ data });
+  const onSubmit: SubmitHandler<z.infer<typeof doctorZodSchema>> = async (
+    data,
+  ) => {
+    if (props.update) {
+      return updateDoctor({ data });
     } else {
       addNewDoctor(data, router);
     }
@@ -217,7 +175,7 @@ const DoctorForm: FC<DoctorFormProps> = ({
       {""}
       <Form {...form}>
         <h1 className="text-center text-3xl font-bold">
-          {update ? "Update Doctor" : "Create New Doctor"}
+          {props.update ? "Update Doctor" : "Create New Doctor"}
         </h1>
         <form
           className="mx-auto rounded-lg  px-6 py-8  "
@@ -247,7 +205,11 @@ const DoctorForm: FC<DoctorFormProps> = ({
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="johndoe@gmail.com" {...field} />
+                      <Input
+                        placeholder="johndoe@gmail.com"
+                        disabled={props.update}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -364,44 +326,51 @@ const DoctorForm: FC<DoctorFormProps> = ({
             </div>
           </div>
 
-          {!update ? (
-            <>
-              <div className="flex gap-4">
-                <div className="grow">
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input placeholder="*********" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grow">
-                  <FormField
-                    control={form.control}
-                    name="cpassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Confirm Password</FormLabel>
-                        <FormControl>
-                          <Input placeholder="*********" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+          <>
+            <div className="flex gap-4">
+              <div className="grow">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type={"password"}
+                          placeholder="*********"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-            </>
-          ) : null}
+              <div className="grow">
+                <FormField
+                  control={form.control}
+                  name="cpassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type={"password"}
+                          placeholder="*********"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </>
+
           <Button className="my-6 w-full" disabled={loading}>{`${
-           loading? 'Loading...': update ? "Update" : "Add Doctor"
+            loading ? "Loading..." : props.update ? "Update" : "Add Doctor"
           }`}</Button>
         </form>
       </Form>

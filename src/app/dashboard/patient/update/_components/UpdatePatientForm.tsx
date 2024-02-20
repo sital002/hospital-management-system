@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { PatientType, PatientTypePlus } from "@/database/modals/PatientModel";
+import { PatientType } from "@/database/modals/PatientModel";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { patientZodSchema } from "../../appointment/_utils/schema";
 
 const genderOptions = [
   {
@@ -39,69 +40,27 @@ const genderOptions = [
 
 type PatientFormProps = {
   update: true;
-  patient: PatientTypePlus;
+  patient: PatientType;
 };
-
-const FormSchema = z.object({
-  name: z
-    .string({
-      required_error: "Name is required",
-    })
-    .min(3, "Name cannot be less than 3 characters"),
-  phone: z
-    .string({
-      required_error: "Phone is required",
-      invalid_type_error: "Invalid phone type",
-    })
-    .min(10, "Phone number cannot be less than 10 characters"),
-  dob: z
-    .string({
-      invalid_type_error: "DOB must be a string",
-      required_error: "DOB is required",
-    })
-    .min(1, "DOB is required"),
-  address: z
-    .string({
-      invalid_type_error: "Address must be a string",
-      required_error: "Address is required",
-    })
-    .min(1, "Address is required"),
-  gender: z.enum(["male", "female"], {
-    required_error: "Gender is required",
-    invalid_type_error: "Invalid gender type",
-  }),
-  password: z
-    .string({
-      invalid_type_error: "Password must be a string",
-      required_error: "Password is required",
-    })
-    .min(8, "Password must be at least 8 characters long"),
-  cpassword: z
-    .string({
-      invalid_type_error: "Confirm Password must be a string",
-      required_error: "Confirm Password is required",
-    })
-    .min(8, "Confirm Password must be at least 8 characters long"),
-});
 
 export const UpdatePatientForm = (props: PatientFormProps) => {
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof patientZodSchema>>({
+    resolver: zodResolver(patientZodSchema),
     defaultValues: {
       name: props.patient.name,
       phone: props.patient.phone,
       address: props.patient.address,
       dob: props.patient.dob,
       gender: props.patient.gender,
-      password: props.patient.password,
-      cpassword: props.patient.password,
+      password: props.patient.password ?? "",
+      cpassword: props.patient.password ?? "",
     },
   });
   const router = useRouter();
   //   console.log(form.watch());
-  function signUpPatient({ data }: { data: z.infer<typeof FormSchema> }) {
+  function signUpPatient({ data }: { data: z.infer<typeof patientZodSchema> }) {
     // console.log("The data is ", data);
     setLoading(true);
     fetch(`http://localhost:3000/api/patient/signup`, {
@@ -127,7 +86,11 @@ export const UpdatePatientForm = (props: PatientFormProps) => {
       });
   }
 
-  function updatePatientDetail({ data }: { data: z.infer<typeof FormSchema> }) {
+  function updatePatientDetail({
+    data,
+  }: {
+    data: z.infer<typeof patientZodSchema>;
+  }) {
     setLoading(true);
     fetch(`http://localhost:3000/api/patient/${props.patient._id}`, {
       method: "PUT",
@@ -151,7 +114,9 @@ export const UpdatePatientForm = (props: PatientFormProps) => {
         setLoading(false);
       });
   }
-  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof patientZodSchema>> = async (
+    data,
+  ) => {
     if (props.update) {
       updatePatientDetail({ data });
     } else {
@@ -272,7 +237,7 @@ export const UpdatePatientForm = (props: PatientFormProps) => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="2002-09-22" {...field} />
+                    <Input placeholder="********" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
