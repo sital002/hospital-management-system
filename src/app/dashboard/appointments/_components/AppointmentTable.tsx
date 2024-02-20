@@ -31,14 +31,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useRouter } from "next/navigation";
 import { TAppointment } from "@/database/modals/Appointment";
 import { formatDate } from "@/utils/formatDate";
 
-interface StaffTableProps {
-  appointments: TAppointment[];
+interface AppointmentTableProps {
+  data: string;
 }
-export function AppointmentTable({ appointments }: StaffTableProps) {
+export function AppointmentTable({ data }: AppointmentTableProps) {
+  const appointments: TAppointment[] = JSON.parse(data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],

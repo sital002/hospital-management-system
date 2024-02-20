@@ -138,4 +138,14 @@ export const sideBarOptions: SidebarOptionType[] = [
     icon: <PlusSquare size={20} />,
     url: "/dashboard/appointments",
   },
+  {
+    name: "View my Profile",
+    url: "/dashboard/profile",
+    icon: <CircleUser size={20} />,
+  },
+  {
+    name: "update my Profile",
+    url: "/dashboard/update",
+    icon: <CircleUser size={20} />,
+  },
 ];
