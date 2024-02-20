@@ -56,8 +56,8 @@ type StaffFormProps =
   | {
       update: true;
       staff: StaffType;
-      open: boolean;
-      setOpen: (value: boolean) => void;
+      open?: boolean;
+      setOpen?: (value: boolean) => void;
     }
   | {
       update: false;
@@ -146,7 +146,7 @@ const StaffForm: FC<StaffFormProps> = (props) => {
       if (json) {
         toast.success("Detail updated successfully");
         router.refresh();
-        if (props.update) {
+        if (props.update && props.setOpen) {
           props.setOpen(false);
         }
 

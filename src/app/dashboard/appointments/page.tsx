@@ -3,21 +3,15 @@ import { redirect } from "next/navigation";
 import React from "react";
 import { AppointmentTable } from "./_components/AppointmentTable";
 import connectToDB from "@/database/connectToDB";
-import axios from "axios";
-import { TAppointment } from "@/database/modals/Appointment";
+import { Appointment, TAppointment } from "@/database/modals/Appointment";
 
 async function getAllAppointments() {
   try {
     await connectToDB();
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/appointment/new`,
-      {
-        withCredentials: true,
-      },
-    );
-    return res.data ?? [];
-  } catch (err: any) {
-    console.log(err.response.data.message);
+    const appointments = await Appointment.find().populate("patient");
+    return appointments ?? [];
+  } catch (err) {
+    console.log(err);
     return [];
   }
 }
@@ -30,10 +24,10 @@ export default async function page() {
     return <p> You arenot authorized to view this page</p>;
   }
   const appointments = (await getAllAppointments()) as TAppointment[];
-  console.log("The appointmens", appointments[0]);
+  // console.log("The appointmens", appointments[0]);
   return (
     <div>
-      <AppointmentTable appointments={appointments} />
+      <AppointmentTable data={JSON.stringify(appointments)} />
     </div>
   );
 }
