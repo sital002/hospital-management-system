@@ -17,5 +17,5 @@ export default async function page() {
   if (user.role === "labtechnician")
     return <LabtechnicianDetailCard labtechnician={user.data} />;
   if (user.role === "admin") return <AdminDetailCard admin={user.data} />;
-  return <div>Hello</div>;
+  
 }
