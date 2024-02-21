@@ -54,8 +54,8 @@ type DoctorFormProps =
   | {
       update: true;
       doctor: DoctorType;
-      open?: boolean;
-      setOpen?: (value: boolean) => void;
+      open: boolean;
+      setOpen: (value: boolean) => void;
     }
   | {
       update?: false;
@@ -147,7 +147,7 @@ const DoctorForm: FC<DoctorFormProps> = (props) => {
 
       toast.success("Detail updated successfully");
       router.refresh();
-      if (props.update && props.setOpen) {
+      if (props.update) {
         return props.setOpen(false);
       }
     } catch (err) {
