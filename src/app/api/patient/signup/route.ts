@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import connectToDB from "@/database/connectToDB";
 import { Patient, PatientTypePlus } from "@/database/modals/PatientModel";
 import { generateToken } from "@/utils/generateToken";
@@ -26,6 +27,14 @@ export const patientZodSchema = z.object({
     .min(8, "Password must be at least 8 characters long"),
   cpassword: z.string().min(8, "Password must be at least 8 characters long"),
 });
+=======
+import { patientZodSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
+import connectToDB from "@/database/connectToDB";
+import { Patient } from "@/database/modals/PatientModel";
+import { generateToken } from "@/utils/generateToken";
+import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -71,6 +80,10 @@ export async function POST(req: NextRequest) {
     }
     const newPatient = await Patient.create({
       name: data.data.name,
+<<<<<<< HEAD
+=======
+      status: "pending",
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
       email: data.data.email,
       phone: data.data.phone,
       dob: data.data.dob,

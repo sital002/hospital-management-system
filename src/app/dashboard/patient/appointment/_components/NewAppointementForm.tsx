@@ -34,8 +34,13 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "@/components/ui/calendar";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+<<<<<<< HEAD
 import { FormSchema } from "../utils/schema";
 import { PatientTypePlus } from "@/database/modals/PatientModel";
+=======
+import { FormSchema } from "../_utils/schema";
+import { PatientType } from "@/database/modals/PatientModel";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 
 const medicalDepart = [
   {
@@ -89,7 +94,11 @@ const medicalDepart = [
 ];
 
 interface NewAppointementFormProps {
+<<<<<<< HEAD
   patient: PatientTypePlus;
+=======
+  patient: PatientType;
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 }
 export function NewAppointementForm({ patient }: NewAppointementFormProps) {
   const router = useRouter();
@@ -100,7 +109,11 @@ export function NewAppointementForm({ patient }: NewAppointementFormProps) {
       patientId: patient._id.toString(),
       date: new Date(),
       contact: "email",
+<<<<<<< HEAD
       email: patient.email,
+=======
+      email: patient.email ?? "",
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
       name: patient.name,
       phone: patient.phone,
       type: "oncology",

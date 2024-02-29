@@ -1,4 +1,5 @@
 import mongoose, { InferSchemaType, Schema, Types } from "mongoose";
+import { Labtest } from "./Labtest";
 
 const PatientSchema = new Schema({
   name: {
@@ -6,11 +7,14 @@ const PatientSchema = new Schema({
     required: [true, "Please provide a name"],
     minLength: [3, "Name cannot be less than 3 characters"],
   },
+<<<<<<< HEAD
   status: {
     type: String,
     enum: ["approved", "pending", "active", "inactive", "rejected"],
     default: "pending",
   },
+=======
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
   email: {
     type: String,
   },
@@ -25,6 +29,10 @@ const PatientSchema = new Schema({
   dob: {
     type: String,
     required: [true, "Please provide a dob"],
+  },
+  status: {
+    type: String,
+    enum: ["pending", "approved", "active", "rejected"],
   },
   admitType: {
     type: String,
@@ -45,7 +53,11 @@ const PatientSchema = new Schema({
 });
 
 export const Patient =
-  mongoose.models.Patient || mongoose.model("Patient", PatientSchema);
+  mongoose.models.Patient ||
+  mongoose.model<InferSchemaType<typeof PatientSchema>>(
+    "Patient",
+    PatientSchema,
+  );
 
 export type PatientType = {
   _id: string | Types.ObjectId;

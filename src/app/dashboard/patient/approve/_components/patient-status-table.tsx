@@ -1,6 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import { PatientTypePlus } from "@/database/modals/PatientModel";
+=======
+import { PatientType } from "@/database/modals/PatientModel";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 import {
   handlePatientApproveStatus,
   handlePatientRejectStatus,
@@ -9,7 +13,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 interface PatientStatusTableProps {
+<<<<<<< HEAD
   patients: PatientTypePlus[];
+=======
+  patients: PatientType[];
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 }
 
 export function PatientStatusTable({ patients }: PatientStatusTableProps) {

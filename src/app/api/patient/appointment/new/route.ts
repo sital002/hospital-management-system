@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 import { FormSchema } from "@/app/dashboard/patient/appointment/utils/schema";
 import connectToDB from "@/database/connectToDB";
 import { Appointment, TAppointment } from "@/database/modals/Appointment";
 import { getUserDetails } from "@/utils/Auth";
 import { NextRequest } from "next/server";
+=======
+import { FormSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
+import connectToDB from "@/database/connectToDB";
+import { Appointment, TAppointment } from "@/database/modals/Appointment";
+import { getUserDetails } from "@/utils/Auth";
+import { NextRequest, NextResponse } from "next/server";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 
 export async function POST(req: NextRequest) {
   try {
@@ -51,7 +59,11 @@ export async function POST(req: NextRequest) {
     await connectToDB();
 
     const newAppointment = await Appointment.create<TAppointment>({
+<<<<<<< HEAD
       patientId: user.data._id,
+=======
+      patient: user.data._id,
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
       date: data.data.date,
       medicalDepartment: data.data.type,
       contactPreference: data.data.contact,
@@ -75,3 +87,20 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+<<<<<<< HEAD
+=======
+
+export async function GET() {
+  try {
+    await connectToDB();
+    const appointments = await Appointment.find().populate("patient");
+    return NextResponse.json(appointments, { status: 200 });
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json(
+      { message: "Failed to fetch appointments" },
+      { status: 500 },
+    );
+  }
+}
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711

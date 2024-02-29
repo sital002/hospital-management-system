@@ -2,9 +2,15 @@ import PatientDetailCard from "@/components/patientDetails/PatientDetailCard";
 import { Card } from "@/components/ui/card";
 import connectToDB from "@/database/connectToDB";
 import { Labtest, LabtestType } from "@/database/modals/Labtest";
+<<<<<<< HEAD
 import { PatientType } from "@/database/modals/PatientModel";
 import { getUserDetails } from "@/utils/Auth";
 import { formatDate } from "@/utils/formatDate";
+=======
+import { getUserDetails } from "@/utils/Auth";
+import { formatDate } from "@/utils/formatDate";
+import { getPatientDetail } from "@/utils/getPatientDetail";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -20,6 +26,7 @@ export async function getLabtests(patientId: string) {
     return [];
   }
 }
+<<<<<<< HEAD
 export async function getPatientDetail(id: string) {
   // console.log("params is : ", id);
   try {
@@ -36,8 +43,10 @@ export async function getPatientDetail(id: string) {
     return null;
   }
 }
+=======
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function page({ params }: { params: { id: string } }) {
   const user = await getUserDetails();
   if (!user) redirect("/signin");
   const patient = await getPatientDetail(params.id);

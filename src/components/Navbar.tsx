@@ -50,9 +50,18 @@ export default async function Navbar() {
             <div>
               <Link
                 href="/auth/admin"
+<<<<<<< HEAD
+=======
+                className="mr-3 rounded-lg bg-primary px-4 py-2 text-white"
+              >
+                Sign In as Hospital
+              </Link>
+              <Link
+                href="/signin"
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
                 className="rounded-lg bg-primary px-4 py-2 text-white "
               >
-                Sign In
+                Sign In as Patient
               </Link>
             </div>
           )}

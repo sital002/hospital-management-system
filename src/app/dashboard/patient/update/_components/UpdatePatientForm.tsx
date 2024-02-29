@@ -4,7 +4,11 @@ import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+<<<<<<< HEAD
 import { PatientType, PatientTypePlus } from "@/database/modals/PatientModel";
+=======
+import { PatientType } from "@/database/modals/PatientModel";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -25,6 +29,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
+=======
+import { patientZodSchema } from "../../appointment/_utils/schema";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 
 const genderOptions = [
   {
@@ -39,6 +47,7 @@ const genderOptions = [
 
 type PatientFormProps = {
   update: true;
+<<<<<<< HEAD
   patient: PatientTypePlus;
 };
 
@@ -89,19 +98,38 @@ export const UpdatePatientForm = (props: PatientFormProps) => {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+=======
+  patient: PatientType;
+};
+
+export const UpdatePatientForm = (props: PatientFormProps) => {
+  const [loading, setLoading] = useState(false);
+
+  const form = useForm<z.infer<typeof patientZodSchema>>({
+    resolver: zodResolver(patientZodSchema),
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
     defaultValues: {
       name: props.patient.name,
       phone: props.patient.phone,
       address: props.patient.address,
       dob: props.patient.dob,
       gender: props.patient.gender,
+<<<<<<< HEAD
       password: props.patient.password,
       cpassword: props.patient.password,
+=======
+      password: props.patient.password ?? "",
+      cpassword: props.patient.password ?? "",
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
     },
   });
   const router = useRouter();
   //   console.log(form.watch());
+<<<<<<< HEAD
   function signUpPatient({ data }: { data: z.infer<typeof FormSchema> }) {
+=======
+  function signUpPatient({ data }: { data: z.infer<typeof patientZodSchema> }) {
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
     // console.log("The data is ", data);
     setLoading(true);
     fetch(`http://localhost:3000/api/patient/signup`, {
@@ -127,7 +155,15 @@ export const UpdatePatientForm = (props: PatientFormProps) => {
       });
   }
 
+<<<<<<< HEAD
   function updatePatientDetail({ data }: { data: z.infer<typeof FormSchema> }) {
+=======
+  function updatePatientDetail({
+    data,
+  }: {
+    data: z.infer<typeof patientZodSchema>;
+  }) {
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
     setLoading(true);
     fetch(`http://localhost:3000/api/patient/${props.patient._id}`, {
       method: "PUT",
@@ -151,7 +187,13 @@ export const UpdatePatientForm = (props: PatientFormProps) => {
         setLoading(false);
       });
   }
+<<<<<<< HEAD
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
+=======
+  const onSubmit: SubmitHandler<z.infer<typeof patientZodSchema>> = async (
+    data,
+  ) => {
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
     if (props.update) {
       updatePatientDetail({ data });
     } else {
@@ -272,7 +314,11 @@ export const UpdatePatientForm = (props: PatientFormProps) => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
+<<<<<<< HEAD
                     <Input placeholder="2002-09-22" {...field} />
+=======
+                    <Input placeholder="********" {...field} />
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
                   </FormControl>
                   <FormMessage />
                 </FormItem>

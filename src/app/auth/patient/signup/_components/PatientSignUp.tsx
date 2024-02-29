@@ -4,7 +4,11 @@ import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+<<<<<<< HEAD
 import { PatientType, PatientTypePlus } from "@/database/modals/PatientModel";
+=======
+import { PatientType } from "@/database/modals/PatientModel";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -25,6 +29,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
+=======
+import { patientZodSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
+import axios from "axios";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 
 type FormInputs = {
   name: string;
@@ -48,6 +57,7 @@ const genderOptions = [
   },
 ];
 
+<<<<<<< HEAD
 const patientTypeOption = [
   {
     name: "In Patient",
@@ -136,12 +146,36 @@ const PatientSignup = (props: PatientFormProps) => {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+=======
+type PatientFormProps =
+  | {
+      update?: true;
+      patient: PatientType;
+    }
+  | {
+      update?: false;
+    };
+
+const PatientSignup = (props: PatientFormProps) => {
+  const [loading, setLoading] = useState(false);
+  // console.log(props.patient, "the patient is");
+  const form = useForm<z.infer<typeof patientZodSchema>>({
+    resolver: zodResolver(patientZodSchema),
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
     defaultValues: props.update
       ? {
           name: props.patient.name,
           phone: props.patient.phone,
+<<<<<<< HEAD
           address: props.patient.address,
           dob: props.patient.dob,
+=======
+          email: props.patient.email ?? "",
+          address: props.patient.address,
+          dob: props.patient.dob,
+          password: props.patient.password ?? "",
+          cpassword: props.patient.password ?? "",
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
           gender: props.patient.gender,
         }
       : {
@@ -156,6 +190,7 @@ const PatientSignup = (props: PatientFormProps) => {
         },
   });
   const router = useRouter();
+<<<<<<< HEAD
   console.log(form.watch());
   function signUpPatient({ data }: { data: z.infer<typeof FormSchema> }) {
     console.log("The data is ", data);
@@ -177,15 +212,73 @@ const PatientSignup = (props: PatientFormProps) => {
       .catch((err) => {
         console.log(err);
         toast.error(err?.message);
+=======
+  function signUpPatient({ data }: { data: z.infer<typeof patientZodSchema> }) {
+    console.log("The data is ", data);
+    setLoading(true);
+    axios(`/api/patient/signup`, {
+      method: "POST",
+      data,
+    })
+      .then((res) => {
+        console.log(res);
+        // toast.success("Patient added successfully");
+        toast.success("Account created succesfully");
+        router.replace("/dashboard");
+      })
+      .catch((err) => {
+        console.log(err);
+        if (axios.isAxiosError(err)) {
+          toast.error(err.response?.data.message ?? "Failed to create account");
+        }
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
       })
       .finally(() => {
         setLoading(false);
       });
   }
+<<<<<<< HEAD
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
     if (props.update) {
       //   updatePatientDetail({ data });
+=======
+  function updatePatientDetail({
+    data,
+  }: {
+    data: z.infer<typeof patientZodSchema>;
+  }) {
+    if (!props.update) return;
+    console.log("The data is ", data);
+    setLoading(true);
+    axios(`/api/patient/update?id=${props.patient._id}`, {
+      method: "PUT",
+      withCredentials: true,
+      data,
+    })
+      .then((res) => {
+        console.log(res);
+        // toast.success("Patient added successfully");
+        toast.success("Account updated succesfully");
+        router.replace("/dashboard");
+        router.refresh();
+      })
+      .catch((err) => {
+        console.log(err);
+        if (axios.isAxiosError(err)) {
+          toast.error(err.response?.data.message ?? "Failed to update account");
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+  const onSubmit: SubmitHandler<z.infer<typeof patientZodSchema>> = async (
+    data,
+  ) => {
+    if (props.update) {
+      updatePatientDetail({ data });
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
     } else {
       signUpPatient({ data });
     }
@@ -195,7 +288,11 @@ const PatientSignup = (props: PatientFormProps) => {
     <div className=" w-full">
       <Form {...form}>
         <h1 className="my-6 text-center text-4xl font-semibold">
+<<<<<<< HEAD
           {props.update ? "Update Patient Detail" : "Add New Patient"}
+=======
+          {props.update ? "Update your Detail" : "Create New Account"}
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
         </h1>
 
         <form className=" mt-4  px-10" onSubmit={form.handleSubmit(onSubmit)}>
@@ -255,16 +352,28 @@ const PatientSignup = (props: PatientFormProps) => {
               name="dob"
               render={({ field }) => (
                 <FormItem>
+<<<<<<< HEAD
                   <FormLabel>DOB</FormLabel>
                   <FormControl>
                     <Input placeholder="2002-09-22" {...field} />
+=======
+                  <FormLabel>
+                    DOB <span className="text-slate-400">(YYYY/MM/DD)</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="2002/09/22" {...field} />
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+<<<<<<< HEAD
           <div className="my-10 items-center flex gap-4">
+=======
+          <div className="my-10 flex items-center gap-4">
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
             <div className="grow">
               <FormField
                 control={form.control}
@@ -341,7 +450,11 @@ const PatientSignup = (props: PatientFormProps) => {
                     <FormControl>
                       <Input
                         type={"password"}
+<<<<<<< HEAD
                         placeholder="2002-09-22"
+=======
+                        placeholder="**********"
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
                         {...field}
                       />
                     </FormControl>
@@ -352,7 +465,11 @@ const PatientSignup = (props: PatientFormProps) => {
             </div>
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
+<<<<<<< HEAD
             {loading ? "Loading..." : props.update ? "Update" : "Create"}
+=======
+            {loading ? "Loading..." : props.update ? "Update" : "Signup"}
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
           </Button>
         </form>
       </Form>

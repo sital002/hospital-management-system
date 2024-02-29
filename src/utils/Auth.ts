@@ -9,7 +9,11 @@ import {
 import { Admin, type AdminType } from "@/database/modals/AdminModal";
 import { Doctor, type DoctorType } from "@/database/modals/DoctorModel";
 import { Staff, type StaffType } from "@/database/modals/StaffModal";
+<<<<<<< HEAD
 import { Patient, PatientTypePlus } from "@/database/modals/PatientModel";
+=======
+import { Patient, PatientType } from "@/database/modals/PatientModel";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 
 export function isAuthenticated(): boolean {
   try {
@@ -65,7 +69,11 @@ interface Labtechnician {
   data: LabtechnicianType;
 }
 interface Patient {
+<<<<<<< HEAD
   data: PatientTypePlus;
+=======
+  data: PatientType;
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
   role: "patient";
 }
 type User = Doctor | Staff | Admin | Labtechnician | Patient | null;
@@ -103,7 +111,11 @@ export async function getUserDetails(): Promise<User> {
       return { data, role: "admin" };
     }
     if (decoded.role === "patient") {
+<<<<<<< HEAD
       const data = (await Patient.findById(decoded._id)) as PatientTypePlus;
+=======
+      const data = (await Patient.findById(decoded._id)) as PatientType;
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
       return { data, role: "patient" };
     }
     return null;

@@ -1,7 +1,14 @@
 import mongoose, { Schema } from "mongoose";
+<<<<<<< HEAD
 
 const AppointmentSchema = new Schema({
   patientId: {
+=======
+import { PatientType } from "./PatientModel";
+
+const AppointmentSchema = new Schema({
+  patient: {
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
     type: mongoose.Schema.Types.ObjectId,
     ref: "Patient",
     required: [true, "Please provide a patientId"],
@@ -29,6 +36,10 @@ const AppointmentSchema = new Schema({
 export type TAppointment = mongoose.InferSchemaType<
   typeof AppointmentSchema
 > & {
+<<<<<<< HEAD
+=======
+  patient: PatientType;
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
   _id: string | mongoose.Types.ObjectId;
 };
 

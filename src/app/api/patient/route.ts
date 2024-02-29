@@ -37,7 +37,10 @@ export async function POST(req: NextRequest) {
         JSON.stringify({ success: false, message: "Patient Type is required" }),
       );
     await connectToDB();
-    const patient = await Patient.create(data);
+    const patient = await Patient.create({
+      ...data,
+      status: "active",
+    });
     return new Response(JSON.stringify({ success: true, patient }));
   } catch (err: any) {
     return new Response(

@@ -132,4 +132,23 @@ export const sideBarOptions: SidebarOptionType[] = [
       },
     ],
   },
+<<<<<<< HEAD
+=======
+  {
+    name: "Appointment",
+    roles: ["admin", "staff"],
+    icon: <PlusSquare size={20} />,
+    url: "/dashboard/appointments",
+  },
+  {
+    name: "View my Profile",
+    url: "/dashboard/profile",
+    icon: <CircleUser size={20} />,
+  },
+  {
+    name: "update my Profile",
+    url: "/dashboard/update",
+    icon: <CircleUser size={20} />,
+  },
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 ];

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Patient, PatientTypePlus } from "@/database/modals/PatientModel";
+=======
+import { Patient } from "@/database/modals/PatientModel";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 import { getUserDetails } from "@/utils/Auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";

@@ -13,7 +13,11 @@ type FormInputs = {
   password: string;
 };
 
+<<<<<<< HEAD
 type Role = "admin" | "staff" | "doctor" | "patient" | "labtechnician";
+=======
+type Role = "admin" | "staff" | "doctor" | "labtechnician";
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
 export default function SignIn() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -66,6 +70,11 @@ export default function SignIn() {
   return (
     <div className="mx-2 w-full  overflow-y-hidden rounded-lg p-5 ">
       <div className="mx-auto mt-10 max-w-[800px] rounded-md border-2 p-4 shadow-md">
+<<<<<<< HEAD
+=======
+        <h2 className="my-3 text-center text-3xl">Login as Hospital</h2>
+
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
         <div className="my-5 flex items-center gap-1">
           <Button
             onClick={() => handleTab("admin")}
@@ -103,6 +112,7 @@ export default function SignIn() {
           >
             Labtechnician
           </Button>
+<<<<<<< HEAD
           <Button
             onClick={() => handleTab("patient")}
             size={"lg"}
@@ -112,6 +122,8 @@ export default function SignIn() {
           >
             Patient
           </Button>
+=======
+>>>>>>> ace30767d319569e1805d17f7a57370a0aa1d711
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
