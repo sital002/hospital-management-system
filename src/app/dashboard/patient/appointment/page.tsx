@@ -3,11 +3,13 @@ import { ViewAppointment } from "./_components/ViewAppointment";
 import { getUserDetails } from "@/utils/Auth";
 import { redirect } from "next/navigation";
 import { Appointment } from "@/database/modals/Appointment";
+import { AppointmentTable } from "../../appointments/_components/AppointmentTable";
 
 async function getAppointments(id: string) {
   try {
     await connectToDB();
-    const appointments = await Appointment.find({ patientId: id });
+    const appointments = await Appointment.find({ patient: id });
+    console.log(appointments)
     return appointments;
   } catch (err: any) {
     console.log(err?.message);
@@ -24,10 +26,11 @@ export default async function page() {
   if (user.role === "patient" && user.data.status === "rejected")
     return <p>Your account is rejected</p>;
   const appointments = await getAppointments(user.data._id.toString());
+  console.log(appointments)
 
   return (
     <div>
-      <ViewAppointment appointments={appointments} />
+      <AppointmentTable data={JSON.stringify(appointments)} />
     </div>
   );
 }

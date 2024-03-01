@@ -8,9 +8,9 @@ import { useState } from "react";
 export function Appointment({ appointment }: { appointment: TAppointment }) {
   const [open, setOpen] = useState(false);
   return (
-    <div>
-      <h3>{appointment.medicalDepartment}</h3>
-      <span className="mr-4">{formatDate(appointment.date)}</span>
+    <div className="flex items-center border-2 my-1 border-black p-3 justify-between ">
+      <h3 className="text-center grow">{appointment.medicalDepartment.toUpperCase()}</h3>
+      <p className="text-center grow ">{formatDate(appointment.date)}</p>
       <Dialog onOpenChange={setOpen} open={open}>
         <DialogTrigger asChild>
           <Button variant="destructive">Cancel</Button>

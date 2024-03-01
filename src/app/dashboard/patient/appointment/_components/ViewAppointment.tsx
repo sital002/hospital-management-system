@@ -3,14 +3,16 @@ import React from "react";
 import { Appointment } from "./Appoinment";
 
 type ViewAppointmentProps = {
-  appointments: TAppointment[];
+  appointments: string;
 };
 export function ViewAppointment({ appointments }: ViewAppointmentProps) {
+  const data:TAppointment[]=JSON.parse(appointments)
+  console.log(data)
   return (
     <div>
-      <h1>Appointments</h1>
+      <h1 className="text-2xl font-bold my2">Appointments</h1>
       <div>
-        {appointments.map((appointment) => {
+        {data.map((appointment) => {
           return (
             <Appointment
               appointment={appointment}
