@@ -1,4 +1,4 @@
-import { FormSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
+import { AppointmentFormSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
 import connectToDB from "@/database/connectToDB";
 import { Appointment, TAppointment } from "@/database/modals/Appointment";
 import { getUserDetails } from "@/utils/Auth";
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       );
     }
     console.log(body, "the body is");
-    const data = FormSchema.safeParse({
+    const data = AppointmentFormSchema.safeParse({
       ...body.data,
       date: new Date(body.data.date),
     });
