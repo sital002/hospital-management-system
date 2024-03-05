@@ -24,6 +24,8 @@ async function getLabtests(patientId: string) {
 export default async function page({ params }: { params: { id: string } }) {
   const user = await getUserDetails();
   if (!user) redirect("/signin");
+  if (user.role === "patient" && user.data._id !== params.id)
+    return <p>You are not allowed to view this page</p>;
   const patient = await getPatientDetail(params.id);
   if (!patient) return null;
   const labtests = await getLabtests(params.id);
