@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { PatientTable } from "@/components/data-table";
 import Stats from "@/components/stats";
-import { getAllUsers as getDoctors } from "@/app/dashboard/doctor/page";
 import { PatientDashboard } from "./_components/PatientDashboard";
 
 const getAllUsers = async () => {
@@ -24,6 +23,7 @@ const getAllUsers = async () => {
     return [];
   }
 };
+
 export default async function page() {
   const user = await getUserDetails();
   if (!user) return redirect("/signin");
@@ -32,9 +32,7 @@ export default async function page() {
   if (user.role === "patient" && user.data.status === "rejected")
     return <p>Your account is rejected</p>;
   const data = await getAllUsers();
-  const totalPatient = data.length;
-  const inPatient = data.filter((item) => item.patientType === "inpatient");
-  const doctor = await getDoctors();
+
   // console.log(data);
 
   return (
@@ -43,11 +41,7 @@ export default async function page() {
         <PatientDashboard patientId={user.data._id.toString()} />
       ) : (
         <>
-          <Stats
-            totalPatient={totalPatient}
-            inPatient={inPatient.length}
-            doctor={doctor.length}
-          />
+          <Stats />
           <PatientTable users={data} />
         </>
       )}

@@ -1,12 +1,39 @@
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
+import { Doctor } from "@/database/modals/DoctorModel";
+import { Patient } from "@/database/modals/PatientModel";
 
-type statsProps={
-  totalPatient?:number;
-  inPatient?:number;
-  doctor?:number;
+async function getAllDocters() {
+  try {
+    const length = await Doctor.find().countDocuments();
+    return length;
+  } catch (err) {
+    return 0;
+  }
 }
 
-export default function Component({totalPatient,inPatient,doctor}:statsProps) {
+async function totalPatients() {
+  try {
+    const length = await Patient.find().countDocuments();
+    return length;
+  } catch (err) {
+    return 0;
+  }
+}
+async function totalInPatients() {
+  try {
+    const length = await Patient.find({
+      patientType: "inpatient",
+    }).countDocuments();
+    return length;
+  } catch (err) {
+    return 0;
+  }
+}
+
+export default async function Component() {
+  const totalDoctors = await getAllDocters();
+  const totalPatient = await totalPatients();
+  const totalInPatient = await totalInPatients();
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
       <Card className="w-full max-w-md">
@@ -19,7 +46,7 @@ export default function Component({totalPatient,inPatient,doctor}:statsProps) {
             <div>
               <h3 className="text-2xl font-semibold">Total Inpatients</h3>
               <p className="text-4xl font-bold text-gray-900 dark:text-gray-50">
-                {inPatient}
+                {totalInPatient}
               </p>
             </div>
           </div>
@@ -35,7 +62,7 @@ export default function Component({totalPatient,inPatient,doctor}:statsProps) {
             <div>
               <h3 className="text-2xl font-semibold">Total Patients</h3>
               <p className="text-4xl font-bold text-gray-900 dark:text-gray-50">
-               {totalPatient}
+                {totalPatient}
               </p>
             </div>
           </div>
@@ -51,7 +78,7 @@ export default function Component({totalPatient,inPatient,doctor}:statsProps) {
             <div>
               <h3 className="text-2xl font-semibold">Total Doctors</h3>
               <p className="text-4xl font-bold text-gray-900 dark:text-gray-50">
-                {doctor}
+                {totalDoctors}
               </p>
             </div>
           </div>
