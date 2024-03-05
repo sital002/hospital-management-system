@@ -36,4 +36,4 @@ export type TAppointment = mongoose.InferSchemaType<
 
 export const Appointment =
   mongoose.models.Appointment ||
-  mongoose.model("Appointment", AppointmentSchema);
+  mongoose.model<TAppointment>("Appointment", AppointmentSchema);
