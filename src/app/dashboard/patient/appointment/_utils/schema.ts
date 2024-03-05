@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const FormSchema = z.object({
+export const AppointmentFormSchema = z.object({
   patientId: z.string({
     required_error: "PatientId is required",
   }),
