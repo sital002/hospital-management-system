@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { PatientTable } from "@/components/data-table";
 import Stats from "@/components/stats";
 
-export const getAllUsers = async () => {
+const getAllUsers = async () => {
   const authToken = cookies().get("auth_token")?.value;
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/patient`, {
