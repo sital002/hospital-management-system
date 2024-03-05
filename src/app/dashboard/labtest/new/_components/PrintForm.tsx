@@ -1,7 +1,6 @@
 "use client";
 import ReactToPrint from "react-to-print";
 import React, { forwardRef, ForwardedRef, ButtonHTMLAttributes } from "react";
-import Stats from "@/components/stats";
 
 export function PrintForm() {
   const componentRef = React.useRef(null);
@@ -60,11 +59,7 @@ interface ButtonProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
 // Define the Button component using forwardRef
 const FunctionalComponentToPrint = React.forwardRef(
   (props: ButtonProps, ref: ForwardedRef<HTMLDivElement>) => {
-    return (
-      <div {...props} ref={ref}>
-        Hello <Stats />
-      </div>
-    );
+    return <div {...props} ref={ref}></div>;
   },
 );
 

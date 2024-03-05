@@ -1,11 +1,9 @@
 import { PatientType } from "@/database/modals/PatientModel";
-import { Sidebar } from "@/components/sidebar";
 import { getUserDetails } from "@/utils/Auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { PatientTable } from "@/components/data-table";
 import Stats from "@/components/stats";
-import { getAllUsers as getDoctors } from "@/app/dashboard/doctor/page";
 
 export const getAllUsers = async () => {
   const authToken = cookies().get("auth_token")?.value;
@@ -29,19 +27,10 @@ export default async function Dashboard() {
   if (!user) return redirect("/signin");
 
   const data = await getAllUsers();
-  const totalPatient = data.length;
-  const inPatient = data.filter(
-    (item, index) => item.patientType === "inpatient",
-  );
-  const doctor = await getDoctors();
-  // console.log(data);
+
   return (
     <div className="px-2">
-      <Stats
-        totalPatient={totalPatient}
-        inPatient={inPatient.length}
-        doctor={doctor.length}
-      />
+      <Stats />
       <PatientTable users={data} />
     </div>
   );
