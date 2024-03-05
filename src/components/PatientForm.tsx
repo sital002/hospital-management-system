@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Label } from "./ui/label";
 import { Select } from "./ui/select";
 import { Input } from "./ui/input";
@@ -24,6 +24,8 @@ import {
 } from "./ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { AdmitPatientSchema } from "@/schema/patient";
+import { addPatient, updatePatient } from "@/actions/patient";
 
 const genderOptions = [
   {
@@ -69,63 +71,10 @@ type PatientFormProps =
       update: false;
     };
 
-const FormSchema = z.object({
-  name: z
-    .string({
-      required_error: "Name is required",
-    })
-    .min(1, "Name is required"),
-  phone: z
-    .string()
-    .min(1, "Phone number is required")
-    .max(10, "Phone number cannot be more than 10")
-    .refine((value) => {
-      const phoneRegex = /^\d{10}$/;
-      return phoneRegex.test(value);
-    }, "Invalid phone number"),
-  address: z
-    .string({
-      required_error: "Address is required",
-    })
-    .min(1, "Address is required")
-    .max(100, "Address is too long"),
-  dob: z
-    .string({
-      required_error: "date is requireds",
-    })
-    .min(1, "Date is required")
-    .refine((value) => {
-      const dateRegex = /^\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/;
-      if (!dateRegex.test(value)) return false;
-      const [year, month, day] = value.split("/").map(Number);
-      const date = new Date(year, month - 1, day);
-      return (
-        date.getFullYear() === year &&
-        date.getMonth() === month - 1 &&
-        date.getDate() === day
-      );
-    }, "Invalid date format or value"),
-  gender: z
-    .string({
-      required_error: "Gender is required",
-    })
-    .min(1, "Gender is required"),
-  admitType: z
-    .string({
-      required_error: "AdmitType is required",
-    })
-    .min(1, "AdmitType is required"),
-  patientType: z
-    .string({
-      required_error: "PatientType is required",
-    })
-    .min(1, "PatientType is required"),
-});
-
 const PatientForm = (props: PatientFormProps) => {
   const [loading, setLoading] = useState(false);
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof AdmitPatientSchema>>({
+    resolver: zodResolver(AdmitPatientSchema),
     defaultValues: props.update
       ? {
           name: props.patient.name ?? "",
@@ -147,87 +96,31 @@ const PatientForm = (props: PatientFormProps) => {
         },
   });
   const router = useRouter();
-  const addNewPatient = async ({
-    data,
-    router,
-  }: {
-    data: z.infer<typeof FormSchema>;
-    router: any;
-  }) => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient`,
-        {
-          method: "POST",
-          body: JSON.stringify(data),
-        },
-      );
-      const json = await res.json();
-      console.log(json)
-      if (json.success) {
-        toast.success("Account created successfully");
-        console.log(json);
-        // router.push("/dashboard/patient");
-        router.refresh();
-        return;
-      }
-      return toast.error(json.message);
-    } catch (err: any) {
-      console.log(err);
-      toast.error(err?.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const updatePatientDetail = async ({
+  const onSubmit: SubmitHandler<z.infer<typeof AdmitPatientSchema>> = async (
     data,
-  }: {
-    data: z.infer<typeof FormSchema>;
-  }) => {
+  ) => {
     try {
-      console.log(data);
-      setLoading(true);
-      if (!props.update) return toast.error("Invalid request");
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${props.patient?._id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify({
-            name: data?.name,
-            phone: data?.phone,
-            address: data?.address,
-            admitType: data?.admitType,
-            patientType: data?.patientType,
-            dob: data?.dob,
-            gender: data.gender,
-          }),
-        },
-      );
-      const json = await res.json();
-      if (json) {
-        toast.success("Detail updated successfully");
-        router.refresh();
-        if (props.update) {
-          props.setOpen(false);
+      if (props.update) {
+        const response = await updatePatient(
+          props.patient._id.toString(),
+          data,
+        );
+        if (!response.success) {
+          throw new Error(response.message ?? "Something went wrong");
         }
-
-        return;
+        toast.success("Patient detail updated successfully");
+        router.refresh();
+      } else {
+        const response = await addPatient(data);
+        if (!response.success)
+          throw new Error(response.message ?? "Something went wrong");
+        toast.success("Patient added successfully");
+        router.refresh();
       }
-      return toast.error(json.message);
     } catch (err: any) {
-      console.log(err);
-      toast.error(err?.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
-    if (props.update) {
-      updatePatientDetail({ data });
-    } else {
-      addNewPatient({ data, router });
+      toast.error(err.message);
+      console.log(err.message);
     }
   };
 

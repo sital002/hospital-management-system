@@ -8,7 +8,7 @@ interface EditLabtestModalProps {
   patient: PatientType;
 }
 const EditPatientModal: FC<EditLabtestModalProps> = ({ patient }) => {
-  console.log(patient);
+  // console.log(patient);
   const [open, setOpen] = useState(false);
   return (
     <div>

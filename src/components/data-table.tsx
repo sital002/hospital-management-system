@@ -36,28 +36,19 @@ import { PatientType } from "@/database/modals/PatientModel";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import EditPatientModal from "./patient/EditPatientModal";
-import Link from "next/link";
+import { deletePatient } from "@/actions/patient";
 
 const handleDelete = async (id: string, router: any) => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/${id}`,
-      {
-        method: "DELETE",
-        cache: "no-store",
-        credentials: "include",
-      },
-    );
-    if (!res.ok) return toast.error("Failed to delete account");
-    const data = await res.json();
-    // console.log(data);
+    const response = await deletePatient(id);
+    if (!response.success) throw new Error(response.message);
     toast.success("Account Deleted Successfully");
     router.refresh();
+    return;
     // return data;
   } catch (err: any) {
     console.log(err?.message);
     toast.error(err?.message);
-    return [];
   }
 };
 
