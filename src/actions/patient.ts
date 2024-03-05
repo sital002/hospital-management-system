@@ -16,7 +16,6 @@ export async function bookAppointment(data: any) {
     if (!user) {
       return { success: false, message: "You are not logged in" };
     }
-    console.log(user);
     if (user.role !== "patient") {
       return { success: false, message: "You are not authorized" };
     }
@@ -35,10 +34,8 @@ export async function bookAppointment(data: any) {
       medicalDepartment: result.data.type,
       status: "pending",
     });
-    return { success: true, appointment: newAppointment };
+    return { success: true, message: "Appointment created successfully" };
   } catch (err: any) {
     return { success: false, message: err.message };
   }
 }
-
-export async function viewAllAppointments() {}

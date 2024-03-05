@@ -164,7 +164,7 @@ const PatientForm = (props: PatientFormProps) => {
         },
       );
       const json = await res.json();
-      console.log(json)
+      console.log(json);
       if (json.success) {
         toast.success("Account created successfully");
         console.log(json);

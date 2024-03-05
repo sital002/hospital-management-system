@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment } from "react";
+import React, { Fragment, useOptimistic } from "react";
 import {
   SelectContent,
   SelectItem,
@@ -37,6 +37,7 @@ import { useRouter } from "next/navigation";
 import { AppointmentFormSchema } from "../_utils/schema";
 import { PatientType } from "@/database/modals/PatientModel";
 import { bookAppointment } from "@/actions/patient";
+import { useFormStatus } from "react-dom";
 
 const medicalDepart = [
   {
@@ -94,12 +95,11 @@ interface NewAppointementFormProps {
 }
 export function NewAppointementForm({ patient }: NewAppointementFormProps) {
   const router = useRouter();
-
   const form = useForm<z.infer<typeof AppointmentFormSchema>>({
     resolver: zodResolver(AppointmentFormSchema),
     defaultValues: {
       patientId: patient._id.toString(),
-      date: new Date(),
+      date: undefined,
       contact: "email",
       email: patient.email ?? "",
       name: patient.name,
