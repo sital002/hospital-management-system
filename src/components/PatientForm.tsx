@@ -101,6 +101,7 @@ const PatientForm = (props: PatientFormProps) => {
     data,
   ) => {
     try {
+      setLoading(true);
       if (props.update) {
         const response = await updatePatient(
           props.patient._id.toString(),
@@ -121,6 +122,8 @@ const PatientForm = (props: PatientFormProps) => {
     } catch (err: any) {
       toast.error(err.message);
       console.log(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "./ui/form";
 import { StaffFormSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
+import { addStaff, updateStaff } from "@/actions/staff";
 
 const genderOptions = [
   {
@@ -94,79 +95,28 @@ const StaffForm: FC<StaffFormProps> = (props) => {
   });
 
   const router = useRouter();
-  // const [showModal, setShowModal] = useState(false);
-  // console.log(form.watch());
-  const createNewStaff = async (
-    data: z.infer<typeof StaffFormSchema>,
-    router: any,
-  ) => {
-    console.log(data);
-    try {
-      setLoading(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`, {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-      const json = await res.json();
-      if (json.success) {
-        toast.success("Account created successfully");
-        router.refresh();
-        return;
-      }
-      return toast.error(json.message);
-    } catch (err: any) {
-      console.log(err);
-      toast.error(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateStaffDetail = async (data: z.infer<typeof StaffFormSchema>) => {
-    try {
-      // console.log(data);
-      if (!props.update) return;
-      setLoading(true);
-      const res = await fetch(`/api/staff/${props.staff._id}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          password: data.password,
-          cpassword: data.cpassword,
-          address: data.address,
-          shift: data.shift,
-          dob: data.dob,
-          gender: data.gender,
-        }),
-      });
-      if (!res.ok) throw new Error("Something went wrong");
-      const json = await res.json();
-      if (json) {
-        toast.success("Detail updated successfully");
-        router.refresh();
-        if (props.update && props.setOpen) {
-          props.setOpen(false);
-        }
-        return;
-      }
-      return toast.error(json.message);
-    } catch (err: any) {
-      console.log(err);
-      toast.error(err?.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const onSubmit: SubmitHandler<z.infer<typeof StaffFormSchema>> = async (
     data,
   ) => {
-    if (props.update) {
-      updateStaffDetail(data);
-    } else {
-      createNewStaff(data, router);
+    try {
+      setLoading(true);
+      if (props.update) {
+        const response = await updateStaff(props.staff._id.toString(), data);
+        if (!response.success) throw new Error(response.message);
+        toast.success("Staff details updated successfully");
+        return;
+      }
+      const response = await addStaff(data);
+      if (!response.success) throw new Error(response.message);
+      toast.success("Staff added successfully");
+      form.reset();
+    } catch (err: any) {
+      console.log(err?.message);
+      toast.error(err?.message ?? "Something went wrong");
+    } finally {
+      setLoading(false);
+      router.refresh();
     }
   };
 

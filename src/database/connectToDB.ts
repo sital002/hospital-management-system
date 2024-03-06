@@ -10,7 +10,7 @@ let isConnected: boolean = false;
 
 export default async function connectToDB() {
   if (isConnected) {
-    console.log("Connected to MongoDB");
+    // console.log("Connected to MongoDB");
     return;
   }
   if (!process.env.MONGO_DB_URI) {

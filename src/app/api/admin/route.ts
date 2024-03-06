@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
         }),
         { status: 400 },
       );
-      console.log(user)
+    console.log(user);
     const newAdmin = await Admin.create(data);
     return new Response(
       JSON.stringify({
