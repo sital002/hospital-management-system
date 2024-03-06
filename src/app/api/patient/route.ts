@@ -3,6 +3,7 @@ import { Patient } from "@/database/modals/PatientModel";
 import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 import { getUserDetails } from "@/utils/Auth";
+import { cookies } from "next/headers";
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
@@ -60,9 +61,11 @@ export async function GET(req: NextRequest) {
     // if (!user) {
     //   return new Response(
     //     JSON.stringify({ message: "You are not authorized" }),
-    //     { status: 401 },
+    //     { status: 401
     //   );
     // }
+    const authToken = cookies().get("auth_token");
+    console.log(authToken);
     await connectToDB();
     const patients = await Patient.find();
     return new Response(JSON.stringify(patients));

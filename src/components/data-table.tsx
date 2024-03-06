@@ -53,13 +53,19 @@ const handleDelete = async (id: string, router: any) => {
 };
 
 interface PatientTableProps {
-  users: PatientType[];
+  users: string;
 }
 export function PatientTable({ users }: PatientTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
+  let patients: PatientType[] = [];
+  try {
+    patients = JSON.parse(users);
+  } catch (err) {
+    console.log(err);
+  }
   const router = useRouter();
 
   const [columnVisibility, setColumnVisibility] =
@@ -161,7 +167,7 @@ export function PatientTable({ users }: PatientTableProps) {
     },
   ];
   const table = useReactTable({
-    data: users,
+    data: patients,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

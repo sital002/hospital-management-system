@@ -1,28 +1,10 @@
-import { PatientType } from "@/database/modals/PatientModel";
+import { Patient } from "@/database/modals/PatientModel";
 import { getUserDetails } from "@/utils/Auth";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { PatientTable } from "@/components/data-table";
 import Stats from "@/components/stats";
 import { PatientDashboard } from "./_components/PatientDashboard";
-
-const getAllUsers = async () => {
-  const authToken = cookies().get("auth_token")?.value;
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/patient`, {
-      // cache: "no-store",
-      credentials: "include",
-      headers: {
-        Cookie: `auth_token=${authToken};`,
-      },
-    });
-    const data = (await res.json()) as PatientType[];
-    return data;
-  } catch (err: any) {
-    console.log(err?.message);
-    return [];
-  }
-};
+import { getAllPatients } from "@/actions/patient";
 
 export default async function page() {
   const user = await getUserDetails();
@@ -31,9 +13,9 @@ export default async function page() {
     return <p>Your account is pending for approval</p>;
   if (user.role === "patient" && user.data.status === "rejected")
     return <p>Your account is rejected</p>;
-  const data = await getAllUsers();
+  const data = await getAllPatients();
 
-  // console.log(data);
+  console.log(data.length);
 
   return (
     <div className="px-2">
@@ -42,7 +24,7 @@ export default async function page() {
       ) : (
         <>
           <Stats />
-          <PatientTable users={data} />
+          <PatientTable users={JSON.stringify(data)} />
         </>
       )}
     </div>

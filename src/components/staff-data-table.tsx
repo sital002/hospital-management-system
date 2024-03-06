@@ -36,38 +36,41 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import EditStaffModal from "./staff/EditStaffModal";
 import { StaffType } from "@/database/modals/StaffModal";
-
-const handleDelete = async (id: string, router: any) => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/staff/${id}`,
-      {
-        method: "DELETE",
-        cache: "no-store",
-        credentials: "include",
-      },
-    );
-    if (!res.ok) return toast.error("Failed to delete account");
-    const data = await res.json();
-    // console.log(data);
-    toast.success("Account Deleted Successfully");
-    router.refresh();
-    // return data;
-  } catch (err: any) {
-    console.log(err?.message);
-    toast.error(err?.message);
-    return [];
-  }
-};
+import { deleteStaff } from "@/actions/staff";
 
 interface StaffTableProps {
-  users: StaffType[];
+  users: string;
 }
+
 export function StaffTable({ users }: StaffTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
+  const [loading, setLoading] = React.useState(false);
+  const handleDelete = async (id: string) => {
+    try {
+      setLoading(true);
+      const response = await deleteStaff(id);
+      if (!response.success) throw new Error(response.message);
+      toast.success("Account Deleted Successfully");
+      router.refresh();
+    } catch (err: any) {
+      console.log(err?.message);
+      toast.error(err?.message);
+      return;
+    } finally {
+      setLoading(false);
+    }
+  };
+  let staff: StaffType[] = React.useMemo(() => {
+    try {
+      return JSON.parse(users);
+    } catch (err) {
+      console.log(err ?? "Error parsing JSON data.");
+      return [];
+    }
+  }, [users]);
   const router = useRouter();
 
   const [columnVisibility, setColumnVisibility] =
@@ -162,8 +165,9 @@ export function StaffTable({ users }: StaffTableProps) {
             <EditStaffModal staff={row.original} />
             <Button
               variant="destructive"
+              disabled={loading}
               onClick={() => {
-                handleDelete(row.original._id.toString(), router);
+                handleDelete(row.original._id.toString());
               }}
             >
               Delete
@@ -174,7 +178,7 @@ export function StaffTable({ users }: StaffTableProps) {
     },
   ];
   const table = useReactTable({
-    data: users,
+    data: staff,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
