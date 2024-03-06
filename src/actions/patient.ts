@@ -3,7 +3,7 @@
 import { AppointmentFormSchema } from "@/app/dashboard/patient/appointment/_utils/schema";
 import connectToDB from "@/database/connectToDB";
 import { Appointment } from "@/database/modals/Appointment";
-import { Patient } from "@/database/modals/PatientModel";
+import { Patient, PatientType } from "@/database/modals/PatientModel";
 import { AdmitPatientSchema } from "@/schema/patient";
 import { getUserDetails } from "@/utils/Auth";
 
@@ -93,5 +93,16 @@ export async function bookAppointment(data: any) {
     return { success: true, message: "Appointment created successfully" };
   } catch (err: any) {
     return { success: false, message: err.message };
+  }
+}
+
+export async function getAllPatients() {
+  try {
+    await connectToDB();
+    const patients: PatientType[] = await Patient.find();
+    return patients ?? [];
+  } catch (err: any) {
+    console.log(err.message);
+    return [];
   }
 }

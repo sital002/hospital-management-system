@@ -1,23 +1,15 @@
-import { Sidebar } from "@/components/sidebar";
-import { type StaffType } from "@/database/modals/StaffModal";
+import { Staff, type StaffType } from "@/database/modals/StaffModal";
 import { getUserDetails } from "@/utils/Auth";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { StaffTable } from "@/components/staff-data-table";
 import Stats from "@/components/stats";
+import connectToDB from "@/database/connectToDB";
 
-const getAllUsers = async () => {
-  const authToken = cookies().get("auth_token")?.value;
+const getAllStaff = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`, {
-      // cache: "no-store",
-      credentials: "include",
-      headers: {
-        Cookie: `auth_token=${authToken};`,
-      },
-    });
-    const data = (await res.json()) as StaffType[];
-    return data;
+    await connectToDB();
+    const staff = await Staff.find();
+    return staff ?? [];
   } catch (err: any) {
     console.log(err?.message);
     return [];
@@ -26,13 +18,15 @@ const getAllUsers = async () => {
 export default async function Dashboard() {
   const user = await getUserDetails();
   if (!user) return redirect("/signin");
+  if (user.role !== "admin")
+    return <p>You arenot authorized to view this page</p>;
 
-  const data = await getAllUsers();
+  const data = await getAllStaff();
 
   return (
     <div className="px-2">
       <Stats />
-      <StaffTable users={data} />
+      <StaffTable users={JSON.stringify(data)} />
     </div>
   );
 }

@@ -8,7 +8,6 @@ interface EditLabtestModalProps {
   staff: StaffType;
 }
 const EditStaffModal: FC<EditLabtestModalProps> = ({ staff }) => {
-  console.log(staff);
   const [open, setOpen] = useState(false);
   return (
     <div>
