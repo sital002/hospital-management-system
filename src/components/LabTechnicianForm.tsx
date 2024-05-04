@@ -67,14 +67,14 @@ const LabTechnicianForm: FC<LabTechnicianFormProps> = (props) => {
           cpassword: props.labtechnician.password,
         }
       : {
-          name: "John Doe",
-          email: "johndoe33@gmail.com",
-          phone: "9860098600",
-          address: "Ratnapark, Kathmandu",
+          name: "",
+          email: "",
+          phone: "",
+          address: "",
           gender: "male",
-          dob: "2002-03-23",
-          password: "Password@123",
-          cpassword: "Password@123",
+          dob: "",
+          password: "",
+          cpassword: "",
         },
   });
 

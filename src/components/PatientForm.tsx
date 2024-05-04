@@ -86,13 +86,13 @@ const PatientForm = (props: PatientFormProps) => {
           gender: props.patient.gender ?? "",
         }
       : {
-          name: "John Doe",
-          phone: "9860098600",
-          address: "Ratnapark, Kathmandu",
+          name: "",
+          phone: "",
+          address: "",
           gender: "male",
           admitType: "emergency",
           patientType: "inpatient",
-          dob: "2002/07/33",
+          dob: "",
         },
   });
   const router = useRouter();

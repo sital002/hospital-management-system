@@ -82,15 +82,15 @@ const StaffForm: FC<StaffFormProps> = (props) => {
           shift: props.staff.shift,
         }
       : {
-          name: "John Doe",
-          email: "johndoe33@gmail.com",
-          phone: "9876543210",
-          address: "Ratnapark, Kathmandu",
+          name: "",
+          email: "",
+          phone: "",
+          address: "",
           gender: "male",
-          dob: "2002/02/12",
+          dob: "",
           shift: "morning",
-          password: "Password@123",
-          cpassword: "Password@123",
+          password: "",
+          cpassword: "",
         },
   });
 
