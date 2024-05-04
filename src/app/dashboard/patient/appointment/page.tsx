@@ -8,8 +8,13 @@ import { AppointmentTable } from "../../appointments/_components/AppointmentTabl
 async function getAppointments(id: string) {
   try {
     await connectToDB();
-    const appointments = await Appointment.find({ patient: id });
-    console.log(appointments)
+
+    const appointments = await Appointment.find({ patient: id })
+      .sort({
+        date: "desc",
+      })
+      .populate("patient");
+    // console.log(appointments);
     return appointments;
   } catch (err: any) {
     console.log(err?.message);
@@ -26,7 +31,7 @@ export default async function page() {
   if (user.role === "patient" && user.data.status === "rejected")
     return <p>Your account is rejected</p>;
   const appointments = await getAppointments(user.data._id.toString());
-  console.log(appointments)
+  console.log(appointments);
 
   return (
     <div>

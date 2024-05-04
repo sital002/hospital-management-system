@@ -1,4 +1,3 @@
-import { Patient } from "@/database/modals/PatientModel";
 import { getUserDetails } from "@/utils/Auth";
 import { redirect } from "next/navigation";
 import { PatientTable } from "@/components/data-table";
@@ -15,7 +14,6 @@ export default async function page() {
     return <p>Your account is rejected</p>;
   const data = await getAllPatients();
 
-  console.log(data.length);
 
   return (
     <div className="px-2">
@@ -24,7 +22,7 @@ export default async function page() {
       ) : (
         <>
           <Stats />
-          <PatientTable users={JSON.stringify(data)} />
+          <PatientTable users={(data)} />
         </>
       )}
     </div>
