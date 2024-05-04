@@ -20,7 +20,7 @@ export const Protein:LabtestFormType[] = [
       children: [
         {
           investigation: "BCG",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "g/dL",
           input: true,
@@ -34,7 +34,7 @@ export const Protein:LabtestFormType[] = [
       children: [
         {
           investigation: "Calculated",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "g/dL",
           input: true,

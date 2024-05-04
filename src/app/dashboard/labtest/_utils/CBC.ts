@@ -48,7 +48,7 @@ export const CBCTest: LabtestFormType[] = [
     children: [
       {
         investigation: "Total RBC Count",
-        result: "5.2",
+        result: "",
         normalRange: "5-10",
         unit: "mill/cumm",
         input: true,
@@ -62,21 +62,21 @@ export const CBCTest: LabtestFormType[] = [
     children: [
       {
         investigation: "packed cell volume(PCV)",
-        result: "5.2",
+        result: "",
         normalRange: "5-10",
         unit: "%",
         input: true,
       },
       {
         investigation: "mean corpuscular volume",
-        result: "5.2",
+        result: "",
         normalRange: "5-10",
         unit: "%",
         input: true,
       },
       {
         investigation: "RDW",
-        result: "5.2",
+        result: "",
         normalRange: "5-10",
         unit: "%",
         input: true,

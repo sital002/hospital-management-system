@@ -20,7 +20,7 @@ export const SugarTest:LabtestFormType[] = [
       children: [
         {
           investigation: "Glucose,Post Prandial,2 Hours,Plasma",
-          result: "5.2",
+          result: "",
           normalRange: "100-140",
           unit: "mg/dL",
           input: true,
@@ -34,7 +34,7 @@ export const SugarTest:LabtestFormType[] = [
       children: [
         {
           investigation: "Glucose,Random,Plasma",
-          result: "5.2",
+          result: "",
           normalRange: "70-140",
           unit: "mg/dL",
           input: true,
