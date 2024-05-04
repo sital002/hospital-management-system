@@ -117,10 +117,6 @@ export function PatientStatusTable({ patients }: PatientStatusTableProps) {
               </Button>
             </div>
           )}
-          {row.original.status !== "approved" &&
-            row.original.status !== "rejected" &&
-            row.original.status !== "active" &&
-            row.original.status !== "pending" && <p>None</p>}
         </div>
       ),
     },
