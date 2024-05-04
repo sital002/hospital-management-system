@@ -26,8 +26,8 @@ export default function SignIn() {
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: {
-      email: "test@gmail.com",
-      password: "Password@123",
+      email: "",
+      password: "",
     },
   });
 
@@ -125,7 +125,7 @@ export default function SignIn() {
           <div className="my-6">
             <Label className="my-3">Password</Label>
             <Input
-            type={"password"}
+              type={"password"}
               {...register("password", {
                 required: {
                   value: true,

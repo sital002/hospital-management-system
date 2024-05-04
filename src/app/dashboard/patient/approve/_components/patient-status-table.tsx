@@ -51,7 +51,7 @@ export function PatientStatusTable({ patients }: PatientStatusTableProps) {
 
   const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [status, setStatus] = React.useState<string>("pending");
+  const [status, setStatus] = React.useState<string>("all");
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
@@ -111,8 +111,25 @@ export function PatientStatusTable({ patients }: PatientStatusTableProps) {
           )}
           {row.original.status === "pending" && (
             <div>
-              <Button>Approve</Button>
-              <Button variant={"destructive"} className="ml-3">
+              <Button
+                onClick={() => {
+                  console.log(row.original._id.toString());
+                  handlePatientApproveStatus(row.original._id.toString());
+                  toast.success("Patient account approved");
+                  router.refresh();
+                }}
+              >
+                Approve
+              </Button>
+              <Button
+                variant={"destructive"}
+                className="ml-3"
+                onClick={() => {
+                  handlePatientRejectStatus(row.original._id.toString());
+                  toast.error("Patient account rejected");
+                  router.refresh();
+                }}
+              >
                 Reject
               </Button>
             </div>

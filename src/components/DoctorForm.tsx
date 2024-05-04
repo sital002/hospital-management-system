@@ -78,15 +78,15 @@ const DoctorForm: FC<DoctorFormProps> = (props) => {
           dob: props.doctor?.dob.toString() || "",
         }
       : {
-          name: "John Doe",
-          email: "johndoe33@gmail.com",
-          phone: "9860098600",
-          address: "Ratnapark, Kathmandu",
+          name: "",
+          email: "",
+          phone: "",
+          address: "",
           gender: "male",
           department: departmentOption[0].value,
-          dob: "2002",
-          password: "Password@123",
-          cpassword: "Password@123",
+          dob: "",
+          password: "",
+          cpassword: "",
         },
   });
 

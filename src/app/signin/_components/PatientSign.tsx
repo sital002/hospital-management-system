@@ -24,8 +24,8 @@ export function PatientLogin() {
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: {
-      email: "admin@gmail.com",
-      password: "admin123",
+      email: "",
+      password: "",
     },
   });
 

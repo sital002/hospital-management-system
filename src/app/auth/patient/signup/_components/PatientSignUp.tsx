@@ -76,14 +76,14 @@ const PatientSignup = (props: PatientFormProps) => {
           gender: props.patient.gender,
         }
       : {
-          name: "John Doe",
-          phone: "9860098600",
-          address: "Ratnapark, Kathmandu",
+          name: "",
+          phone: "",
+          address: "",
           gender: "male",
-          email: "test@gmail.com",
-          password: "Password@123",
-          cpassword: "Password@123",
-          dob: "2002/07/33",
+          email: "",
+          password: "",
+          cpassword: "",
+          dob: "",
         },
   });
   const router = useRouter();
