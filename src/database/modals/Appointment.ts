@@ -25,6 +25,7 @@ const AppointmentSchema = new Schema({
     type: String,
     required: [true, "Please provide a medical department"],
   },
+
 });
 
 export type TAppointment = mongoose.InferSchemaType<

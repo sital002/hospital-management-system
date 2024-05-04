@@ -99,8 +99,9 @@ export async function bookAppointment(data: any) {
 export async function getAllPatients() {
   try {
     await connectToDB();
-    const patients: PatientType[] = await Patient.find();
-    return patients ?? [];
+    const patients: PatientType[] = await Patient.find().lean()
+    return JSON.parse(JSON.stringify(patients)) ?? [];
+
   } catch (err: any) {
     console.log(err.message);
     return [];

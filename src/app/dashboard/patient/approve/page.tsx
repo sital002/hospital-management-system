@@ -9,9 +9,10 @@ import connectToDB from "@/database/connectToDB";
 async function getPatients() {
   try {
     await connectToDB();
-    const patients = await Patient.find({ status: "pending" });
-    console.log(patients);
-    return patients ?? [];
+    // const patients = await Patient.find();
+    const patients = await Patient.find({ status: { $exists: true } });
+    // console.log(patients);
+    return JSON.parse(JSON.stringify(patients)) ?? [];
   } catch (err: any) {
     console.log(err?.message);
     return [];

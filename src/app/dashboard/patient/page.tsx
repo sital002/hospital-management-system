@@ -9,11 +9,11 @@ export default async function Dashboard() {
   if (!user) return redirect("/signin");
 
   const data = await getAllPatients();
-
+  console.log(data);
   return (
     <div className="px-2">
       <Stats />
-      <PatientTable users={JSON.stringify(data)} />
+      <PatientTable users={(data)} />
     </div>
   );
 }
