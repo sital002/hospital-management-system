@@ -51,7 +51,7 @@ export function PatientStatusTable({ patients }: PatientStatusTableProps) {
 
   const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [status, setStatus] = React.useState<string>("pending");
+  const [status, setStatus] = React.useState<string>("all");
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
