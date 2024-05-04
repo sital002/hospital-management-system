@@ -1,9 +1,9 @@
-import { PaitentSidebarOptions, doctorSidebarOptions, labtechnicianSidebarOptions, sideBarOptions } from "./SidebarOptions";
+import { PaitentSidebarOptions, doctorSidebarOptions, labtechnicianSidebarOptions, sideBarOptions,staffSidebarOption } from "./SidebarOptions";
 
 export const currentSideBar = {
   patient: PaitentSidebarOptions,
   doctor: doctorSidebarOptions,
-  staff: sideBarOptions,
+  staff: staffSidebarOption,
   labtechnician: labtechnicianSidebarOptions,
   admin: sideBarOptions,
 };

@@ -7,6 +7,7 @@ import {
   PlusSquare,
   UserRound,
 } from "lucide-react";
+import React from 'react'
 
 export interface SidebarOptionType {
   name: string;
@@ -149,6 +150,82 @@ export const sideBarOptions: SidebarOptionType[] = [
     icon: <CircleUser size={20} />,
   },
 ];
+
+
+export const staffSidebarOption:SidebarOptionType[]=[
+  {
+    name: "Dashboard",
+    url: "/dashboard",
+    icon: <LayoutDashboard />,
+  },
+  {
+    name: "Patient",
+    icon: <Accessibility />,
+    dropdown: [
+      {
+        name: "Register Patient",
+        url: "/dashboard/patient/new",
+        icon: <PlusSquare size={20} />,
+      },
+      {
+        name: "Manage Patient",
+        url: "/dashboard/patient",
+        icon: <FolderKanban size={20} />,
+      }
+    ],
+  },
+  
+  {
+    name: "Doctor",
+    icon: <CircleUser />,
+    roles: ["staff"],
+    dropdown: [
+      {
+        name: "Register Doctor",
+        url: "/dashboard/doctor/new",
+        icon: <PlusSquare size={20} />,
+      },
+      {
+        name: "Manage Doctor",
+        url: "/dashboard/doctor",
+        icon: <FolderKanban size={20} />,
+      },
+    ],
+  },
+  {
+    name: "LabTechnician",
+    icon: <Accessibility />,
+    dropdown: [
+      {
+        name: "Register Lab Technician",
+        url: "/dashboard/labtechnician/new",
+        icon: <PlusSquare size={20} />,
+      },
+      {
+        name: "Manage Lab Technicaian",
+        url: "/dashboard/labtechnician",
+        icon: <FolderKanban size={20} />,
+      },
+    ],
+  },
+  
+    {
+    name: "Appointment",
+    roles: ["staff"],
+    icon: <PlusSquare size={20} />,
+    url: "/dashboard/appointments",
+  },
+  {
+    name: "View my Profile",
+    url: "/dashboard/profile",
+    icon: <CircleUser size={20} />,
+  },
+  {
+    name: "update my Profile",
+    url: "/dashboard/update",
+    icon: <CircleUser size={20} />,
+  },
+]
 
 export const doctorSidebarOptions: SidebarOptionType[] = [
   {
