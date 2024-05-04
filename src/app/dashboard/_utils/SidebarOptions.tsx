@@ -149,3 +149,58 @@ export const sideBarOptions: SidebarOptionType[] = [
     icon: <CircleUser size={20} />,
   },
 ];
+
+export const doctorSidebarOptions: SidebarOptionType[] = [
+  {
+    name: "Dashboard",
+    url: "/dashboard",
+    icon: <PlusSquare size={20} />,
+  },
+  {
+    name: "View Appointments",
+    url: "/dashboard/appointments",
+    icon: <PlusSquare size={20} />,
+  },
+
+  {
+    name: "Update My Profile",
+    url: "/dashboard/update",
+    icon: <PlusSquare size={20} />,
+  },
+];
+
+export const labtechnicianSidebarOptions: SidebarOptionType[] = [
+  {
+    name: "Dashboard",
+    url: "/dashboard",
+    icon: <PlusSquare size={20} />,
+  },
+
+  {
+    name: "Labtest",
+    roles: ["admin", "labtechnician"],
+    icon: <Pill />,
+    dropdown: [
+      {
+        name: "Create LabTest",
+        url: "/dashboard/labtest",
+        icon: <PlusSquare size={20} />,
+      },
+      {
+        name: "Manage LabTest",
+        url: "/dashboard/labtest/manage",
+        icon: <FolderKanban size={20} />,
+      },
+    ],
+  },
+  {
+    name: "View my Profile",
+    url: "/dashboard/profile",
+    icon: <CircleUser size={20} />,
+  },
+  {
+    name: "Update My Profile",
+    url: "/dashboard/update",
+    icon: <PlusSquare size={20} />,
+  },
+];

@@ -20,7 +20,11 @@ export default async function page() {
   if (!user) {
     redirect("/signin");
   }
-  if (user.role !== "admin" && user.role !== "staff") {
+  if (
+    user.role !== "admin" &&
+    user.role !== "staff" &&
+    user.role !== "doctor"
+  ) {
     return <p> You arenot authorized to view this page</p>;
   }
   const appointments = (await getAllAppointments()) as TAppointment[];

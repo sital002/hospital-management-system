@@ -4,6 +4,8 @@ import { PatientTable } from "@/components/data-table";
 import Stats from "@/components/stats";
 import { PatientDashboard } from "./_components/PatientDashboard";
 import { getAllPatients } from "@/actions/patient";
+import { DoctorDashboard } from "./doctor/_components/DoctorDashboard";
+import { LabtechnicianDashboard } from "./_components/LabtechnicianDashboard";
 
 export default async function page() {
   const user = await getUserDetails();
@@ -14,7 +16,21 @@ export default async function page() {
     return <p>Your account is rejected</p>;
   const data = await getAllPatients();
 
-
+  if (user.role === "doctor")
+    return (
+      <div className="px-2">
+        <DoctorDashboard data={data} doctorId={user.data._id.toString()} />
+      </div>
+    );
+  if (user.role === "labtechnician")
+    return (
+      <div className="px-2">
+        <LabtechnicianDashboard
+          data={data}
+          labtechnicianId={user.data._id.toString()}
+        />
+      </div>
+    );
   return (
     <div className="px-2">
       {user.role === "patient" ? (
@@ -22,7 +38,7 @@ export default async function page() {
       ) : (
         <>
           <Stats />
-          <PatientTable users={(data)} />
+          <PatientTable users={data} />
         </>
       )}
     </div>

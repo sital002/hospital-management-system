@@ -98,13 +98,13 @@ export function AppointmentTable({ data }: AppointmentTableProps) {
         <div className="uppercase">{row.original.patient?.gender}</div>
       ),
     },
-    {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ row }) => (
-        <div className="uppercase">{row.original?.status}</div>
-      ),
-    },
+    // {
+    //   accessorKey: "status",
+    //   header: "Status",
+    //   cell: ({ row }) => (
+    //     <div className="uppercase">{row.original?.status}</div>
+    //   ),
+    // },
   ];
   const table = useReactTable({
     data: appointments,
@@ -136,7 +136,7 @@ export function AppointmentTable({ data }: AppointmentTableProps) {
           }
           className="max-w-sm"
         />
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
               Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
@@ -161,7 +161,7 @@ export function AppointmentTable({ data }: AppointmentTableProps) {
                 );
               })}
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
       <div className="rounded-md border">
         <Table>

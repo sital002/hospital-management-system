@@ -111,8 +111,25 @@ export function PatientStatusTable({ patients }: PatientStatusTableProps) {
           )}
           {row.original.status === "pending" && (
             <div>
-              <Button>Approve</Button>
-              <Button variant={"destructive"} className="ml-3">
+              <Button
+                onClick={() => {
+                  console.log(row.original._id.toString());
+                  handlePatientApproveStatus(row.original._id.toString());
+                  toast.success("Patient account approved");
+                  router.refresh();
+                }}
+              >
+                Approve
+              </Button>
+              <Button
+                variant={"destructive"}
+                className="ml-3"
+                onClick={() => {
+                  handlePatientRejectStatus(row.original._id.toString());
+                  toast.error("Patient account rejected");
+                  router.refresh();
+                }}
+              >
                 Reject
               </Button>
             </div>

@@ -55,6 +55,8 @@ export async function deletePatient(id: string) {
     }
     await connectToDB();
     const deletedPatient = await Patient.findByIdAndDelete(id);
+    const deletedAppointment = await Appointment.deleteMany({ patient: id });
+    console.log(deletedAppointment);
     if (deletedPatient) {
       return { success: true, message: "Patient deleted successfully" };
     }
