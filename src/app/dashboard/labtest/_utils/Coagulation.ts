@@ -18,7 +18,7 @@ export const CoagulationTest = [
       children: [
         {
           investigation: "Lee & White",
-          result: "5.2",
+          result: "",
           normalRange: "2-7",
           unit: "min",
           input: true,
@@ -32,7 +32,7 @@ export const CoagulationTest = [
       children: [
         {
           investigation: "Photo Optical Clot Detection",
-          result: "5.2",
+          result: "",
           normalRange: "10.3-12.8",
           unit: "sec",
           input: true,

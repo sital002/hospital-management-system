@@ -20,7 +20,7 @@ export const ThyroidTest:LabtestFormType[] = [
       children: [
         {
           investigation: "CLIA",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "U/L",
           input: true,
@@ -34,7 +34,7 @@ export const ThyroidTest:LabtestFormType[] = [
       children: [
         {
           investigation: "CLIA",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "U/L",
           input: true,
@@ -48,7 +48,7 @@ export const ThyroidTest:LabtestFormType[] = [
       children: [
         {
           investigation: "CLIA",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "U/mL",
           input: true,
@@ -62,7 +62,7 @@ export const ThyroidTest:LabtestFormType[] = [
       children: [
         {
           investigation: "CLIA",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "U/mL",
           input: true,

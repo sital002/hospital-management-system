@@ -20,7 +20,7 @@ export const LFTTest:LabtestFormType[] = [
       children: [
         {
           investigation: "IFCC without P5P",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "U/L",
           input: true,
@@ -34,7 +34,7 @@ export const LFTTest:LabtestFormType[] = [
       children: [
         {
           investigation: "Calculated",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "U/L",
           input: true,
@@ -47,7 +47,7 @@ export const LFTTest:LabtestFormType[] = [
       children: [
         {
           investigation: "IFCC-AMP",
-          result: "60000",
+          result: "",
           normalRange: "500000-100000",
           unit: "U/L",
           input: true,
@@ -60,7 +60,7 @@ export const LFTTest:LabtestFormType[] = [
       children: [
         {
           investigation: "IFCC",
-          result: "60",
+          result: "",
           normalRange: "50-80",
           unit: "cumm",
           input: true,
@@ -73,7 +73,7 @@ export const LFTTest:LabtestFormType[] = [
       children: [
         {
           investigation: "DPD",
-          result: "6000",
+          result: "",
           normalRange: "540000-80000",
           unit: "mg/dL",
           input: true,
@@ -86,7 +86,7 @@ export const LFTTest:LabtestFormType[] = [
       children: [
         {
           investigation: "Blure",
-          result: "6000",
+          result: "",
           normalRange: "540000-80000",
           unit: "g/dL",
           input: true,
