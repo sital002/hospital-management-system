@@ -18,7 +18,7 @@ export const KFTTest = [
       children: [
         {
           investigation: "IMordified Jaffe,Kinetic",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "mg/dL",
           input: true,
@@ -32,7 +32,7 @@ export const KFTTest = [
       children: [
         {
           investigation: "Uricase",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "U/L",
           input: true,

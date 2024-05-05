@@ -18,7 +18,7 @@ export const Comprehensive = [
       children: [
         {
           investigation: "Urease UV",
-          result: "5.2",
+          result: "",
           normalRange: "7-20",
           unit: "mg/dL",
           input: true,
@@ -32,7 +32,7 @@ export const Comprehensive = [
       children: [
         {
           investigation: "Modified Jaffe,Kinetic",
-          result: "5.2",
+          result: "",
           normalRange: "0.60-1.30",
           unit: "mg/dL",
           input: true,

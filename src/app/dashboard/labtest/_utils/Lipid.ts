@@ -20,7 +20,7 @@ export const Lipid:LabtestFormType[] = [
       children: [
         {
           investigation: "Spectrophotometry",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "mg/dL",
           input: true,
@@ -34,7 +34,7 @@ export const Lipid:LabtestFormType[] = [
       children: [
         {
           investigation: "Spectrophotometry",
-          result: "5.2",
+          result: "",
           normalRange: "5-10",
           unit: "mg/dL",
           input: true,
