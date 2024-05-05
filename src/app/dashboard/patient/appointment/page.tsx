@@ -9,11 +9,9 @@ async function getAppointments(id: string) {
   try {
     await connectToDB();
 
-    const appointments = await Appointment.find({ patient: id })
-      .sort({
-        date: "desc",
-      })
-      .populate("patient");
+    const appointments = await Appointment.find({ patient: id }).populate(
+      "patient",
+    );
     // console.log(appointments);
     return appointments;
   } catch (err: any) {

@@ -44,7 +44,7 @@ interface PatientStatusTableProps {
   patients: PatientType[];
 }
 
-const statusOptions = ["all", "pending", "approved", "rejected", "active"];
+const statusOptions = ["all", "pending", "approved", "rejected"];
 export function PatientStatusTable({ patients }: PatientStatusTableProps) {
   // console.log(patients);
   // patients = patients.filter((patient) => patient.status === "pending");
