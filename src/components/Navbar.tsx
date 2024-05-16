@@ -9,6 +9,7 @@ import maleImage from "@/assets/undraw_male_avatar_g98d.svg";
 import femaleImage from "@/assets/undraw_female_avatar_efig.svg";
 export default async function Navbar() {
   const user = await getUserDetails();
+  console.log("The user is user", user);
   const handleLogout = async () => {
     "use server";
     cookies().set("auth_token", "", {

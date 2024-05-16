@@ -137,6 +137,13 @@ export function PatientTable({
       ),
     },
     {
+      accessorKey: "addedBy",
+      header: "Added By",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("addedBy") ?? "NONE"}</div>
+      ),
+    },
+    {
       id: "actions",
       header: "Actions",
       enableHiding: false,

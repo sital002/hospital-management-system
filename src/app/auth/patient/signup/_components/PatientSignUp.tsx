@@ -99,6 +99,7 @@ const PatientSignup = (props: PatientFormProps) => {
         // toast.success("Patient added successfully");
         toast.success("Account created succesfully");
         router.replace("/dashboard");
+        router.refresh();
       })
       .catch((err) => {
         console.log(err);
@@ -116,7 +117,7 @@ const PatientSignup = (props: PatientFormProps) => {
     data: z.infer<typeof patientZodSchema>;
   }) {
     if (!props.update) return;
-    console.log("The data is ", data);
+    // console.log("The data is ", data);
     setLoading(true);
     axios(`/api/patient/update?id=${props.patient._id}`, {
       method: "PUT",
