@@ -2,7 +2,7 @@ import connectToDB from "@/database/connectToDB";
 import { ViewAppointment } from "./_components/ViewAppointment";
 import { getUserDetails } from "@/utils/Auth";
 import { redirect } from "next/navigation";
-import { Appointment } from "@/database/modals/Appointment";
+import { Appointment, TAppointment } from "@/database/modals/Appointment";
 import { AppointmentTable } from "../../appointments/_components/AppointmentTable";
 
 async function getAppointments(id: string) {
@@ -28,12 +28,13 @@ export default async function page() {
     return <p>Your account is pending for approval</p>;
   if (user.role === "patient" && user.data.status === "rejected")
     return <p>Your account is rejected</p>;
-  const appointments = await getAppointments(user.data._id.toString());
-  console.log(appointments);
+  const appointments = (await getAppointments(
+    user.data._id.toString(),
+  )) as TAppointment[];
 
   return (
     <div>
-      <AppointmentTable data={JSON.stringify(appointments)} />
+      <AppointmentTable data={appointments} />
     </div>
   );
 }
