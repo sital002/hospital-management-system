@@ -20,7 +20,7 @@ export const arthritis:LabtestFormType[] = [
     children: [
       {
         investigation: "Immunoturbidimetry",
-        result: "5.2",
+        result: "",
         normalRange: "0-18",
         unit: "IU/mL",
         input: true,
@@ -33,7 +33,7 @@ export const arthritis:LabtestFormType[] = [
     children: [
       {
         investigation: "Immunoturbidimetry",
-        result: "5.2",
+        result: "",
         normalRange: "0-3",
         unit: "mg/L",
         input: true,

@@ -53,19 +53,19 @@ const handleDelete = async (id: string, router: any) => {
 };
 
 interface PatientTableProps {
-  users: string;
+  users: PatientType[];
+  showEdit?: boolean;
+  shwoDelete?: boolean;
 }
-export function PatientTable({ users }: PatientTableProps) {
+export function PatientTable({
+  users,
+  showEdit = true,
+  shwoDelete = true,
+}: PatientTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-  let patients: PatientType[] = [];
-  try {
-    patients = JSON.parse(users);
-  } catch (err) {
-    console.log(err);
-  }
   const router = useRouter();
 
   const [columnVisibility, setColumnVisibility] =
@@ -137,6 +137,13 @@ export function PatientTable({ users }: PatientTableProps) {
       ),
     },
     {
+      accessorKey: "addedBy",
+      header: "Added By",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("addedBy") ?? "NONE"}</div>
+      ),
+    },
+    {
       id: "actions",
       header: "Actions",
       enableHiding: false,
@@ -152,22 +159,24 @@ export function PatientTable({ users }: PatientTableProps) {
             >
               View
             </Button>
-            <EditPatientModal patient={row.original} />
-            <Button
-              variant="destructive"
-              onClick={() => {
-                handleDelete(row.original._id.toString(), router);
-              }}
-            >
-              Delete
-            </Button>
+            {showEdit && <EditPatientModal patient={row.original} />}
+            {shwoDelete && (
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  handleDelete(row.original._id.toString(), router);
+                }}
+              >
+                Delete
+              </Button>
+            )}
           </div>
         );
       },
     },
   ];
   const table = useReactTable({
-    data: patients,
+    data: users,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

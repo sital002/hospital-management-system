@@ -17,7 +17,7 @@ export async function addPatient(body: any) {
     if (!result.success)
       return { success: false, message: "Form validation failed" };
     await connectToDB();
-    const newPatient = await Patient.create(result.data);
+    const newPatient = await Patient.create({ ...result.data, addedBy: user.data.name });
     return { success: true, message: "Patient added successfully" };
   } catch (err: any) {
     return { success: false, message: err.message };
@@ -55,6 +55,8 @@ export async function deletePatient(id: string) {
     }
     await connectToDB();
     const deletedPatient = await Patient.findByIdAndDelete(id);
+    const deletedAppointment = await Appointment.deleteMany({ patient: id });
+    console.log(deletedAppointment);
     if (deletedPatient) {
       return { success: true, message: "Patient deleted successfully" };
     }
@@ -99,8 +101,9 @@ export async function bookAppointment(data: any) {
 export async function getAllPatients() {
   try {
     await connectToDB();
-    const patients: PatientType[] = await Patient.find();
-    return patients ?? [];
+    const patients: PatientType[] = await Patient.find().lean()
+    return JSON.parse(JSON.stringify(patients)) ?? [];
+
   } catch (err: any) {
     console.log(err.message);
     return [];

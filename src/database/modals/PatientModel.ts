@@ -1,5 +1,4 @@
 import mongoose, { InferSchemaType, Schema, Types } from "mongoose";
-import { Labtest } from "./Labtest";
 
 const PatientSchema = new Schema({
   name: {
@@ -42,6 +41,9 @@ const PatientSchema = new Schema({
     type: String,
     required: [true, "Please provide a address"],
   },
+  addedBy: {
+    type: String
+  }
 });
 
 export const Patient =

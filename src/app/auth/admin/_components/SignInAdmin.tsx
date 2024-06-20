@@ -13,9 +13,11 @@ type FormInputs = {
   password: string;
 };
 
-export function PatientLogin() {
+type Role = "admin" | "staff" | "doctor" | "labtechnician";
+export function SignInAdmin() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [select, setSelect] = useState<Role>("admin");
 
   const {
     register,
@@ -31,9 +33,10 @@ export function PatientLogin() {
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
+      console.log(select, data);
       setLoading(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/patient/signin`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/${select}/signin`,
         {
           method: "POST",
           body: JSON.stringify(data),
@@ -43,7 +46,7 @@ export function PatientLogin() {
       const json = await res.json();
       if (json.success) {
         toast.success("Logged in successfully");
-        router.replace("/dashboard");
+        router.push("/dashboard");
         router.refresh();
         return;
       }
@@ -57,10 +60,52 @@ export function PatientLogin() {
   };
   watch();
 
+  const handleTab = (value: Role) => {
+    setSelect(value);
+  };
   return (
     <div className="mx-2 w-full  overflow-y-hidden rounded-lg p-5 ">
       <div className="mx-auto mt-10 max-w-[800px] rounded-md border-2 p-4 shadow-md">
-        <h2 className="my-3 text-center text-3xl">Login as Patient</h2>
+        <h2 className="my-3 text-center text-3xl">Login as Hospital</h2>
+
+        <div className="my-5 flex items-center gap-1">
+          <Button
+            onClick={() => handleTab("admin")}
+            size={"lg"}
+            className={`grow  rounded-sm text-lg shadow-md hover:bg-purple-500 ${
+              select === "admin" ? "bg-purple-500" : "bg-neutral-400"
+            }`}
+          >
+            Admin
+          </Button>
+          <Button
+            onClick={() => handleTab("staff")}
+            size={"lg"}
+            className={`grow rounded-sm  text-lg shadow-md hover:bg-purple-500 ${
+              select === "staff" ? "bg-purple-500" : "bg-neutral-400"
+            }`}
+          >
+            Staff
+          </Button>
+          <Button
+            onClick={() => handleTab("doctor")}
+            size={"lg"}
+            className={`grow  rounded-sm text-lg shadow-md hover:bg-purple-500 ${
+              select === "doctor" ? "bg-purple-500" : "bg-neutral-400"
+            }`}
+          >
+            Doctor
+          </Button>
+          <Button
+            onClick={() => handleTab("labtechnician")}
+            size={"lg"}
+            className={`grow  rounded-sm text-lg shadow-md hover:bg-purple-500 ${
+              select === "labtechnician" ? "bg-purple-500" : "bg-neutral-400"
+            }`}
+          >
+            Labtechnician
+          </Button>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <Label className="my-3">Email</Label>
@@ -80,6 +125,7 @@ export function PatientLogin() {
           <div className="my-6">
             <Label className="my-3">Password</Label>
             <Input
+              type={"password"}
               {...register("password", {
                 required: {
                   value: true,
@@ -95,7 +141,6 @@ export function PatientLogin() {
                 },
               })}
               placeholder="Password@123"
-              type="password"
             />
             {errors.password && (
               <p className="text-red-500">{errors.password.message}</p>
@@ -105,10 +150,6 @@ export function PatientLogin() {
             {loading ? "Loading..." : "Sign In"}
           </Button>
         </form>
-        <p className="mt-3">
-          Don&apos;t have an account?{" "}
-          <Link href={"/auth/patient/signup"}>Sign Up</Link>
-        </p>
       </div>
     </div>
   );

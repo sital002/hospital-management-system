@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       );
     }
     const data = patientZodSchema.safeParse(body);
-    console.log("the data is data", data);
+    // console.log("the data is data", data);
     if (!data.success) {
       return new Response(
         JSON.stringify({

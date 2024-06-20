@@ -76,14 +76,14 @@ const PatientSignup = (props: PatientFormProps) => {
           gender: props.patient.gender,
         }
       : {
-          name: "John Doe",
-          phone: "9860098600",
-          address: "Ratnapark, Kathmandu",
+          name: "",
+          phone: "",
+          address: "",
           gender: "male",
-          email: "test@gmail.com",
-          password: "Password@123",
-          cpassword: "Password@123",
-          dob: "2002/07/33",
+          email: "",
+          password: "",
+          cpassword: "",
+          dob: "",
         },
   });
   const router = useRouter();
@@ -99,6 +99,7 @@ const PatientSignup = (props: PatientFormProps) => {
         // toast.success("Patient added successfully");
         toast.success("Account created succesfully");
         router.replace("/dashboard");
+        router.refresh();
       })
       .catch((err) => {
         console.log(err);
@@ -116,7 +117,7 @@ const PatientSignup = (props: PatientFormProps) => {
     data: z.infer<typeof patientZodSchema>;
   }) {
     if (!props.update) return;
-    console.log("The data is ", data);
+    // console.log("The data is ", data);
     setLoading(true);
     axios(`/api/patient/update?id=${props.patient._id}`, {
       method: "PUT",
