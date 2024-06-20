@@ -9,7 +9,7 @@ async function getAllAppointments() {
   try {
     await connectToDB();
     const appointments = await Appointment.find().populate("patient");
-    return appointments ?? [];
+    return JSON.parse(JSON.stringify(appointments)) ?? [];
   } catch (err) {
     console.log(err);
     return [];
@@ -28,10 +28,9 @@ export default async function page() {
     return <p> You arenot authorized to view this page</p>;
   }
   const appointments = (await getAllAppointments()) as TAppointment[];
-  // console.log("The appointmens", appointments[0]);
   return (
     <div>
-      <AppointmentTable data={JSON.stringify(appointments)} />
+      <AppointmentTable data={appointments} />
     </div>
   );
 }
