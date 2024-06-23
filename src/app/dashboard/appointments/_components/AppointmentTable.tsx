@@ -35,10 +35,9 @@ import { TAppointment } from "@/database/modals/Appointment";
 import { formatDate } from "@/utils/formatDate";
 
 interface AppointmentTableProps {
-  data: string;
+  data: TAppointment[];
 }
 export function AppointmentTable({ data }: AppointmentTableProps) {
-  const appointments: TAppointment[] = JSON.parse(data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -107,7 +106,7 @@ export function AppointmentTable({ data }: AppointmentTableProps) {
     // },
   ];
   const table = useReactTable({
-    data: appointments,
+    data: data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
