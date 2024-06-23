@@ -13,7 +13,7 @@ async function getAppointments(id: string) {
       "patient",
     );
     // console.log(appointments);
-    return appointments;
+    return JSON.parse(JSON.stringify(appointments));
   } catch (err: any) {
     console.log(err?.message);
     return [];
