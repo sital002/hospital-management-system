@@ -50,3 +50,23 @@ export async function updateDoctor(id: string, body: any) {
     return { success: false, message: err.message };
   }
 }
+
+export async function deleteDoctor(id: string) {
+  try {
+    const user = await getUserDetails();
+    if (!user) {
+      return { success: false, message: "You are not logged in" };
+    }
+    if (user.role !== "admin" && user.role !== "staff") {
+      return { success: false, message: "You are not authorized" };
+    }
+    await connectToDB();
+    const deletedPatient = await Doctor.findByIdAndDelete(id);
+    if (deletedPatient) {
+      return { success: true, message: "Account deleted successfully" };
+    }
+    return { success: false, message: "Doctor not found" };
+  } catch (err: any) {
+    return { success: false, message: err.message };
+  }
+}

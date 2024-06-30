@@ -36,29 +36,7 @@ import { DoctorType } from "@/database/modals/DoctorModel";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import EditDoctorModal from "./doctor/EditDoctorModal";
-
-const handleDelete = async (id: string, router: any) => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor/${id}`,
-      {
-        method: "DELETE",
-        cache: "no-store",
-        credentials: "include",
-      },
-    );
-    if (!res.ok) return toast.error("Failed to delete account");
-    const data = await res.json();
-    // console.log(data);
-    toast.success("Account Deleted Successfully");
-    router.refresh();
-    // return data;
-  } catch (err: any) {
-    console.log(err?.message);
-    toast.error(err?.message);
-    return [];
-  }
-};
+import { deleteDoctor } from "@/actions/doctor";
 
 interface DoctorTableProps {
   users: DoctorType[];
@@ -74,6 +52,19 @@ export function DoctorTable({ users }: DoctorTableProps) {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  async function handleDelete(id: string) {
+    try {
+      const response = await deleteDoctor(id);
+      if (!response.success) throw new Error(response.message);
+      toast.success("Account Deleted Successfully");
+      router.refresh();
+      return;
+      // return data;
+    } catch (err: any) {
+      console.log(err?.message);
+      toast.error(err?.message);
+    }
+  }
   const columns: ColumnDef<DoctorType>[] = [
     {
       id: "select",
@@ -163,7 +154,7 @@ export function DoctorTable({ users }: DoctorTableProps) {
             <Button
               variant="destructive"
               onClick={() => {
-                handleDelete(row.original._id.toString(), router);
+                handleDelete(row.original._id.toString());
               }}
             >
               Delete
