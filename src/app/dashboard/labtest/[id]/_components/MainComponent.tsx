@@ -6,6 +6,7 @@ interface MainComponentProps {
   labtest: LabtestType;
 }
 export default function MainComponent({ labtest }: MainComponentProps) {
+  console.log(labtest);
   return (
     <div>
       <PrintComponent labtest={labtest} />

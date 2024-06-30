@@ -92,7 +92,7 @@ export const AdminForm: FC<AdminFormProps> = (props) => {
     if (props.update && props.handleAdminUpdate) {
       const res = await props.handleAdminUpdate(data);
       if (res.success) {
-        toast.success("User Updated");
+        toast.success("Admin profile updated");
       } else {
         toast.error(res?.message);
       }
