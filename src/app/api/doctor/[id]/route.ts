@@ -1,6 +1,7 @@
 import { doctorZodSchema } from "@/app/dashboard/doctor/_utils/doctorSchema";
 import connectToDB from "@/database/connectToDB";
 import { Doctor, DoctorType } from "@/database/modals/DoctorModel";
+import { getUserDetails } from "@/utils/Auth";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -74,9 +75,22 @@ export async function PUT(req: NextRequest) {
         { status: 400 },
       );
 
+    const user = await getUserDetails();
+    if (!user) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "You are not authorized to perform this action",
+        }),
+        { status: 401 },
+      );
+    }
+
+    const allowedRoles = ["admin", "doctor"];
+    console.log(user, "User is ");
     const body = await req.json();
     const data = doctorZodSchema.safeParse(body);
-    console.log("The data is ", data.success);
+    // console.log("The data is ", data.success);
     if (!data.success) {
       return new Response(
         JSON.stringify({

@@ -27,6 +27,7 @@ import {
 } from "./ui/select";
 import { doctorZodSchema } from "@/app/dashboard/doctor/_utils/doctorSchema";
 import axios, { AxiosError } from "axios";
+import { addDoctor, updateDoctor } from "@/actions/doctor";
 
 const genderOptions = [
   {
@@ -92,81 +93,35 @@ const DoctorForm: FC<DoctorFormProps> = (props) => {
 
   const router = useRouter();
 
-  const addNewDoctor = async (
-    data: z.infer<typeof doctorZodSchema>,
-    router: any,
-  ) => {
-    console.log(data);
-    try {
-      setLoading(true);
-      const res = await axios(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor`,
-        {
-          method: "POST",
-          data,
-        },
-      );
-      toast.success("Doctor added successfully");
-      router.refresh();
-    } catch (err) {
-      console.log(err);
-      if (axios.isAxiosError(err)) {
-        toast.error(err.response?.data?.message ?? "Failed to add doctor");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateDoctor = async ({
-    data,
-  }: {
-    data: z.infer<typeof doctorZodSchema>;
-  }) => {
-    try {
-      console.log(data);
-      if (!props.update) throw new Error("Invalid request");
-      setLoading(true);
-      const res = await axios(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor/${props.doctor?._id}`,
-        {
-          method: "PUT",
-          data: {
-            name: data.name,
-            phone: data.phone,
-            address: data.address,
-            dob: data.dob,
-            password: data.password,
-            email: data.email,
-            cpassword: data.password,
-            gender: data.gender,
-            department: data.department,
-          },
-        },
-      );
-
-      toast.success("Detail updated successfully");
-      router.refresh();
-      if (props.update && props.setOpen) {
-        return props.setOpen(false);
-      }
-    } catch (err) {
-      console.log(err);
-      if (axios.isAxiosError(err)) {
-        toast.error(err?.response?.data?.message ?? "Failed to update doctor");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const onSubmit: SubmitHandler<z.infer<typeof doctorZodSchema>> = async (
     data,
   ) => {
     if (props.update) {
-      return updateDoctor({ data });
+      // return updateDoctor({ data });
+      try {
+        const response = await updateDoctor(props.doctor._id.toString(), data);
+
+        if (!response.success)
+          return toast.error(response.message ?? "Something went wrong");
+
+        toast.success("Doctor updated successfully");
+        router.refresh();
+        router.push("/dashboard/profile");
+      } catch (err: any) {
+        toast.error(err.message ?? "Something went wrong");
+      }
     } else {
-      addNewDoctor(data, router);
+      try {
+        const response = await addDoctor(data);
+
+        if (!response.success)
+          throw new Error(response.message ?? "Something went wrong");
+        toast.success("Doctor added successfully");
+        router.refresh();
+        router.push("/dashboard/doctor");
+      } catch (err: any) {
+        toast.error(err.message ?? "Something went wrong");
+      }
     }
   };
 

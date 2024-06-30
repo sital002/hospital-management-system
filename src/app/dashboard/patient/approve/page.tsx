@@ -21,7 +21,7 @@ async function getPatients() {
 export default async function page() {
   const user = await getUserDetails();
   if (!user) return redirect("/signin");
-  if (user.role !== "admin") {
+  if (user.role !== "admin" && user.role !== "staff") {
     return (
       <div>
         <p className="my-3">You are not authorized to view this page</p>
