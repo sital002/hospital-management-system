@@ -103,7 +103,7 @@ export async function PUT(req: NextRequest) {
         }),
         { status: 400 },
       );
-    if (user.role === "labtechnician" && user.data._id.toString() !== id) {
+    if (!allowedRoles.includes(user.role) && user.role !== "labtechnician") {
       return new Response(
         JSON.stringify({
           success: false,
@@ -112,7 +112,7 @@ export async function PUT(req: NextRequest) {
         { status: 401 },
       );
     }
-    if (!allowedRoles.includes(user.role)) {
+    if (user.role === "labtechnician" && user.data._id.toString() !== id) {
       return new Response(
         JSON.stringify({
           success: false,
