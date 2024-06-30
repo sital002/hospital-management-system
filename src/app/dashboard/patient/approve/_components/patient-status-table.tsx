@@ -113,7 +113,7 @@ export function PatientStatusTable({ patients }: PatientStatusTableProps) {
             <div>
               <Button
                 onClick={() => {
-                  console.log(row.original._id.toString());
+                  // console.log(row.original._id.toString());
                   handlePatientApproveStatus(row.original._id.toString());
                   toast.success("Patient account approved");
                   router.refresh();

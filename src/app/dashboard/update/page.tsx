@@ -24,7 +24,7 @@ export default async function page() {
           success: false,
         };
       }
-      console.log("The data", result);
+      // console.log("The data", result);
       const updatedData = await Admin.findByIdAndUpdate(
         user?.data._id,
         result.data,

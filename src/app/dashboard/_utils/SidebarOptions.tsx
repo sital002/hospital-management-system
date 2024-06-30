@@ -167,6 +167,11 @@ export const doctorSidebarOptions: SidebarOptionType[] = [
     url: "/dashboard/update",
     icon: <PlusSquare size={20} />,
   },
+  {
+    name: "View my Profile",
+    url: "/dashboard/profile",
+    icon: <CircleUser size={20} />,
+  },
 ];
 
 export const labtechnicianSidebarOptions: SidebarOptionType[] = [

@@ -1,4 +1,9 @@
-import { PaitentSidebarOptions, doctorSidebarOptions, labtechnicianSidebarOptions, sideBarOptions } from "./SidebarOptions";
+import {
+  PaitentSidebarOptions,
+  doctorSidebarOptions,
+  labtechnicianSidebarOptions,
+  sideBarOptions,
+} from "./SidebarOptions";
 
 export const currentSideBar = {
   patient: PaitentSidebarOptions,

@@ -28,7 +28,9 @@ export async function updateStaff(id: string, body: any) {
   try {
     const user = await getUserDetails();
     if (!user) return { success: false, message: "You are not logged in" };
-    if (user.role !== "admin")
+    if (user.role !== "admin" && user.role !== "staff")
+      return { success: false, message: "You are not authorized" };
+    if (user.data._id.toString() !== id)
       return { success: false, message: "You are not authorized" };
     const result = StaffFormSchema.safeParse(body);
     if (!result.success)
